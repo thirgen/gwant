@@ -9,9 +9,9 @@ public class UnitCard : Card {
 
 
 
-    public UnitCard(string Name, string Art) : base(Name, Art, false)
+    public UnitCard(int ID, string Name, string Art, bool Hero) : base(ID, Name, Art, false)
     {
-
+        this.Hero = Hero;
     }
 
 

@@ -1,0 +1,89 @@
+faction = {
+	name = "Neutral"
+	
+	1 = {
+		name="Geralt of Rivia"
+		art = "geRalt2"
+		strength = 15
+		hero = true
+	}
+	
+	2 = {
+		name = "Yennefer of Vengerberg"
+		strength = 7
+		hero = true
+		ability = medic
+		art = "yen"
+	}
+	
+	
+	3 = {
+		name="Cirilla Fiona Elen Riannon"
+		strength= 15
+		art="cirI"
+	}
+	
+	4 = {
+		name = "Triss Merigold"
+		strength = 7
+		hero = true
+		art = "triss"
+	}
+	
+	5 = {
+		name = "Vesemir"
+		strength = 6
+	}
+
+	6 = {
+		name="Dandelion"
+		strength = 2
+		ability = horn
+	}
+
+	7 = {
+		name="Zoltan Chivay"
+		strength = 5
+		art = "zoltan"
+	}
+	8 = {
+		name="Emiel Regis Rohellec Terzieff"
+		strength = 2
+		art = "regis"
+	}
+	9 = {
+		name="Villentretenmerth"
+		strength = 7
+		ability = scorch
+		art = "borch"
+	}
+	10 = {
+		name="Mysterious Elf"
+		strength = 0
+		ability = spy
+		name="MysteriousElf"
+	}
+	11 = {
+		name="Decoy"
+		ability = Decoy
+	}
+	12 = {
+		name="Decoy"
+		ability = Decoy
+	}
+	13 = {
+		name="Decoy"
+		ability = Decoy
+	}
+	14 = {
+		name="Commander's Horn"
+		art = "horn"
+		horn = true
+		count = 3
+	}
+	15 = {
+		name="Scorch"
+		ability = scorch
+		count = 3
+	}
+}

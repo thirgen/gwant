@@ -22,7 +22,7 @@ public class SpecialCard : Card {
     }
 
 
-    public SpecialCard(string Name, string Art) : base(Name, Art, true)
+    public SpecialCard(int ID, string Name, string Art) : base(ID, Name, Art, true)
     {
 
     }
