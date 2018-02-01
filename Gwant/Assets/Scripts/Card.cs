@@ -41,7 +41,9 @@ public abstract class Card
     public bool Special { get { return special; } private set { special = value; } }
     #endregion
 
-    public abstract Abilities Ability { get; }
+    public abstract Abilities Ability { get; protected set; }
     protected abstract bool AbilityIsValid(Abilities ab);
+    public abstract void ApplyEffects(Zone zone);
+    
 
 }

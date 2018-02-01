@@ -9,11 +9,25 @@ public class UnitCard : Card {
 
 
 
-    public UnitCard(int ID, string Name, string Art, bool Hero) : base(ID, Name, Art, false)
+    public UnitCard(int ID, string Name, string Art, bool Hero, Abilities Ability) : base(ID, Name, Art, false)
     {
         this.Hero = Hero;
+        this.Ability = Ability;
     }
 
+
+
+    public override void ApplyEffects(Zone zone)
+    {
+        //Stuff
+
+        CalcStats();
+    }
+
+    public void CalcStats()
+    {
+        //Definte Order of operations for effects
+    }
 
     public bool Hero { get { return hero; } private set { hero = value; } }
     public override Abilities Ability
@@ -25,6 +39,7 @@ public class UnitCard : Card {
             else
                 return Abilities.None;
         }
+        protected set { ability = value; }
     }
 
     protected override bool AbilityIsValid(Abilities ab)

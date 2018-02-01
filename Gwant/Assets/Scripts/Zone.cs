@@ -6,16 +6,17 @@ public class Zone : MonoBehaviour {
 
     public enum Types { Hand, Melee, Ranged, Siege, Weather, Deck, Discard }
     public enum IsVisibleTo { None, Player1, Player2, Both }
-    public enum Restrictions { None, Melee, Ranged, Siege, Weather }
 
-    GameObject zoneGO;
+    #region Fields
+    //GameObject zoneGO;
     Types type;
     List<Card> cards;
-    Restrictions restriction;
     IsVisibleTo visibleTo;
     bool collapsed;
+    #endregion
 
-    public GameObject ZoneGO { get { return zoneGO; } set { zoneGO = value; } }
+    #region Properties
+    //public GameObject ZoneGO { get { return zoneGO; } set { zoneGO = value; } }
     public Types Type 
     {
         get { return type; }
@@ -24,20 +25,102 @@ public class Zone : MonoBehaviour {
             type = value;
             if (type == Types.Deck)
             {
-                Restriction = Restrictions.None;
-                VisibleTo = IsVisibleTo.None;
-                IsCollapsed = true;
+                //VisibleTo = IsVisibleTo.None;
+                //IsCollapsed = true;
+
+
+                if (!gameObject.GetComponent<Deck>())
+                {
+                    Deck d = gameObject.AddComponent<Deck>();
+                    Destroy(gameObject.GetComponent<Zone>());
+                    d.VisibleTo = IsVisibleTo.None;
+                    d.IsCollapsed = true;
+                    d.Cards = new List<Card>();
+                }
             }
         }
     }
     public List<Card> Cards { get { return cards; } private set { cards = value; } }
-    public Restrictions Restriction { get { return restriction; } private set { restriction = value; } }
     public IsVisibleTo VisibleTo { get { return visibleTo; } private set { visibleTo = value; } }
     public bool IsCollapsed { get { return collapsed; } private set { collapsed = value; } }
+    #endregion
 
+    private void Start()
+    {
+        Type = Types.Deck;
+    }
 
+    #region Methods
     public void SetDeckCards(List<Card> c)
     {
         Cards = c;
     }
+
+    public void MoveCardTo(Card card, Zone zone)
+    {
+        //Zone targetZone;
+        if (card.Special)
+        {
+            SpecialCard c = (SpecialCard)card;
+            if (c.Weather)
+            {
+                if (c.WeatherType == SpecialCard.WeatherTypes.Frost)
+                    c.WeatherEffect(zone); //Melee row
+                else if (c.WeatherType == SpecialCard.WeatherTypes.Fog)
+                    c.WeatherEffect(zone); //Ranged row
+                else if (c.WeatherType == SpecialCard.WeatherTypes.Rain)
+                    c.WeatherEffect(zone); //Siege row
+                else if (c.WeatherType == SpecialCard.WeatherTypes.Storm)
+                {
+                    c.WeatherEffect(zone); //Ranged row
+                    c.WeatherEffect(zone); //Siege row
+                }
+                else //if (c.WeatherType == SpecialCard.WeatherTypes.Clear)
+                    c.WeatherEffect(zone); //Clear Weather row
+            }
+            else
+            {
+                //Horn, Scorch, Mushrom, Decoy stuff
+            }
+        }
+        else
+        {
+            //None, Agile, Medic, Morale, Muster, Spy, Bond, Berserker, Horn, Scorch
+
+        }
+        //card.ApplyEffects(targetZone);
+    }
+
+    public void CalcStats()
+    {
+        foreach (UnitCard card in Cards)
+            card.CalcStats();
+    }
+    #endregion
+
+    #region Children
+    public class Hand : Zone
+    {
+
+    }
+    public class Deck : Zone
+    {
+
+    }
+    public class Discard : Zone
+    {
+
+    }
+    public class Weather : Zone
+    {
+
+    }
+    public class Battlefield : Zone
+    {
+        public enum Combats { Melee, Ranged, Siege }
+        Combats combat;
+
+        public Combats Combat { get { return combat; } set { combat = value; } }
+    }
+    #endregion
 }

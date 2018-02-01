@@ -19,14 +19,27 @@ public class SpecialCard : Card {
             else
                 return Abilities.None;
         }
+        protected set { ability = value; }
     }
 
 
-    public SpecialCard(int ID, string Name, string Art) : base(ID, Name, Art, true)
+    public SpecialCard(int ID, string Name, string Art, Abilities Ability) : base(ID, Name, Art, true)
+    {
+        this.Ability = Ability;
+    }
+
+
+
+    public override void ApplyEffects(Zone zone)
+    {
+        //Horn, Sorch, Mushroom, Decoy
+        
+    }
+
+    public void WeatherEffect(Zone z)
     {
 
     }
-
 
     #region Properties
 
