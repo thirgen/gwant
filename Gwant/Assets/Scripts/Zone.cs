@@ -91,11 +91,6 @@ public class Zone : MonoBehaviour {
         //card.ApplyEffects(targetZone);
     }
 
-    public void CalcStats()
-    {
-        foreach (UnitCard card in Cards)
-            card.CalcStats();
-    }
     #endregion
 
     #region Children
@@ -111,16 +106,34 @@ public class Zone : MonoBehaviour {
     {
 
     }
-    public class Weather : Zone
+    public class WeatherZone : Zone
     {
 
+    }
+    public class HornZone : Zone
+    {
+        bool horn;
+        public bool Horn { get { return horn; } set { horn = value; } }
     }
     public class Battlefield : Zone
     {
         public enum Combats { Melee, Ranged, Siege }
         Combats combat;
+        List<UnitCard> horns;
+        HornZone hornZone;
+        bool weather;
 
         public Combats Combat { get { return combat; } set { combat = value; } }
+        public HornZone ZoneHorn { get { return hornZone; } set { hornZone = value; } } 
+        public bool Weather { get { return weather; } set { weather = value; } }
+        public List<UnitCard> Horns { get { return horns; } }
+
+
+        public void CalcStats()
+        {
+            foreach (UnitCard card in Cards)
+                card.CalcStats(this);
+        }
     }
     #endregion
 }

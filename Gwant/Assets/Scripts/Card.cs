@@ -5,11 +5,11 @@ using UnityEngine;
 public abstract class Card
 {
     public enum Abilities {
-        None = -1, Agile, Medic, Morale, Muster, Spy, Bond, Berserker, //Unit abilities only
+        None, Agile, Medic, Morale, Muster, Spy, Bond, Berserker, Avenger, //Unit abilities only
         SPECIAL_START, //Special abilites start here
-        Horn, Scorch, //Both Unit and Special abilities
+        Horn, Scorch, Mushroom, //Both Unit and Special abilities
         UNIT_END, //No more Unit abilites beyond this point
-        Mushroom, Decoy, Weather, //Special abilities only
+        Decoy, Weather, //Special abilities only
         ABILITY_COUNT
     }
     protected const int UNIT_END = (int)Abilities.UNIT_END;
