@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class Zone : MonoBehaviour {
 
-    public enum Types { Hand, Melee, Ranged, Siege, Weather, Deck, Discard }
+    public enum Types { NOT_SET_YET, Hand, Melee, Ranged, Siege, Weather, Deck, Discard }
     public enum IsVisibleTo { None, Player1, Player2, Both }
 
     #region Fields
@@ -17,6 +18,7 @@ public class Zone : MonoBehaviour {
 
     #region Properties
     //public GameObject ZoneGO { get { return zoneGO; } set { zoneGO = value; } }
+
     public Types Type 
     {
         get { return type; }
@@ -28,7 +30,7 @@ public class Zone : MonoBehaviour {
                 //VisibleTo = IsVisibleTo.None;
                 //IsCollapsed = true;
 
-
+                /*
                 if (!gameObject.GetComponent<Deck>())
                 {
                     Deck d = gameObject.AddComponent<Deck>();
@@ -37,6 +39,7 @@ public class Zone : MonoBehaviour {
                     d.IsCollapsed = true;
                     d.Cards = new List<Card>();
                 }
+                */
             }
         }
     }
@@ -47,7 +50,7 @@ public class Zone : MonoBehaviour {
 
     private void Start()
     {
-        Type = Types.Deck;
+        //Type = Types.Deck;
     }
 
     #region Methods
@@ -56,13 +59,54 @@ public class Zone : MonoBehaviour {
         Cards = c;
     }
 
+    public void HighlightZone(Card c)
+    {
+        if (c.Special)
+        {
+            SpecialCard card = (SpecialCard)c;
+            if (card.WeatherType != SpecialCard.WeatherTypes.None)
+            {
+                //Highlight weather zone;
+            }
+            else if (card.Ability == Card.Abilities.Horn)
+            {
+                //Highlight horn zones;
+            }
+            else //if ability = Scorch, Mushroom, or Decoy
+            {
+                //Highlight all battlefield zones;
+            }
+        }
+        else
+        {
+            UnitCard card = (UnitCard)c;
+            if (card.Section == UnitCard.Sections.Agile)
+            {
+                //Highlights melee;
+                //Highlight ranged;
+            }
+            else if (card.Section == UnitCard.Sections.Melee)
+            {
+                //Highlight melee;
+            }
+            else if (card.Section == UnitCard.Sections.Ranged)
+            {
+                //Highlight ranged;
+            }
+            else if (card.Section == UnitCard.Sections.Siege)
+            {
+                //Highlight Siege;
+            }
+        }
+    }
+
     public void MoveCardTo(Card card, Zone zone)
     {
         //Zone targetZone;
         if (card.Special)
         {
             SpecialCard c = (SpecialCard)card;
-            if (c.Weather)
+            if (c.WeatherType != SpecialCard.WeatherTypes.None)
             {
                 if (c.WeatherType == SpecialCard.WeatherTypes.Frost)
                     c.WeatherEffect(zone); //Melee row
@@ -85,7 +129,7 @@ public class Zone : MonoBehaviour {
         }
         else
         {
-            //None, Agile, Medic, Morale, Muster, Spy, Bond, Berserker, Horn, Scorch
+            //None, Agile, Medic, Morale, Muster, Spy, Bond, Berserker, Horn, Scorch, Mushroom
 
         }
         //card.ApplyEffects(targetZone);
@@ -100,7 +144,10 @@ public class Zone : MonoBehaviour {
     }
     public class Deck : Zone
     {
+        public void DrawCard()
+        {
 
+        }
     }
     public class Discard : Zone
     {
@@ -108,32 +155,68 @@ public class Zone : MonoBehaviour {
     }
     public class WeatherZone : Zone
     {
+        Card frost;
+        Card fog;
+        Card rain;
+        Card storm;
+
+        public new List<Card> Cards { get { return null; } }
+
+        public Card Forst { get { return frost; } }
+        public Card Fog { get { return fog; } }
+        public Card Rain { get { return rain; } }
+        public Card Storm { get { return storm; } }
+
+        public void AddWeather(SpecialCard c)
+        {
+            if (c.WeatherType == SpecialCard.WeatherTypes.Frost)
+            {
+                frost = c;
+            }
+            else if (c.WeatherType == SpecialCard.WeatherTypes.Fog)
+            {
+                fog = c;
+            }
+            else if (c.WeatherType == SpecialCard.WeatherTypes.Rain)
+            {
+                rain = c;
+            }
+            else if (c.WeatherType == SpecialCard.WeatherTypes.Storm)
+            {
+                storm = c;
+            }
+            else if (c.WeatherType == SpecialCard.WeatherTypes.Clear)
+            {
+                ClearWeather();
+            }
+            else
+            {
+                //do nothing
+
+            }
+        }
+
+        private void ClearWeather()
+        {
+            frost = null;
+            fog = null;
+            rain = null;
+            storm = null;
+        }
 
     }
     public class HornZone : Zone
     {
         bool horn;
+        Battlefield.Combats combat;
         public bool Horn { get { return horn; } set { horn = value; } }
-    }
-    public class Battlefield : Zone
-    {
-        public enum Combats { Melee, Ranged, Siege }
-        Combats combat;
-        List<UnitCard> horns;
-        HornZone hornZone;
-        bool weather;
+        public Battlefield.Combats Combat { get { return combat; } set { combat = value; } }
 
-        public Combats Combat { get { return combat; } set { combat = value; } }
-        public HornZone ZoneHorn { get { return hornZone; } set { hornZone = value; } } 
-        public bool Weather { get { return weather; } set { weather = value; } }
-        public List<UnitCard> Horns { get { return horns; } }
-
-
-        public void CalcStats()
+        public void PlayCard(Card c)
         {
-            foreach (UnitCard card in Cards)
-                card.CalcStats(this);
+
         }
     }
+    
     #endregion
 }

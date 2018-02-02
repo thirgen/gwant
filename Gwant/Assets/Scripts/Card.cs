@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Card
+public abstract class Card// : MonoBehaviour
 {
     public enum Abilities {
         None, Agile, Medic, Morale, Muster, Spy, Bond, Berserker, Avenger, //Unit abilities only
@@ -22,7 +22,10 @@ public abstract class Card
     private string art;
     private bool special;
 
+
     #region Constructors
+
+    /*
     public Card() : this(0, "", "", true) { }
 
     public Card(int ID, string Name, string Art, bool Special)
@@ -32,6 +35,7 @@ public abstract class Card
         this.Art = Art;
         this.Special = special;
     }
+    */
     #endregion
 
     #region Properties

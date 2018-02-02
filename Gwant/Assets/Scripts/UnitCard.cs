@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class UnitCard : Card {
 
-    Abilities ability;
+    public enum Sections { Agile = -1, Melee, Ranged, Siege }
+
+    Sections section;
     bool hero;
+    Abilities ability;
     int strength;
     int baseStrength;
     int morale;
@@ -16,9 +19,10 @@ public class UnitCard : Card {
     bool horn;
 
 
-    public UnitCard(int ID, string Name, string Art, int Strength, bool Hero, Abilities Ability, int Morale) :
-        base(ID, Name, Art, false)
+    public UnitCard(int ID, string Name, string Art, Sections Section, int Strength,
+        bool Hero, Abilities Ability, int Morale) : base(ID, Name, Art, false)
     {
+        this.Section = Section;
         this.Hero = Hero;
         this.Ability = Ability;
         SetBaseStrength(Strength);
@@ -34,7 +38,7 @@ public class UnitCard : Card {
         //CalcStats(zone);
     }
 
-    public void CalcStats(Zone.Battlefield bf)
+    public void CalcStats(Battlefield bf)
     {
         //1. apply Weather effects
         if (bf.Weather)
@@ -89,6 +93,7 @@ public class UnitCard : Card {
     public bool Hero { get { return hero; } private set { hero = value; } }
     public bool Bond { get { return bond; } private set { bond = value; } }
     public bool Horn { get { return horn; } set { horn = value; } }
+    public Sections Section { get { return section; } private set { section = value; } }
     public override Abilities Ability
     {
         get

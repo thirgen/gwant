@@ -7,7 +7,7 @@ public class SpecialCard : Card {
     Abilities ability;
     bool weather;
 
-    public enum WeatherTypes { Clear, Frost, Fog, Rain, Storm }
+    public enum WeatherTypes { None, Clear, Frost, Fog, Rain, Storm }
     WeatherTypes weatherType;
 
     public override Abilities Ability
@@ -43,7 +43,7 @@ public class SpecialCard : Card {
 
     #region Properties
 
-    public bool Weather { get { return weather; } set { weather = value; } }
+    //public bool Weather { get { return weather; } set { weather = value; } }
     public WeatherTypes WeatherType { get { return weatherType; } set { weatherType = value; } }
 
     #endregion
