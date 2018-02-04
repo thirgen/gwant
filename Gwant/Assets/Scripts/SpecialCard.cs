@@ -5,9 +5,9 @@ using UnityEngine;
 public class SpecialCard : Card {
 
     Abilities ability;
-    bool weather;
+    //bool weather;
 
-    public enum WeatherTypes { None, Clear, Frost, Fog, Rain, Storm }
+    public enum WeatherTypes { None, Clear, Frost, Fog, Rain, Storm, COUNT }
     WeatherTypes weatherType;
 
     public override Abilities Ability
@@ -22,13 +22,25 @@ public class SpecialCard : Card {
         protected set { ability = value; }
     }
 
-
-    public SpecialCard(int ID, string Name, string Art, Abilities Ability) : base(ID, Name, Art, true)
+    
+    private void CardSetUp(int ID, string Name, string Art, Abilities Ability, WeatherTypes WeatherType)
     {
+        this.ID = ID;
+        this.Name = Name;
+        this.Art = Art;
         this.Ability = Ability;
     }
+    
 
-
+    public static SpecialCard AddComponentTo(GameObject go, int ID, string Name, string Art, Abilities Ability,
+        WeatherTypes WeatherType = WeatherTypes.None) //
+    {
+        SpecialCard c = go.AddComponent<SpecialCard>();
+        if (Ability == Abilities.Weather && WeatherType == WeatherTypes.None)
+            throw new GwantExceptions.InvalidWeatherException(ID);
+        c.CardSetUp(ID, Name, Art, Ability, WeatherType);
+        return c;
+    }
 
     public override void ApplyEffects(Zone zone)
     {

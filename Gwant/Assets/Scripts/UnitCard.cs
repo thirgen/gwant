@@ -1,32 +1,57 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class UnitCard : Card {
 
-    public enum Sections { Agile = -1, Melee, Ranged, Siege }
+    public enum Sections { Agile, Melee, Ranged, Siege, COUNT }
 
     Sections section;
     bool hero;
     Abilities ability;
-    int strength;
-    int baseStrength;
-    int morale;
-    int baseMorale;
+
+    //x = total strength
+    //y = base strength
+    Vector2Int strength;
+    Vector2Int morale;
+
     string muster;
     int scorchThreshold;
+
     bool bond;
     bool horn;
 
 
-    public UnitCard(int ID, string Name, string Art, Sections Section, int Strength,
-        bool Hero, Abilities Ability, int Morale) : base(ID, Name, Art, false)
+    private void CardSetUp(int ID, string Name, string Art, Sections Section, int Strength,
+        bool Hero, Abilities Ability)// : base(ID, Name, Art, false)
     {
+        this.ID = ID;
+        this.Name = Name;
+        this.Art = Art;
+        this.Special = false;
         this.Section = Section;
         this.Hero = Hero;
         this.Ability = Ability;
+        strength = new Vector2Int();
+        morale = new Vector2Int();
         SetBaseStrength(Strength);
-        SetBaseMorale(Morale);
+        if (Ability == Abilities.Morale)
+            SetBaseMorale(1);
+        else
+            SetBaseMorale(0);
+        //serializedUnitCard = new SerializedUnitCard(ID, Name, Art, Section, strength, hero,
+        //ability, morale, muster, scorchThreshold, bond, horn);
+    }
+
+
+
+    public static UnitCard AddComponentTo(GameObject go, int ID, string Name, string Art, Sections Section, int Strength,
+        bool Hero, Abilities Ability) //
+    {        UnitCard c = go.AddComponent<UnitCard>();
+        c.CardSetUp(ID, Name, Art, Section, Strength, Hero, Ability);
+        return c;
     }
 
 
@@ -74,26 +99,38 @@ public class UnitCard : Card {
         }
     }
 
-    public int Strength { get { return strength; } set { strength = value; } }
-    public int GetBaseStrength() { return baseStrength; }
-    public int Morale { get { return morale; } set { morale = value; } }
-    public int GetBaseMorale() { return baseMorale; }
+    public int Strength { get { return strength.x; } set { strength.x = value; } }
+    public int GetBaseStrength() { return strength.y; }
+    public int Morale { get { return morale.x; } set { morale.x = value; } }
+    public int GetBaseMorale() { return morale.y; }
+    public int ScorchThreshold { get { return morale.y; } private set { scorchThreshold = value; } }
 
     private void SetBaseStrength(int Strength)
     {
         this.Strength = Strength;
-        baseStrength = Strength;
+        strength.y = Strength;
     }
     private void SetBaseMorale(int Morale)
     {
-        this.Morale = Morale;
-        baseMorale = Morale;
+        //this.Morale = Morale;
+        morale.y = Morale;
     }
 
     public bool Hero { get { return hero; } private set { hero = value; } }
     public bool Bond { get { return bond; } private set { bond = value; } }
     public bool Horn { get { return horn; } set { horn = value; } }
     public Sections Section { get { return section; } private set { section = value; } }
+    public string Muster
+    {
+        get
+        {
+            if (Ability == Abilities.Muster)
+                return muster;
+            else
+                return null;
+        }
+        private set { muster = value; }
+    }
     public override Abilities Ability
     {
         get
@@ -103,7 +140,7 @@ public class UnitCard : Card {
             else
                 return Abilities.None;
         }
-        protected set { ability = value; }
+        protected set { ability = value; } //Must be protected because it's an override
     }
 
     protected override bool AbilityIsValid(Abilities ab)
@@ -112,4 +149,6 @@ public class UnitCard : Card {
             return true;
         return false;
     }
+
+    
 }

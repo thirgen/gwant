@@ -1,17 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using UnityEngine;
 
 [System.Serializable]
 public class Zone : MonoBehaviour {
 
-    public enum Types { NOT_SET_YET, Hand, Melee, Ranged, Siege, Weather, Deck, Discard }
+    public enum Types { NOT_SET_YET, Hand, Melee, Ranged, Siege, Weather, Deck, Discard, Horn }
     public enum IsVisibleTo { None, Player1, Player2, Both }
 
     #region Fields
     //GameObject zoneGO;
     Types type;
-    List<Card> cards;
+    //List<Card> cards;
     IsVisibleTo visibleTo;
     bool collapsed;
     #endregion
@@ -43,7 +44,7 @@ public class Zone : MonoBehaviour {
             }
         }
     }
-    public List<Card> Cards { get { return cards; } private set { cards = value; } }
+    //public List<Card> Cards { get { return cards; } private set { cards = value; } }
     public IsVisibleTo VisibleTo { get { return visibleTo; } private set { visibleTo = value; } }
     public bool IsCollapsed { get { return collapsed; } private set { collapsed = value; } }
     #endregion
@@ -56,7 +57,7 @@ public class Zone : MonoBehaviour {
     #region Methods
     public void SetDeckCards(List<Card> c)
     {
-        Cards = c;
+        //Cards = c;
     }
 
     public void HighlightZone(Card c)
@@ -129,7 +130,7 @@ public class Zone : MonoBehaviour {
         }
         else
         {
-            //None, Agile, Medic, Morale, Muster, Spy, Bond, Berserker, Horn, Scorch, Mushroom
+            //None, Medic, Morale, Muster, Spy, Bond, Berserker, Horn, Scorch, Mushroom
 
         }
         //card.ApplyEffects(targetZone);
@@ -142,25 +143,15 @@ public class Zone : MonoBehaviour {
     {
 
     }
-    public class Deck : Zone
-    {
-        public void DrawCard()
-        {
-
-        }
-    }
-    public class Discard : Zone
-    {
-
-    }
     public class WeatherZone : Zone
     {
+        List<SpecialCard> cards;
         Card frost;
         Card fog;
         Card rain;
         Card storm;
 
-        public new List<Card> Cards { get { return null; } }
+        public ReadOnlyCollection<SpecialCard> Cards { get { return cards.AsReadOnly(); } }
 
         public Card Forst { get { return frost; } }
         public Card Fog { get { return fog; } }
@@ -204,18 +195,6 @@ public class Zone : MonoBehaviour {
             storm = null;
         }
 
-    }
-    public class HornZone : Zone
-    {
-        bool horn;
-        Battlefield.Combats combat;
-        public bool Horn { get { return horn; } set { horn = value; } }
-        public Battlefield.Combats Combat { get { return combat; } set { combat = value; } }
-
-        public void PlayCard(Card c)
-        {
-
-        }
     }
     
     #endregion

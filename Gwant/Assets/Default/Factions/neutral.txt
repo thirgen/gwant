@@ -1,89 +1,151 @@
 faction = {
 	name = "Neutral"
 	
-	1 = {
+	unit = {
+		id = 1
 		name="Geralt of Rivia"
 		art = "geRalt2"
 		strength = 15
 		hero = true
+		section = melee
 	}
 	
-	2 = {
+	unit = {
+		id = 2
 		name = "Yennefer of Vengerberg"
 		strength = 7
 		hero = true
 		ability = medic
 		art = "yen"
+		section = ranged
 	}
 	
 	
-	3 = {
+	unit = {
+		id = 3
 		name="Cirilla Fiona Elen Riannon"
 		strength= 15
 		art="cirI"
+		section = melee
 	}
 	
-	4 = {
+	unit = {
+		id = 4
 		name = "Triss Merigold"
 		strength = 7
 		hero = true
 		art = "triss"
+		section = melee
 	}
 	
-	5 = {
+	unit = {
+		id = 5
 		name = "Vesemir"
 		strength = 6
+		section = melee
 	}
 
-	6 = {
+	unit = {
+		id = 6
 		name="Dandelion"
 		strength = 2
 		ability = horn
+		section = melee
 	}
 
-	7 = {
+	unit = {
+		id = 7
 		name="Zoltan Chivay"
 		strength = 5
 		art = "zoltan"
+		section = melee
 	}
-	8 = {
+	unit = {
+		id = 8
 		name="Emiel Regis Rohellec Terzieff"
 		strength = 2
 		art = "regis"
+		section = melee
 	}
-	9 = {
+	unit = {
+		id = 9
 		name="Villentretenmerth"
 		strength = 7
 		ability = scorch
 		art = "borch"
+		section = melee
 	}
-	10 = {
+	unit = {
+		id = 10
 		name="Mysterious Elf"
 		strength = 0
 		ability = spy
-		name="MysteriousElf"
+		section = melee
 	}
-	11 = {
+	special = {
+		id = 11
 		name="Decoy"
 		ability = Decoy
 	}
-	12 = {
+	special = {
+		id = 11
 		name="Decoy"
 		ability = Decoy
 	}
-	13 = {
+	special = {
+		id = 11
 		name="Decoy"
 		ability = Decoy
 	}
-	14 = {
+	special = {
+		id = 12
 		name="Commander's Horn"
 		art = "horn"
 		horn = true
 		count = 3
 	}
-	15 = {
+	special = {
+		id = 13
 		name="Scorch"
 		ability = scorch
 		count = 3
+	}
+	unit = {
+		id = 14
+		name="Cow"
+		strength = 0
+		ability = avenger
+		avenger =  15 "Bovine Defence Force"
+		section = ranged
+	}
+	unit = {
+		id = 15
+		name="Bovine Defence Force"
+		strength = 8
+		ability = vanish
+		section = melee
+	}
+	unit = {
+		id = 16
+		name="Gaunter O'Dimm"
+		strength = 2
+		ability = muster
+		section = siege
+		muster = "Gaunter O'Dimm*"
+	}
+	unit = {
+		id = 17
+		name="Gaunter O'Dimm: Darkness"
+		strength = 4
+		ability = muster
+		section = ranged
+		count = 3
+	}
+	unit = {
+		id = 18
+		name="Olgierd von Everec"
+		strength = 6
+		ability = morale
+		section = agile
 	}
 }
