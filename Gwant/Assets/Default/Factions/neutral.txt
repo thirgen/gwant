@@ -27,6 +27,7 @@ faction = {
 		strength= 15
 		art="cirI"
 		section = melee
+		hero = true
 	}
 	
 	unit = {
@@ -81,27 +82,19 @@ faction = {
 		strength = 0
 		ability = spy
 		section = melee
+		hero = true
 	}
 	special = {
 		id = 11
 		name="Decoy"
 		ability = Decoy
-	}
-	special = {
-		id = 11
-		name="Decoy"
-		ability = Decoy
-	}
-	special = {
-		id = 11
-		name="Decoy"
-		ability = Decoy
+		count = 3
 	}
 	special = {
 		id = 12
 		name="Commander's Horn"
 		art = "horn"
-		horn = true
+		ability = horn
 		count = 3
 	}
 	special = {

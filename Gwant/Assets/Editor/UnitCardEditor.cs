@@ -26,6 +26,19 @@ public class UnitCardEditor : Editor {
         EditorGUILayout.EnumPopup("Section", card.Section);
         EditorGUILayout.Toggle("Hero", card.Hero);
         EditorGUILayout.EnumPopup("Ability", card.Ability);
+        if (card.Ability == Card.Abilities.Avenger)
+        {
+            EditorGUILayout.IntField("Avenger", card.Avenger);
+        }
+        else if (card.Ability == Card.Abilities.Muster)
+            EditorGUILayout.LabelField("Muster", card.Muster);
+        else if (card.Ability == Card.Abilities.Scorch)
+        {
+            EditorGUILayout.IntField("Scorch Value", card.ScorchThreshold);
+            //EditorGUILayout.HelpBox("The value that a row must be greater than for the Scorch ability to activate", MessageType.Info);
+        }
+        else if (card.Ability == Card.Abilities.Bond)
+            EditorGUILayout.Toggle("Bond", card.Bond);
 
         if (!card.Hero)
         {
@@ -61,18 +74,11 @@ public class UnitCardEditor : Editor {
 
             EditorGUILayout.EndHorizontal();
         }
-        else
-            EditorGUILayout.IntField("Morale", card.Morale);
-        if (card.Ability == Card.Abilities.Muster)
-            EditorGUILayout.LabelField("Muster", card.Muster);
-        else if (card.Ability == Card.Abilities.Scorch)
+        else if (!card.Hero)
         {
-            EditorGUILayout.IntField("Scorch Value", card.ScorchThreshold);
-            //EditorGUILayout.HelpBox("The value that a row must be greater than for the Scorch ability to activate", MessageType.Info);
+            EditorGUILayout.IntField("Morale", card.Morale);
+            EditorGUILayout.Toggle("Horn", card.Horn);
         }
-        else if (card.Ability == Card.Abilities.Bond)
-            EditorGUILayout.Toggle("Bond", card.Bond);
-        EditorGUILayout.Toggle("Horn", card.Horn);
 
         //EditorGUILayout.Vector2IntField("Strength", new Vector2Int(card.Strength, card.GetBaseStrength()));
         //EditorGUILayout.Vector2IntField("Morale", new Vector2Int(card.Morale, card.GetBaseMorale()));

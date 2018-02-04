@@ -19,13 +19,14 @@ public class UnitCard : Card {
 
     string muster;
     int scorchThreshold;
+    int avenger;
 
     bool bond;
     bool horn;
 
 
     private void CardSetUp(int ID, string Name, string Art, Sections Section, int Strength,
-        bool Hero, Abilities Ability)// : base(ID, Name, Art, false)
+        bool Hero, Abilities Ability, int Avenger, string Muster, int ScorchThreshold)// : base(ID, Name, Art, false)
     {
         this.ID = ID;
         this.Name = Name;
@@ -41,6 +42,12 @@ public class UnitCard : Card {
             SetBaseMorale(1);
         else
             SetBaseMorale(0);
+        if (Ability == Abilities.Muster)
+            this.Muster = Muster;
+        if (Ability == Abilities.Avenger)
+            this.Avenger = Avenger;
+        if (Ability == Abilities.Scorch)
+            this.ScorchThreshold = ScorchThreshold;
         //serializedUnitCard = new SerializedUnitCard(ID, Name, Art, Section, strength, hero,
         //ability, morale, muster, scorchThreshold, bond, horn);
     }
@@ -48,9 +55,9 @@ public class UnitCard : Card {
 
 
     public static UnitCard AddComponentTo(GameObject go, int ID, string Name, string Art, Sections Section, int Strength,
-        bool Hero, Abilities Ability) //
+        bool Hero, Abilities Ability, int Avenger, string Muster, int ScorchThreshold) //
     {        UnitCard c = go.AddComponent<UnitCard>();
-        c.CardSetUp(ID, Name, Art, Section, Strength, Hero, Ability);
+        c.CardSetUp(ID, Name, Art, Section, Strength, Hero, Ability, Avenger, Muster, ScorchThreshold);
         return c;
     }
 
@@ -104,6 +111,7 @@ public class UnitCard : Card {
     public int Morale { get { return morale.x; } set { morale.x = value; } }
     public int GetBaseMorale() { return morale.y; }
     public int ScorchThreshold { get { return morale.y; } private set { scorchThreshold = value; } }
+    public int Avenger { get { return avenger; } private set { avenger = value; } }
 
     private void SetBaseStrength(int Strength)
     {

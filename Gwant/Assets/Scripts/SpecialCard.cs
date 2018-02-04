@@ -29,11 +29,12 @@ public class SpecialCard : Card {
         this.Name = Name;
         this.Art = Art;
         this.Ability = Ability;
+        this.WeatherType = WeatherType;
     }
     
 
     public static SpecialCard AddComponentTo(GameObject go, int ID, string Name, string Art, Abilities Ability,
-        WeatherTypes WeatherType = WeatherTypes.None) //
+        WeatherTypes WeatherType) //
     {
         SpecialCard c = go.AddComponent<SpecialCard>();
         if (Ability == Abilities.Weather && WeatherType == WeatherTypes.None)

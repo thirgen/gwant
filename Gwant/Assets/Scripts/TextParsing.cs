@@ -7,6 +7,8 @@ using UnityEngine;
 public class TextParsing {
 
     private const int DEFAULT_INT_VALUE = -1000;
+    private const int INACTIVE_INT = -1;
+    private static List<int> idList = new List<int>();
 
     public static List<GameObject> ParseText(string text, out List<string> strings)
     {
@@ -51,55 +53,73 @@ public class TextParsing {
             {
                 //get id
                 int id = GetIntProperty("ID", m.Value);
+                if (idList.Contains(id))
+                    throw new GwantExceptions.DuplicateIDException(id);
+                else
+                    idList.Add(id);
+
                 //get name
                 string name = GetStringProperty("Name", m.Value);
+
                 //get art
                 string art = GetStringProperty("Art", m.Value);
-                if (art == null) art = name;
+                if (art == null) art = name.Replace(" ", string.Empty);
+                art = "art/" + art.ToLower() + ".jpg";
+
                 //get strength
                 int strength = GetIntProperty("Strength", m.Value);
+                if (strength == DEFAULT_INT_VALUE)
+                    throw new GwantExceptions.InvalidStrengthException(id);
+
                 //get hero
-                bool hero = GetBoolProperty("Hero", m.Value);
+                bool hero = GetBoolProperty("Hero", m.Value); //invalid result defaults to false
+
+
                 //get ability
                 Enum ab = GetEnumProperty(EnumProperties.Ability, m.Value);
                 Card.Abilities ability = (ab != null)? (Card.Abilities)ab : Card.Abilities.None;
+
                 //get section
                 UnitCard.Sections section = (UnitCard.Sections)GetEnumProperty(EnumProperties.Section, m.Value);
+
 
                 //if ability = muster
                 //get muster name
                 string muster = (ability == Card.Abilities.Muster)? GetStringProperty("Muster", m.Value) : null;
-                if (muster == null && ability == Card.Abilities.Muster) muster = name;
+                if (muster == null && ability == Card.Abilities.Muster)
+                    muster = name;
+
                 //if ability = scorch
                 //get scorch threshold
-                int scorch = -1;
+                int scorch = INACTIVE_INT;
                 if (ability == Card.Abilities.Scorch)
                 {
                     scorch = GetIntProperty("Scorch", m.Value);
                     scorch = (scorch == DEFAULT_INT_VALUE) ? 10 : scorch;
                 }
-                //int scorch = (ability == Card.Abilities.Scorch) ? GetIntProperty("Scorch", m.Value) : -1;
+                
                 //if ability = avenger
                 //get avenger id
-                int avenger = -1;
+                int avenger = INACTIVE_INT;
                 if (ability == Card.Abilities.Avenger)
                 {
                     avenger = GetIntProperty("Avenger", m.Value);
-                    if (avenger == -1)
+                    if (avenger == DEFAULT_INT_VALUE)
                     {
                         throw new GwantExceptions.InvalidAvengerException(id);
                     }
                 }
+
                 //get count
                 int count = GetIntProperty("Count", m.Value);
                 count = (count == DEFAULT_INT_VALUE) ? 1 : count;
 
+                //Create the cards
                 for (int i = 0; i < count; i++)
                 {
-                    //UnitCard c = new UnitCard();
                     GameObject go = new GameObject();
-                    UnitCard.AddComponentTo(go, id, name, art, section, strength, hero, ability);
-                    go.name = go.GetComponent<UnitCard>().Name;
+                    UnitCard.AddComponentTo(go, id, name, art, section, strength, hero, ability, avenger, muster, scorch);
+                    go.name = name;
                     cards.Add(go);
                 }
             }
@@ -109,12 +129,48 @@ public class TextParsing {
             foreach (Match m in matchCollection)
             {
                 //get id
-                //get name
-                //get art
-                //get ability
-                //get weather type
-                
+                int id = GetIntProperty("ID", m.Value);
+                if (idList.Contains(id))
+                    throw new GwantExceptions.DuplicateIDException(id);
+                else
+                    idList.Add(id);
 
+                //get name
+                string name = GetStringProperty("Name", m.Value);
+
+                //get art
+                string art = GetStringProperty("Art", m.Value);
+                if (art == null) art = name.Replace(" ", string.Empty);
+                art = "art/" + art.ToLower() + ".jpg";
+
+
+                //get ability
+                Enum ab = GetEnumProperty(EnumProperties.Ability, m.Value);
+                Card.Abilities ability = (ab != null) ? (Card.Abilities)ab : Card.Abilities.None;
+
+                //get weather type
+                SpecialCard.WeatherTypes weatherType;
+                if (ability == Card.Abilities.Weather)
+                {
+                    Enum w = GetEnumProperty(EnumProperties.Ability, m.Value);
+                    weatherType = (w != null) ? (SpecialCard.WeatherTypes)w :
+                        SpecialCard.WeatherTypes.None;
+                }
+                else weatherType = SpecialCard.WeatherTypes.None;
+
+                
+                //get count
+                int count = GetIntProperty("Count", m.Value);
+                count = (count == DEFAULT_INT_VALUE) ? 1 : count;
+
+                //Create the cards
+                for (int i = 0; i < count; i++)
+                {
+                    GameObject go = new GameObject();
+                    SpecialCard.AddComponentTo(go, id, name, art, ability, weatherType);
+                    go.name = name;
+                    cards.Add(go);
+                }
             }
         }
 
@@ -126,7 +182,7 @@ public class TextParsing {
     private enum StringProperties { Name, Art }
     private static string GetStringProperty(string Property, string Text)
     {
-        string pattern = @"(" + Property + @")\s*=\s*""([\p{L}\s':]{1,30})""";
+        string pattern = @"(" + Property + @")\s*=\s*""([\p{L}\p{N}\s':]{1,30})""";
         try
         {
             string output = (string)GetProperty(Text, pattern);
@@ -221,13 +277,11 @@ public class TextParsing {
             pattern += @"3})";
         try
         {
-            object o = GetProperty(Text, pattern);
-            if (o != null)
-            {
-                int i = int.Parse((string)GetProperty(Text, pattern));
-                return i;
-            }
-            return DEFAULT_INT_VALUE;
+            int output;
+            if (int.TryParse((string)GetProperty(Text, pattern), out output))
+                return output;
+            else
+                return DEFAULT_INT_VALUE;
         }
         catch (InvalidCastException)
         {
@@ -245,8 +299,12 @@ public class TextParsing {
         string pattern = @"(" + Property.ToString().ToLower() + @")\s*=\s*(true|false)";
         try
         {
-            bool output = (bool)GetProperty(Text, pattern);
-            return output;
+            string o = (string)GetProperty(Text, pattern);
+            bool output;
+            if (bool.TryParse(o, out output))
+                return output;
+            else
+                return false;
         }
         catch (InvalidCastException)
         {
