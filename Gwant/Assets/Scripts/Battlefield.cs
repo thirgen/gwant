@@ -26,7 +26,9 @@ public class Battlefield : Zone
     public void CalcStats()
     {
         foreach (UnitCard card in Cards)
+        {
             card.CalcStats(this);
+        }
     }
 
     public void PlayCard(Card c)

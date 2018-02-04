@@ -17,9 +17,8 @@ public abstract class Card : MonoBehaviour
     protected const int SPECIAL_START = (int)Abilities.SPECIAL_START;
     protected const int ABILITY_COUNT = (int)Abilities.COUNT;
 
-
     private int id;
-    private string cardName;
+    private new string name;
     private string art;
     private bool special;
 
@@ -37,13 +36,25 @@ public abstract class Card : MonoBehaviour
     }
     */
     #endregion
-    
-    
+
+
 
     #region Properties
+    /// <summary>
+    /// The ID number of the card. Must be uniquie.
+    /// </summary>
     public int ID { get { return id; } protected set { id = value; } }
-    public string Name { get { return cardName; } protected set { cardName = value; } }
+    /// <summary>
+    /// The Name of the card.
+    /// </summary>
+    public string Name { get { return name; } protected set { name = value; } }
+    /// <summary>
+    /// The filename of the card art.
+    /// </summary>
     public string Art { get { return art; } protected set { art = value; } }
+    /// <summary>
+    /// Whether the card is a Unit or Special card.
+    /// </summary>
     public bool Special { get { return special; } protected set { special = value; } }
     #endregion
 

@@ -1,0 +1,178 @@
+faction = {
+	name = "Northern Realms"
+	exclusive = true
+
+	unit = {
+		name = "Vernon Roche"
+		id = 100
+		strength = 10
+		hero = true
+		section = melee
+		art = "roche"
+	}
+
+	unit = {
+		name = "Ballista"
+		id = 101
+		strength = 6
+		section = siege
+		count = 2
+	}
+	unit = {
+		name = "Blue Stripes Commando"
+		id = 102
+		strength = 4
+		section = melee
+		ability = bond
+		count = 3
+	}
+	unit = {
+		name = "Catapult"
+		id = 103
+		strength = 8
+		section = siege
+		ability = bond
+		count = 2
+	}
+	unit = {
+		name = "Crinfrid Reavers Dragon Hunter"
+		id = 104
+		strength = 5
+		section = ranged
+		ability = bond
+		count = 3
+	}
+	unit = {
+		name = "Dethmold"
+		id = 105
+		strength = 5
+		section = siege
+	}
+	unit = {
+		name = "Dun Banner Medic"
+		id = 106
+		strength = 5
+		section = siege
+		ability = medic
+	}
+	unit = {
+		name = "Esterad Thyssen"
+		id = 107
+		strength = 10
+		section = melee
+		hero = true
+	}
+	unit = {
+		name = "John Natalis"
+		id = 108
+		strength = 10
+		section = melee
+		hero = true
+	}
+	unit = {
+		name = "Kaedweni Siege Expert"
+		id = 109
+		strength = 1
+		section = siege
+		ability = morale
+		count = 3
+	}
+	unit = {
+		name = "Keira Metz"
+		id = 110
+		strength = 5
+		section = ranged
+	}
+	unit = {
+		name = "Philippa Eilhart"
+		id = 111
+		strength = 10
+		section = ranged
+		hero = true
+	}
+	unit = {
+		name = "Poor Sodding Infantry"
+		id = 112
+		strength = 1
+		section = melee
+		ability = bond
+		count = 3
+	}
+	unit = {
+		name = "Prince Stennis"
+		id = 113
+		strength = 5
+		section = melee
+		abilitiy = spy
+	}
+	unit = {
+		name = "Redanian Foot Soldier"
+		id = 114
+		strength = 1
+		section = melee
+		count = 3
+	}
+	unit = {
+		name = "Sabrina Glevissing"
+		id = 115
+		strength = 4
+		section = ranged
+	}
+	unit = {
+		name = "Sheldon Skaggs"
+		id = 116
+		strength = 4
+		section = ranged
+	}
+	unit = {
+		name = "Siege Tower"
+		id = 117
+		strength = 6
+		section = siege
+	}
+	unit = {
+		name = "Siegfried of Denesle"
+		id = 118
+		strength = 5
+		section = melee
+	}
+	unit = {
+		name = "Sigismund Dijkstra"
+		id = 119
+		strength = 4
+		section = melee
+		ability = spy
+	}
+	unit = {
+		name = "Síle de Tansarville"
+		id = 120
+		strength = 5
+		section = ranged
+	}
+	unit = {
+		name = "Thaler"
+		id = 121
+		strength = 1
+		section = siege
+		ability = spy
+	}
+	unit = {
+		name = "Trebuchet"
+		id = 122
+		strength = 6
+		section = siege
+		count = 2
+	}
+	unit = {
+		name = "Ves"
+		id = 123
+		strength = 5
+		section = melee
+	}
+	unit = {
+		name = "Yarpen Zigrin"
+		id = 124
+		strength = 2
+		section = melee
+	}
+}

@@ -31,4 +31,9 @@ public class ZoneEditor : Editor {
 
     }
 
+    public static void DrawCardFoldout(List<Card> Cards, bool[] ActiveCards, bool ViewCards)
+    {
+
+    }
+
 }

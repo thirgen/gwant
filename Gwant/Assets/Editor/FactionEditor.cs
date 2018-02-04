@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(CardGO))]
-public class CardGOEditor : Editor
+[CustomEditor(typeof(Faction))]
+public class FactionEditor : Editor
 {
-    static bool cards = false;
-    bool[] active;
+    static bool ViewCards = false;
+    bool[] ActiveCards;
 
     public override void OnInspectorGUI()
     {
-        CardGO cardGO = (CardGO)target;
+        Faction faction = (Faction)target;
         //base.OnInspectorGUI();
 
-        SerializedProperty p = serializedObject.FindProperty("text");
-        EditorGUILayout.PropertyField(p);
+        //SerializedProperty p = serializedObject.FindProperty("text");
+        //EditorGUILayout.PropertyField(p);
 
         //EditorGUILayout.LabelField("Type", zone.Type.ToString().ToUpper());
 
@@ -25,32 +25,37 @@ public class CardGOEditor : Editor
         //EditorGUILayout.DropdownButton(GUIContent.none, FocusType.Passive);
         //EditorGUILayout.PropertyField(serializedObject.FindProperty("Cards"));
         //cards = EditorGUILayout.Toggle("Expand Cards", cards);
-        cards = EditorGUILayout.Foldout(cards, "Cards");
-        if (cards)
+        EditorGUILayout.LabelField("Name", faction.Name);
+        EditorGUILayout.Toggle("Exclusive", faction.Exclusive);
+
+        //ZoneEditor.DrawCardFoldout(faction.Cards, ViewCards, ActiveCards);
+
+        ViewCards = EditorGUILayout.Foldout(ViewCards, "Cards");
+        if (ViewCards)
         {
-            if (active == null)
+            if (ActiveCards == null)
             {
-                active = new bool[cardGO.cards.Count];
-                for (int i = 0; i < active.Length; i++)
+                ActiveCards = new bool[faction.Cards.Count];
+                for (int i = 0; i < ActiveCards.Length; i++)
                 {
-                    active[i] = false;
+                    ActiveCards[i] = false;
                 }
             }
-            for (int i = 0; i < cardGO.cards.Count; i++)
+            for (int i = 0; i < faction.Cards.Count; i++)
             {
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Space(20);
-                active[i] = EditorGUILayout.Foldout(active[i], cardGO.cards[i].Name);
+                ActiveCards[i] = EditorGUILayout.Foldout(ActiveCards[i], faction.Cards[i].Name);
                 EditorGUILayout.EndHorizontal();
 
-                if (active[i])
+                if (ActiveCards[i])
                 {
                     EditorGUILayout.BeginHorizontal(); //Horizontal contains tab + ints
 
                     GUILayout.Space(40); //Tab in 20 pixels //https://forum.unity.com/threads/indenting-guilayout-objects.113494/
 
                     EditorGUILayout.BeginVertical(); //Vertical contains ints
-                    UnitCardEditor.DrawInspector((UnitCard)cardGO.cards[i]);
+                    UnitCardEditor.DrawInspector((UnitCard)faction.Cards[i]);
                     EditorGUILayout.EndVertical();
 
                     EditorGUILayout.EndHorizontal();

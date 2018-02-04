@@ -58,4 +58,11 @@ public class GwantExceptions : Exception {
 
         }
     }
+    public class MissingFactionName : GwantExceptions
+    {
+        public MissingFactionName() : base("Missing Faction name in file: " + ".txt")
+        {
+
+        }
+    }
 }

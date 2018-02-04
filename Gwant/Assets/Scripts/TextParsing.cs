@@ -10,179 +10,217 @@ public class TextParsing {
     private const int INACTIVE_INT = -1;
     private static List<int> idList = new List<int>();
 
-    public static List<GameObject> ParseText(string text, out List<string> strings)
+    public static List<GameObject> ParseText(string text)
     {
-        List<GameObject> cards = new List<GameObject>();
+        List<GameObject> factions = new List<GameObject>();
+        //Match m = Regex.Match(text, @"(faction)\s*(=)\s*({)(?s).*");
+        string factionName = null;
+        bool factionExclusivity = false;
+
         //match:    'faction' + (0+ spaces) + '=' + (0+ spaces) + '{' + 
         //          (everything until the end of file)
-        List<string> matches = new List<string>();
-        //Match m = Regex.Match(text, @"(faction)\s*(=)\s*({)(?s).*");
-        MatchCollection regexMatches = Regex.Matches(text, @"(faction)\s*(=)\s*({)(?s).*");
-        foreach (Match m in regexMatches)
+        List<Match> regexMatches = new List<Match>();// = Regex.Matches(text, @"(faction)\s*(=)\s*({)(?s).*");
+        string regexInput = text;
+        Match ma = Regex.Match(regexInput, @"(faction)\s*=\s*{(?'data'[\s|\S]*)");
+
+        while (ma.Success)
         {
-        //matches.Add(m.Value);
-            int OpenBracketCount = 1;
-            int CloseBracketCount = 0;
-            for (int i = 0; i < m.Value.Length; i++)
+            if (!regexMatches.Contains(ma))
             {
-                char ch = m.Value[i];
+                regexMatches.Add(ma);
+                ma = Regex.Match(ma.Groups["data"].Value, @"(faction)\s*=\s*{(?'data'[\s|\S]*)");
+            }
+        }
+        foreach (Match factionMatch in regexMatches)
+        {
+            List<string> matches = new List<string>();
+            //matches.Add(m.Value);
+            int OpenBracketCount = 0;
+            int CloseBracketCount = 0;
+            Match factionValues = Regex.Match(factionMatch.Value, @"{([^{]+){");
+
+            #region Get faction Name & Exclusivity
+
+            factionName = GetStringProperty("Name", factionValues.Value);
+            if (factionValues == null) throw new GwantExceptions.MissingFactionName();
+            factionExclusivity = GetBoolProperty("Exclusive", factionValues.Value);
+
+            #endregion
+
+            #region Brackets
+            for (int i = 0; i < factionMatch.Value.Length; i++)
+            {
+                char ch = factionMatch.Value[i];
                 if (ch == '{')
                     OpenBracketCount++;
                 else if (ch == '}')
                     CloseBracketCount++;
 
-                if (OpenBracketCount == CloseBracketCount)
+                if (OpenBracketCount == CloseBracketCount && OpenBracketCount > 1)
                 {
-                    matches.Add(m.Value.Substring(0, i));
+                    matches.Add(factionMatch.Value.Substring(0, i));
                     break;
                 }
             }
+
+            #endregion
+
+            foreach (string s in matches)
+            {
+                List<GameObject> cardGameObjects = new List<GameObject>();
+
+                #region Unit matches
+                MatchCollection matchCollection = Regex.Matches(s, @"(unit)\s*=\s{[^{]+}");
+                foreach (Match unitMatch in matchCollection)
+                {
+                    //get id
+                    int id = GetIntProperty("ID", unitMatch.Value);
+                    if (idList.Contains(id))
+                        throw new GwantExceptions.DuplicateIDException(id);
+                    else
+                        idList.Add(id);
+
+                    //get name
+                    string name = GetStringProperty("Name", unitMatch.Value);
+
+                    //get art
+                    string art = GetStringProperty("Art", unitMatch.Value);
+                    if (art == null) art = name.Replace(" ", string.Empty);
+                    art = "art/" + art.ToLower() + ".jpg";
+
+                    //get strength
+                    int strength = GetIntProperty("Strength", unitMatch.Value);
+                    if (strength == DEFAULT_INT_VALUE)
+                        throw new GwantExceptions.InvalidStrengthException(id);
+
+                    //get hero
+                    bool hero = GetBoolProperty("Hero", unitMatch.Value); //invalid result defaults to false
+
+
+                    //get ability
+                    Enum ab = GetEnumProperty(EnumProperties.Ability, unitMatch.Value);
+                    Card.Abilities ability = (ab != null) ? (Card.Abilities)ab : Card.Abilities.None;
+
+                    //get section
+                    UnitCard.Sections section = (UnitCard.Sections)GetEnumProperty(EnumProperties.Section, unitMatch.Value);
+
+
+                    //if ability = muster
+                    //get muster name
+                    string muster = (ability == Card.Abilities.Muster) ? GetStringProperty("Muster", unitMatch.Value) : null;
+                    if (muster == null && ability == Card.Abilities.Muster)
+                        muster = name;
+
+                    //if ability = scorch
+                    //get scorch threshold
+                    int scorch = INACTIVE_INT;
+                    if (ability == Card.Abilities.Scorch)
+                    {
+                        scorch = GetIntProperty("Scorch", unitMatch.Value);
+                        scorch = (scorch == DEFAULT_INT_VALUE) ? 10 : scorch;
+                    }
+
+                    //if ability = avenger
+                    //get avenger id
+                    int avenger = INACTIVE_INT;
+                    if (ability == Card.Abilities.Avenger)
+                    {
+                        avenger = GetIntProperty("Avenger", unitMatch.Value);
+                        if (avenger == DEFAULT_INT_VALUE)
+                        {
+                            throw new GwantExceptions.InvalidAvengerException(id);
+                        }
+                    }
+
+                    //get count
+                    int count = GetIntProperty("Count", unitMatch.Value);
+                    count = (count == DEFAULT_INT_VALUE) ? 1 : count;
+
+                    //Create the cards
+                    for (int i = 0; i < count; i++)
+                    {
+                        GameObject go = new GameObject();
+                        UnitCard.AddComponentTo(go, id, name, art, section, strength, hero, ability, avenger, muster, scorch);
+                        go.name = name;
+                        cardGameObjects.Add(go);
+                    }
+                }
+                #endregion
+
+                #region Special matches
+                matchCollection = Regex.Matches(s, @"(special)\s*=\s{[^{]+}");
+                foreach (Match specialMatch in matchCollection)
+                {
+                    //get id
+                    int id = GetIntProperty("ID", specialMatch.Value);
+                    if (idList.Contains(id))
+                        throw new GwantExceptions.DuplicateIDException(id);
+                    else
+                        idList.Add(id);
+
+                    //get name
+                    string name = GetStringProperty("Name", specialMatch.Value);
+
+                    //get art
+                    string art = GetStringProperty("Art", specialMatch.Value);
+                    if (art == null) art = name.Replace(" ", string.Empty);
+                    art = "art/" + art.ToLower() + ".jpg";
+
+
+                    //get ability
+                    Enum ab = GetEnumProperty(EnumProperties.Ability, specialMatch.Value);
+                    Card.Abilities ability = (ab != null) ? (Card.Abilities)ab : Card.Abilities.None;
+
+                    //get weather type
+                    SpecialCard.WeatherTypes weatherType;
+                    if (ability == Card.Abilities.Weather)
+                    {
+                        Enum w = GetEnumProperty(EnumProperties.Ability, specialMatch.Value);
+                        weatherType = (w != null) ? (SpecialCard.WeatherTypes)w :
+                            SpecialCard.WeatherTypes.None;
+                    }
+                    else weatherType = SpecialCard.WeatherTypes.None;
+
+
+                    //get count
+                    int count = GetIntProperty("Count", specialMatch.Value);
+                    count = (count == DEFAULT_INT_VALUE) ? 1 : count;
+
+                    //Create the cards
+                    for (int i = 0; i < count; i++)
+                    {
+                        GameObject go = new GameObject();
+                        SpecialCard.AddComponentTo(go, id, name, art, ability, weatherType);
+                        go.name = name;
+                        cardGameObjects.Add(go);
+                    }
+                }
+                #endregion
+
+                List<Card> cardList = new List<Card>();
+                foreach (GameObject go in cardGameObjects)
+                {
+                    cardList.Add(go.GetComponent<Card>());
+                }
+                factions.Add(Faction.CreateFaction(factionName, cardList, factionExclusivity));
+            }
+
         }
-        if (matches.Count == 0)
-            matches.Add(text);
         //strings = matches;
 
 
         //string name = "";
 
-        foreach (string s in matches)
-        {
-            //Unit matches
-            MatchCollection matchCollection = Regex.Matches(s, @"(unit)\s*=\s{[^{]+}");
-            foreach (Match m in matchCollection)
-            {
-                //get id
-                int id = GetIntProperty("ID", m.Value);
-                if (idList.Contains(id))
-                    throw new GwantExceptions.DuplicateIDException(id);
-                else
-                    idList.Add(id);
-
-                //get name
-                string name = GetStringProperty("Name", m.Value);
-
-                //get art
-                string art = GetStringProperty("Art", m.Value);
-                if (art == null) art = name.Replace(" ", string.Empty);
-                art = "art/" + art.ToLower() + ".jpg";
-
-                //get strength
-                int strength = GetIntProperty("Strength", m.Value);
-                if (strength == DEFAULT_INT_VALUE)
-                    throw new GwantExceptions.InvalidStrengthException(id);
-
-                //get hero
-                bool hero = GetBoolProperty("Hero", m.Value); //invalid result defaults to false
-
-
-                //get ability
-                Enum ab = GetEnumProperty(EnumProperties.Ability, m.Value);
-                Card.Abilities ability = (ab != null)? (Card.Abilities)ab : Card.Abilities.None;
-
-                //get section
-                UnitCard.Sections section = (UnitCard.Sections)GetEnumProperty(EnumProperties.Section, m.Value);
-
-
-                //if ability = muster
-                //get muster name
-                string muster = (ability == Card.Abilities.Muster)? GetStringProperty("Muster", m.Value) : null;
-                if (muster == null && ability == Card.Abilities.Muster)
-                    muster = name;
-
-                //if ability = scorch
-                //get scorch threshold
-                int scorch = INACTIVE_INT;
-                if (ability == Card.Abilities.Scorch)
-                {
-                    scorch = GetIntProperty("Scorch", m.Value);
-                    scorch = (scorch == DEFAULT_INT_VALUE) ? 10 : scorch;
-                }
-                
-                //if ability = avenger
-                //get avenger id
-                int avenger = INACTIVE_INT;
-                if (ability == Card.Abilities.Avenger)
-                {
-                    avenger = GetIntProperty("Avenger", m.Value);
-                    if (avenger == DEFAULT_INT_VALUE)
-                    {
-                        throw new GwantExceptions.InvalidAvengerException(id);
-                    }
-                }
-
-                //get count
-                int count = GetIntProperty("Count", m.Value);
-                count = (count == DEFAULT_INT_VALUE) ? 1 : count;
-
-                //Create the cards
-                for (int i = 0; i < count; i++)
-                {
-                    GameObject go = new GameObject();
-                    UnitCard.AddComponentTo(go, id, name, art, section, strength, hero, ability, avenger, muster, scorch);
-                    go.name = name;
-                    cards.Add(go);
-                }
-            }
-
-            //Special matches
-            matchCollection = Regex.Matches(s, @"(special)\s*=\s{[^{]+}");
-            foreach (Match m in matchCollection)
-            {
-                //get id
-                int id = GetIntProperty("ID", m.Value);
-                if (idList.Contains(id))
-                    throw new GwantExceptions.DuplicateIDException(id);
-                else
-                    idList.Add(id);
-
-                //get name
-                string name = GetStringProperty("Name", m.Value);
-
-                //get art
-                string art = GetStringProperty("Art", m.Value);
-                if (art == null) art = name.Replace(" ", string.Empty);
-                art = "art/" + art.ToLower() + ".jpg";
-
-
-                //get ability
-                Enum ab = GetEnumProperty(EnumProperties.Ability, m.Value);
-                Card.Abilities ability = (ab != null) ? (Card.Abilities)ab : Card.Abilities.None;
-
-                //get weather type
-                SpecialCard.WeatherTypes weatherType;
-                if (ability == Card.Abilities.Weather)
-                {
-                    Enum w = GetEnumProperty(EnumProperties.Ability, m.Value);
-                    weatherType = (w != null) ? (SpecialCard.WeatherTypes)w :
-                        SpecialCard.WeatherTypes.None;
-                }
-                else weatherType = SpecialCard.WeatherTypes.None;
-
-                
-                //get count
-                int count = GetIntProperty("Count", m.Value);
-                count = (count == DEFAULT_INT_VALUE) ? 1 : count;
-
-                //Create the cards
-                for (int i = 0; i < count; i++)
-                {
-                    GameObject go = new GameObject();
-                    SpecialCard.AddComponentTo(go, id, name, art, ability, weatherType);
-                    go.name = name;
-                    cards.Add(go);
-                }
-            }
-        }
-
-        strings = matches;
+        //strings = matches;
         //strings.Add(name);
-        return cards;
+        //return cards;
+        return factions;
     }
 
     private enum StringProperties { Name, Art }
     private static string GetStringProperty(string Property, string Text)
     {
-        string pattern = @"(" + Property + @")\s*=\s*""([\p{L}\p{N}\s':]{1,30})""";
+        string pattern = @"(" + Property + @")\s*=\s*""(?'data'[\p{L}\p{N}\s':]{1,30})""";
         try
         {
             string output = (string)GetProperty(Text, pattern);
@@ -197,7 +235,7 @@ public class TextParsing {
     private enum EnumProperties { Ability, Section, WeatherType }
     private static Enum GetEnumProperty(EnumProperties Property, string Text)
     {
-        string pattern = @"(" + Property.ToString().ToLower() + @")\s*=\s*(";// ([0-9]{1,2})";
+        string pattern = @"(" + Property.ToString().ToLower() + @")\s*=\s*(?'data'";// ([0-9]{1,2})";
 
         Type enumType;
         if (Property == EnumProperties.Ability)
@@ -270,7 +308,7 @@ public class TextParsing {
     private enum IntProperties { ID, Strength, Avenger }
     private static int GetIntProperty(string Property, string Text)
     {
-        string pattern = @"(" + Property.ToString().ToLower() + @")\s*=\s*([0-9]{1,";// 2})";
+        string pattern = @"(" + Property.ToString().ToLower() + @")\s*=\s*(?'data'[0-9]{1,";// 2})";
         if (Property.ToString().ToLower().Equals("strength"))
             pattern += @"2})";
         else
@@ -296,7 +334,7 @@ public class TextParsing {
     private enum BoolProperties { Hero }
     private static bool GetBoolProperty(string Property, string Text)
     {
-        string pattern = @"(" + Property.ToString().ToLower() + @")\s*=\s*(true|false)";
+        string pattern = @"(" + Property.ToString().ToLower() + @")\s*=\s*(?'data'true|false)";
         try
         {
             string o = (string)GetProperty(Text, pattern);
@@ -322,12 +360,10 @@ public class TextParsing {
 
         //object valueToReturn = null;
         Match m = Regex.Match(Text, pattern, RegexOptions.IgnoreCase);
-        if (m.Groups[2].Success)
+        if (m.Groups["data"] .Success)
             return m.Groups[2].Value;
         else
             return null;
-
-        //return valueToReturn;
     }
 
 }

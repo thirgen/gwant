@@ -20,7 +20,7 @@ public class UnitCardEditor : Editor {
         //base.OnInspectorGUI();
         
         EditorGUILayout.LabelField("ID", card.ID.ToString());
-        EditorGUILayout.LabelField("Name", card.Name);
+        EditorGUILayout.TextField("Name", card.Name);
         EditorGUILayout.LabelField("Art", card.Art);
         //EditorGUILayout.LabelField("Special", card.Special.ToString());
         EditorGUILayout.EnumPopup("Section", card.Section);

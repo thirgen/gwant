@@ -6,14 +6,13 @@ public class CardGO : MonoBehaviour {
     
     public Card card;
     public Card card2;
-    public TextAsset text;
-    public List<string> list = new List<string>();
-    private List<GameObject> gos = new List<GameObject>();
-    public List<Card> cards = new List<Card>();
+    public TextAsset[] TextAssets;
+    private List<GameObject> FactionGameObjects = new List<GameObject>();
 
     // Use this for initialization
     void Start()
     {
+        TextAssets = Resources.LoadAll<TextAsset>("Factions/");
         //card = new UnitCard(1, "1", "1", UnitCard.Sections.Melee, 10, false, Card.Abilities.None);
         //card = UnitCard.AddComponentTo(gameObject, 1, "Name", "Art", UnitCard.Sections.Melee, 10,
             //false, Card.Abilities.None);
@@ -34,11 +33,20 @@ public class CardGO : MonoBehaviour {
             }
             */
         }
-        gos = TextParsing.ParseText(text.text, out list);
-        foreach (GameObject go in gos)
+        foreach (TextAsset t in TextAssets)
         {
-            cards.Add(go.GetComponent<Card>());
+            List<GameObject> g = TextParsing.ParseText(t.text);
+            foreach (GameObject go in g)
+            {
+                FactionGameObjects.Add(go);
+            }
         }
+        
+        foreach (GameObject go in FactionGameObjects)
+        {
+            DontDestroyOnLoad(go);
+        }
+        
     }
 	
 	// Update is called once per frame
