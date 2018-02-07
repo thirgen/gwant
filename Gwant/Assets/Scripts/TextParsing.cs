@@ -17,10 +17,15 @@ public class TextParsing {
         string factionName = null;
         bool factionExclusivity = false;
 
-        //match:    'faction' + (0+ spaces) + '=' + (0+ spaces) + '{' + 
-        //          (everything until the end of file)
+
+        List<Card> cardList = new List<Card>();
+
+
         List<Match> regexMatches = new List<Match>();// = Regex.Matches(text, @"(faction)\s*(=)\s*({)(?s).*");
         string regexInput = text;
+
+        //match:    'faction' + (0+ spaces) + '=' + (0+ spaces) + '{' + 
+        //          (everything until the end of file)
         Match ma = Regex.Match(regexInput, @"(faction)\s*=\s*{(?'data'[\s|\S]*)");
 
         while (ma.Success)
@@ -67,7 +72,7 @@ public class TextParsing {
 
             foreach (string s in matches)
             {
-                List<GameObject> cardGameObjects = new List<GameObject>();
+                //List<GameObject> cardGameObjects = new List<GameObject>();
 
                 #region Unit matches
                 MatchCollection matchCollection = Regex.Matches(s, @"(unit)\s*=\s{[^{]+}");
@@ -86,6 +91,8 @@ public class TextParsing {
                     //get art
                     string art = GetStringProperty("Art", unitMatch.Value);
                     if (art == null) art = name.Replace(" ", string.Empty);
+                    //art = art.Replace(@"(\P{L})*", string.Empty);
+                    //DO REGEX TO REPLACE INVALID FILE NAME CHARACTERS
                     art = "art/" + art.ToLower() + ".jpg";
 
                     //get strength
@@ -139,10 +146,15 @@ public class TextParsing {
                     //Create the cards
                     for (int i = 0; i < count; i++)
                     {
+                        /*
                         GameObject go = new GameObject();
                         UnitCard.AddComponentTo(go, id, name, art, section, strength, hero, ability, avenger, muster, scorch);
                         go.name = name;
                         cardGameObjects.Add(go);
+                        */
+                        //GameObject go = new GameObject();
+                        UnitCard c = new UnitCard(id, name, art, section, strength, hero, ability, avenger, muster, scorch);
+                        cardList.Add(c);
                     }
                 }
                 #endregion
@@ -189,20 +201,28 @@ public class TextParsing {
                     //Create the cards
                     for (int i = 0; i < count; i++)
                     {
+                        /*
                         GameObject go = new GameObject();
                         SpecialCard.AddComponentTo(go, id, name, art, ability, weatherType);
                         go.name = name;
                         cardGameObjects.Add(go);
+                        */
+                        SpecialCard c = new SpecialCard(id, name, art, ability, weatherType);
+                        cardList.Add(c);
+
                     }
                 }
                 #endregion
 
-                List<Card> cardList = new List<Card>();
-                foreach (GameObject go in cardGameObjects)
-                {
-                    cardList.Add(go.GetComponent<Card>());
-                }
+                //List<Card> cardList = new List<Card>();
+                //foreach (GameObject go in cardGameObjects)
+                //{
+                //cardList.Add(go.GetComponent<Card>());
+                //}
+                //GameObject go = Faction.CreateFaction(factionName, cardList, factionExclusivity);
                 factions.Add(Faction.CreateFaction(factionName, cardList, factionExclusivity));
+                //factions.Add(go.GetComponent<Faction>());
+                //factions.Add(new Faction(factionName, cardList, factionExclusivity));
             }
 
         }

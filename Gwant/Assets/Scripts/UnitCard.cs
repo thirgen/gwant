@@ -24,6 +24,27 @@ public class UnitCard : Card {
     bool bond;
     bool horn;
 
+    public UnitCard(int ID, string Name, string Art, Sections Section, int Strength,
+        bool Hero, Abilities Ability, int Avenger, string Muster, int ScorchThreshold) : base(ID, Name, Art, false)
+    {
+        this.Section = Section;
+        this.Hero = Hero;
+        this.Ability = Ability;
+        strength = new Vector2Int();
+        morale = new Vector2Int();
+        SetBaseStrength(Strength);
+        if (Ability == Abilities.Morale)
+            SetBaseMorale(1);
+        else
+            SetBaseMorale(0);
+        if (Ability == Abilities.Muster)
+            this.Muster = Muster;
+        if (Ability == Abilities.Avenger)
+            this.Avenger = Avenger;
+        if (Ability == Abilities.Scorch)
+            this.ScorchThreshold = ScorchThreshold;
+
+    }
 
     private void CardSetUp(int ID, string Name, string Art, Sections Section, int Strength,
         bool Hero, Abilities Ability, int Avenger, string Muster, int ScorchThreshold)// : base(ID, Name, Art, false)
@@ -51,16 +72,16 @@ public class UnitCard : Card {
         //serializedUnitCard = new SerializedUnitCard(ID, Name, Art, Section, strength, hero,
         //ability, morale, muster, scorchThreshold, bond, horn);
     }
+    
 
-
-
+    /*
     public static UnitCard AddComponentTo(GameObject go, int ID, string Name, string Art, Sections Section, int Strength,
         bool Hero, Abilities Ability, int Avenger, string Muster, int ScorchThreshold) //
     {        UnitCard c = go.AddComponent<UnitCard>();
         c.CardSetUp(ID, Name, Art, Section, Strength, Hero, Ability, Avenger, Muster, ScorchThreshold);
         return c;
     }
-
+    */
 
 
     public override void ApplyEffects(Zone zone)

@@ -9,7 +9,8 @@ public class UnitCardEditor : Editor {
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
-        DrawInspector((UnitCard)target);
+        UnitCard card = ((GameObject)target).GetComponent<UnitCard>();
+        DrawInspector(card);
 
     }
 

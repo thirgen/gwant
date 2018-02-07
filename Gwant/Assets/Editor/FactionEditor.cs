@@ -55,7 +55,10 @@ public class FactionEditor : Editor
                     GUILayout.Space(40); //Tab in 20 pixels //https://forum.unity.com/threads/indenting-guilayout-objects.113494/
 
                     EditorGUILayout.BeginVertical(); //Vertical contains ints
-                    UnitCardEditor.DrawInspector((UnitCard)faction.Cards[i]);
+                    if (faction.Cards[i].Special)
+                        SpecialCardEditor.DrawInspector((SpecialCard)faction.Cards[i]);
+                    else
+                        UnitCardEditor.DrawInspector((UnitCard)faction.Cards[i]);
                     EditorGUILayout.EndVertical();
 
                     EditorGUILayout.EndHorizontal();

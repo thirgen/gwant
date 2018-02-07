@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //[System.Serializable]
-public abstract class Card : MonoBehaviour
+public abstract class Card// : MonoBehaviour
 {
     public enum Abilities {
         None, Medic, Morale, Muster, Spy, Bond, Berserker, Avenger, Vanish, //Unit abilities only
@@ -18,13 +18,13 @@ public abstract class Card : MonoBehaviour
     protected const int ABILITY_COUNT = (int)Abilities.COUNT;
 
     private int id;
-    private new string name;
+    private string name;
     private string art;
     private bool special;
 
 
     #region Constructors
-    /*
+    
     public Card() : this(0, "", "", true) { }
 
     public Card(int ID, string Name, string Art, bool Special)
@@ -34,7 +34,7 @@ public abstract class Card : MonoBehaviour
         this.Art = Art;
         this.Special = special;
     }
-    */
+    
     #endregion
 
 

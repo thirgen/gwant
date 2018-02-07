@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿    using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,7 +22,12 @@ public class SpecialCard : Card {
         protected set { ability = value; }
     }
 
-    
+    public SpecialCard(int ID, string Name, string Art, Abilities Ability, WeatherTypes WeatherType) : base(ID, Name, Art, true)
+    {
+        this.Ability = Ability;
+        this.WeatherType = WeatherType;
+    }
+
     private void CardSetUp(int ID, string Name, string Art, Abilities Ability, WeatherTypes WeatherType)
     {
         this.ID = ID;
@@ -33,6 +38,7 @@ public class SpecialCard : Card {
     }
     
 
+    /*
     public static SpecialCard AddComponentTo(GameObject go, int ID, string Name, string Art, Abilities Ability,
         WeatherTypes WeatherType) //
     {
@@ -42,6 +48,7 @@ public class SpecialCard : Card {
         c.CardSetUp(ID, Name, Art, Ability, WeatherType);
         return c;
     }
+    */
 
     public override void ApplyEffects(Zone zone)
     {

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Faction : MonoBehaviour {
+public class Faction : MonoBehaviour
+{
 
     new string name;
     List<Card> cards;
@@ -12,6 +13,15 @@ public class Faction : MonoBehaviour {
     public List<Card> Cards { get { return cards; } private set { cards = value; } }
     public bool Exclusive { get { return exclusive; } private set { exclusive = value; } }
 
+    /*
+    public Faction(string Name, List<Card> Cards, bool Exclusive)
+    {
+        f.Name = Name;
+        f.Cards = Cards;
+        f.Exclusive = Exclusive;
+    }
+    */
+    
     public static GameObject CreateFaction(string Name, List<Card> Cards, bool Exclusive)
     {
         GameObject go = new GameObject(Name);
@@ -21,4 +31,15 @@ public class Faction : MonoBehaviour {
         f.Exclusive = Exclusive;
         return go;
     }
+
+    public static Faction CloneTo(Faction FactionToBeCloned, GameObject GOToCloneTo)
+    {
+        Faction f = GOToCloneTo.AddComponent<Faction>();
+        f.Name = FactionToBeCloned.Name;
+        f.Cards = FactionToBeCloned.Cards;
+        f.Exclusive = FactionToBeCloned.Exclusive;
+        return f;
+    }
+    
+
 }
