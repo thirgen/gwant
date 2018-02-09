@@ -28,28 +28,6 @@ public class SpecialCard : Card {
         this.WeatherType = WeatherType;
     }
 
-    private void CardSetUp(int ID, string Name, string Art, Abilities Ability, WeatherTypes WeatherType)
-    {
-        this.ID = ID;
-        this.Name = Name;
-        this.Art = Art;
-        this.Ability = Ability;
-        this.WeatherType = WeatherType;
-    }
-    
-
-    /*
-    public static SpecialCard AddComponentTo(GameObject go, int ID, string Name, string Art, Abilities Ability,
-        WeatherTypes WeatherType) //
-    {
-        SpecialCard c = go.AddComponent<SpecialCard>();
-        if (Ability == Abilities.Weather && WeatherType == WeatherTypes.None)
-            throw new GwantExceptions.InvalidWeatherException(ID);
-        c.CardSetUp(ID, Name, Art, Ability, WeatherType);
-        return c;
-    }
-    */
-
     public override void ApplyEffects(Zone zone)
     {
         //Horn, Sorch, Mushroom, Decoy

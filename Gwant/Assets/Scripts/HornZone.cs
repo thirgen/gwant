@@ -6,8 +6,10 @@ public class HornZone : MonoBehaviour {
 
     SpecialCard card;
     bool horn;
-    Battlefield.Combats combat;
+    //Battlefield.Types combat;
     public bool Horn { get { return horn; } set { horn = value; } }
-    public Battlefield.Combats Combat { get { return combat; } set { combat = value; } }
+    //public Battlefield.Combats Combat { get { return combat; } set { combat = value; } }
+
+
 
 }

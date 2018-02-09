@@ -15,7 +15,7 @@ public class UnitCard : Card {
     //x = total strength
     //y = base strength
     Vector2Int strength;
-    Vector2Int morale;
+    int morale;
 
     string muster;
     int scorchThreshold;
@@ -31,7 +31,6 @@ public class UnitCard : Card {
         this.Hero = Hero;
         this.Ability = Ability;
         strength = new Vector2Int();
-        morale = new Vector2Int();
         SetBaseStrength(Strength);
         if (Ability == Abilities.Morale)
             SetBaseMorale(1);
@@ -45,43 +44,6 @@ public class UnitCard : Card {
             this.ScorchThreshold = ScorchThreshold;
 
     }
-
-    private void CardSetUp(int ID, string Name, string Art, Sections Section, int Strength,
-        bool Hero, Abilities Ability, int Avenger, string Muster, int ScorchThreshold)// : base(ID, Name, Art, false)
-    {
-        this.ID = ID;
-        this.Name = Name;
-        this.Art = Art;
-        this.Special = false;
-        this.Section = Section;
-        this.Hero = Hero;
-        this.Ability = Ability;
-        strength = new Vector2Int();
-        morale = new Vector2Int();
-        SetBaseStrength(Strength);
-        if (Ability == Abilities.Morale)
-            SetBaseMorale(1);
-        else
-            SetBaseMorale(0);
-        if (Ability == Abilities.Muster)
-            this.Muster = Muster;
-        if (Ability == Abilities.Avenger)
-            this.Avenger = Avenger;
-        if (Ability == Abilities.Scorch)
-            this.ScorchThreshold = ScorchThreshold;
-        //serializedUnitCard = new SerializedUnitCard(ID, Name, Art, Section, strength, hero,
-        //ability, morale, muster, scorchThreshold, bond, horn);
-    }
-    
-
-    /*
-    public static UnitCard AddComponentTo(GameObject go, int ID, string Name, string Art, Sections Section, int Strength,
-        bool Hero, Abilities Ability, int Avenger, string Muster, int ScorchThreshold) //
-    {        UnitCard c = go.AddComponent<UnitCard>();
-        c.CardSetUp(ID, Name, Art, Section, Strength, Hero, Ability, Avenger, Muster, ScorchThreshold);
-        return c;
-    }
-    */
 
 
     public override void ApplyEffects(Zone zone)
@@ -114,8 +76,10 @@ public class UnitCard : Card {
             Horn = true;
         }
         //4.2 apply Horn effect from Horn special cards
-        if (bf.Horns != null && !Horn)
+        if (bf.Horns.Count != 0 && !Horn)
         {
+            //I'm not sure what this is supposed to do.
+            //I forgot why I wrote it
             foreach (UnitCard c in bf.Horns)
             {
                 if (c != this)
@@ -129,9 +93,8 @@ public class UnitCard : Card {
 
     public int Strength { get { return strength.x; } set { strength.x = value; } }
     public int GetBaseStrength() { return strength.y; }
-    public int Morale { get { return morale.x; } set { morale.x = value; } }
-    public int GetBaseMorale() { return morale.y; }
-    public int ScorchThreshold { get { return morale.y; } private set { scorchThreshold = value; } }
+    public int Morale { get { return morale; } set { morale = value; } }
+    public int ScorchThreshold { get { return scorchThreshold; } private set { scorchThreshold = value; } }
     public int Avenger { get { return avenger; } private set { avenger = value; } }
 
     private void SetBaseStrength(int Strength)
@@ -139,11 +102,7 @@ public class UnitCard : Card {
         this.Strength = Strength;
         strength.y = Strength;
     }
-    private void SetBaseMorale(int Morale)
-    {
-        //this.Morale = Morale;
-        morale.y = Morale;
-    }
+    private void SetBaseMorale(int Morale) { this.Morale = Morale; }
 
     public bool Hero { get { return hero; } private set { hero = value; } }
     public bool Bond { get { return bond; } private set { bond = value; } }

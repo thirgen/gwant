@@ -25,14 +25,14 @@ public abstract class Card// : MonoBehaviour
 
     #region Constructors
     
-    public Card() : this(0, "", "", true) { }
+    public Card() : this(-1, "", "", true) { }
 
     public Card(int ID, string Name, string Art, bool Special)
     {
         this.ID = ID;
         this.Name = Name;
         this.Art = Art;
-        this.Special = special;
+        this.Special = Special;
     }
     
     #endregion

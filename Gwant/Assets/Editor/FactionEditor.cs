@@ -13,22 +13,9 @@ public class FactionEditor : Editor
     {
         Faction faction = (Faction)target;
         //base.OnInspectorGUI();
-
-        //SerializedProperty p = serializedObject.FindProperty("text");
-        //EditorGUILayout.PropertyField(p);
-
-        //EditorGUILayout.LabelField("Type", zone.Type.ToString().ToUpper());
-
-        //zone.Type = (Zone.Types)EditorGUILayout.EnumPopup("Type", zone.Type);
-
-
-        //EditorGUILayout.DropdownButton(GUIContent.none, FocusType.Passive);
-        //EditorGUILayout.PropertyField(serializedObject.FindProperty("Cards"));
-        //cards = EditorGUILayout.Toggle("Expand Cards", cards);
+        
         EditorGUILayout.LabelField("Name", faction.Name);
         EditorGUILayout.Toggle("Exclusive", faction.Exclusive);
-
-        //ZoneEditor.DrawCardFoldout(faction.Cards, ViewCards, ActiveCards);
 
         ViewCards = EditorGUILayout.Foldout(ViewCards, "Cards");
         if (ViewCards)
@@ -56,9 +43,13 @@ public class FactionEditor : Editor
 
                     EditorGUILayout.BeginVertical(); //Vertical contains ints
                     if (faction.Cards[i].Special)
+                    {
                         SpecialCardEditor.DrawInspector((SpecialCard)faction.Cards[i]);
+                    }
                     else
+                    {
                         UnitCardEditor.DrawInspector((UnitCard)faction.Cards[i]);
+                    }
                     EditorGUILayout.EndVertical();
 
                     EditorGUILayout.EndHorizontal();

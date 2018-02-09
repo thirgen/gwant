@@ -19,4 +19,8 @@ public class CardGO : MonoBehaviour {
         name = Card.Name;
     }
 
+    private void AddEventTrigger()
+    {
+        //Add and set up event trigger paramets here;
+    }
 }

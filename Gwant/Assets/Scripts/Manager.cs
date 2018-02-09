@@ -4,50 +4,41 @@ using UnityEngine;
 
 public class Manager : MonoBehaviour {
     
-    public Card card;
-    public Card card2;
     public TextAsset[] TextAssets;
-    private List<GameObject> FactionGameObjects = new List<GameObject>();
+    private List<GameObject> FactionGameObjects;
+    public bool DebugCheats = true;
+    private bool turn;
 
-    // Use this for initialization
+    /// <summary>
+    /// Returns true if it's Player One's turn.
+    /// </summary>
+    public bool PlayerOnesTurn { get { return turn; } private set { turn = value; } }
+
+
+    #region BoardZones
+    [System.Serializable]
+    public struct BoardHalf
+    {
+        public Zone Hand;
+        public Zone Discard;
+        public Zone Deck;
+        public Battlefield Melee;
+        public Battlefield Ranged;
+        public Battlefield Siege;
+    }
+    #endregion
+    public BoardHalf player1Half;
+    public BoardHalf player2Half;
+    public Zone weather;
+
     void Start()
     {
         DontDestroyOnLoad(gameObject);
         TextAssets = Resources.LoadAll<TextAsset>("Factions/");
-        //card = new UnitCard(1, "1", "1", UnitCard.Sections.Melee, 10, false, Card.Abilities.None);
-        //card = UnitCard.AddComponentTo(gameObject, 1, "Name", "Art", UnitCard.Sections.Melee, 10,
-            //false, Card.Abilities.None);
-        //card2 = SpecialCard.AddComponentTo(gameObject, 2, "Special", "Special",
-            //Card.Abilities.Weather, SpecialCard.WeatherTypes.Frost);
+        FactionGameObjects = new List<GameObject>();
 
-        //List<UnitCard> cards = FindObjectOfType<Battlefield>().Cards;
-        Battlefield b = FindObjectOfType<Battlefield>();
-        if (b != null)
-        {
-            //print("FROUND");
-            //print(b.gameObject);
-            /*
-            for (int i = 0; i < 10; i++)
-            {
-
-                b.Cards.Add((UnitCard)card);
-            }
-            */
-        }
-        /*
         foreach (TextAsset t in TextAssets)
         {
-            List<Faction> factions = TextParsing.ParseText(t.text);
-            foreach (Faction f in factions)
-            {
-                
-            }
-        }
-        */
-        
-        foreach (TextAsset t in TextAssets)
-        {
-            
             List<GameObject> g = TextParsing.ParseText(t.text);
             foreach (GameObject go in g)
             {
@@ -60,25 +51,57 @@ public class Manager : MonoBehaviour {
                 }
                 Faction.CloneTo(f, gameObject);
             }
-            /*
-            while (g.Count > 0)
-                Destroy(g[0]);
-            */
-            
-            //List<Card> cards = TextParsing.ParseText(t.text);
-            //FactionGameObjects.Add(Faction.CreateFaction())
         }
-        
-        /*
-        foreach (GameObject go in FactionGameObjects)
-        {
-            DontDestroyOnLoad(go);
-        }
-        */
+
+        PlayerOnesTurn = (Random.Range(0, 2) == 1) ? true : false;
+
+
+
+        InitialiseZone(player1Half, true);
+        InitialiseZone(player2Half, false);
+        weather.Type = Zone.Types.Weather;
+        weather.VisibleTo = Zone.IsVisibleTo.Both;
+    }
+
+    private void InitialiseZone(BoardHalf b, bool player1)
+    {
+        Zone.IsVisibleTo visibleTo = (player1) ? Zone.IsVisibleTo.Player1 : Zone.IsVisibleTo.Player2;
+        Zone.IsVisibleTo notVisibleTo = (player1) ? Zone.IsVisibleTo.Player2 : Zone.IsVisibleTo.Player1;
+
+        b.Hand.Type = Zone.Types.Hand;
+        b.Hand.VisibleTo = visibleTo;
+
+        b.Deck.Type = Zone.Types.Deck;
+        b.Deck.VisibleTo = Zone.IsVisibleTo.None;
+
+        b.Discard.Type = Zone.Types.Discard;
+        b.Discard.VisibleTo = visibleTo;
+
+        b.Melee.Type = Zone.Types.Melee;
+        b.Melee.VisibleTo = Zone.IsVisibleTo.Both;
+
+        b.Ranged.Type = Zone.Types.Ranged;
+        b.Ranged.VisibleTo = Zone.IsVisibleTo.Both;
+
+        b.Siege.Type = Zone.Types.Siege;
+        b.Siege.VisibleTo = Zone.IsVisibleTo.Both;
     }
 	
-	// Update is called once per frame
 	void Update () {
 		
 	}
+
+    public void ChangeTurn()
+    {
+        PlayerOnesTurn = !PlayerOnesTurn;
+    }
+
+
+    void Cheats()
+    {
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            //draw card;
+        }
+    }
 }

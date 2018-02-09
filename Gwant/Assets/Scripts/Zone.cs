@@ -26,26 +26,14 @@ public class Zone : MonoBehaviour {
         set
         {
             type = value;
-            if (type == Types.Deck)
-            {
-                //VisibleTo = IsVisibleTo.None;
-                //IsCollapsed = true;
-
-                /*
-                if (!gameObject.GetComponent<Deck>())
-                {
-                    Deck d = gameObject.AddComponent<Deck>();
-                    Destroy(gameObject.GetComponent<Zone>());
-                    d.VisibleTo = IsVisibleTo.None;
-                    d.IsCollapsed = true;
-                    d.Cards = new List<Card>();
-                }
-                */
-            }
+            if (type == Types.Deck || type == Types.Discard)
+                IsCollapsed = true;
+            else
+                IsCollapsed = false;
         }
     }
     //public List<Card> Cards { get { return cards; } private set { cards = value; } }
-    public IsVisibleTo VisibleTo { get { return visibleTo; } private set { visibleTo = value; } }
+    public IsVisibleTo VisibleTo { get { return visibleTo; } set { visibleTo = value; } }
     public bool IsCollapsed { get { return collapsed; } private set { collapsed = value; } }
     #endregion
 

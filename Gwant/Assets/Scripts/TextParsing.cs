@@ -93,6 +93,7 @@ public class TextParsing {
                     if (art == null) art = name.Replace(" ", string.Empty);
                     //art = art.Replace(@"(\P{L})*", string.Empty);
                     //DO REGEX TO REPLACE INVALID FILE NAME CHARACTERS
+                    art = art.Replace(":", "").Replace("'", "");
                     art = "art/" + art.ToLower() + ".jpg";
 
                     //get strength
@@ -332,7 +333,7 @@ public class TextParsing {
         if (Property.ToString().ToLower().Equals("strength"))
             pattern += @"2})";
         else
-            pattern += @"3})";
+            pattern += @"4})";
         try
         {
             int output;

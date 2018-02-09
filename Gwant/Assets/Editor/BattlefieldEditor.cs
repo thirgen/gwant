@@ -13,16 +13,12 @@ public class BattlefieldEditor : Editor
     {
         Battlefield zone = (Battlefield)target;
         base.OnInspectorGUI();
+        
+        //zone.Type = (Zone.Types)EditorGUILayout.EnumPopup("Type", zone.Type);
+        EditorGUILayout.EnumPopup("Type", zone.Type);
 
-        //EditorGUILayout.LabelField("Type", zone.Type.ToString().ToUpper());
-        zone.Type = (Zone.Types)EditorGUILayout.EnumPopup("Type", zone.Type);
-
-
-        //EditorGUILayout.DropdownButton(GUIContent.none, FocusType.Passive);
-        //EditorGUILayout.PropertyField(serializedObject.FindProperty("Cards"));
-        //cards = EditorGUILayout.Toggle("Expand Cards", cards);
         cards = EditorGUILayout.Foldout(cards, "Cards");
-        if (cards)
+        if (zone.Cards != null && cards)
         {
             if (active == null)
             {
