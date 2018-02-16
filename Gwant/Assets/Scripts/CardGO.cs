@@ -17,16 +17,24 @@ public class CardGO : MonoBehaviour {
 	void Start () {
         if (child == null)
             child = Resources.Load<GameObject>("Prefabs/CardBorder");
-	}
+        GameObject border = Instantiate(child);
+        border.transform.SetParent(transform);
+        border.name = "Border";
+        RectTransform rr = border.GetComponent<RectTransform>();
+        
+        rr.offsetMax  = Vector2.zero;
+        rr.offsetMin = Vector2.zero;
+
+        GetComponent<CardEventTrigger>().Border = transform.GetChild(0).GetComponent<Image>();
+        //border.SetActive(false);
+    }
+
+    public Zone.Types InZone { get { return transform.parent.gameObject.GetComponent<Zone>().Type; } }
 
     public void SetCard(Card Card)
     {
         this.Card = Card;
         name = Card.Name;
-        child = Instantiate(child);
-        child.transform.SetParent(transform);
-        child.name = "Border";
-        child.SetActive(false);
     }
 
     

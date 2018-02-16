@@ -8,12 +8,6 @@ public class CardGOEditor : Editor {
 
     public override void OnInspectorGUI()
     {
-
-        CardEventTrigger trigger = ((CardGO)target).GetComponent<CardEventTrigger>();
-        trigger.DefaultColour = EditorGUILayout.ColorField("Default Colour", trigger.DefaultColour);
-        trigger.HighlightColour = EditorGUILayout.ColorField("Highlight Colour", trigger.HighlightColour);
-        trigger.SelectedColour = EditorGUILayout.ColorField("Selected Colour", trigger.SelectedColour);
-
         base.OnInspectorGUI();
 
 

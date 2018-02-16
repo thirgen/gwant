@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Manager : MonoBehaviour {
-    
+
+    public static Manager manager;
     public TextAsset[] TextAssets;
     private List<GameObject> FactionGameObjects;
     public bool DebugCheats = true;
@@ -33,7 +34,13 @@ public class Manager : MonoBehaviour {
 
     void Start()
     {
-        DontDestroyOnLoad(gameObject);
+        if (manager == null)
+        {
+            DontDestroyOnLoad(gameObject);
+            manager = this;
+        }
+        else
+            Destroy(gameObject);
         TextAssets = Resources.LoadAll<TextAsset>("Factions/");
         FactionGameObjects = new List<GameObject>();
 
