@@ -22,7 +22,7 @@ public class Manager : MonoBehaviour {
     {
         public Zone Hand;
         public Zone Discard;
-        public Zone Deck;
+        public Deck Deck;
         public Battlefield Melee;
         public Battlefield Ranged;
         public Battlefield Siege;
@@ -44,6 +44,10 @@ public class Manager : MonoBehaviour {
         TextAssets = Resources.LoadAll<TextAsset>("Factions/");
         FactionGameObjects = new List<GameObject>();
 
+        GameObject UnitPrefab = Resources.Load<GameObject>("Prefabs/UnitPrefab");
+        GameObject HeroPrefab = Resources.Load<GameObject>("Prefabs/HeroPrefab");
+        GameObject SpecialPrefab = Resources.Load<GameObject>("Prefabs/SpecialPrefab");
+
         foreach (TextAsset t in TextAssets)
         {
             List<GameObject> g = TextParsing.ParseText(t.text);
@@ -53,17 +57,47 @@ public class Manager : MonoBehaviour {
                 Faction f = go.GetComponent<Faction>();
                 foreach (Card c in f.Cards)
                 {
-                    CardGO wrapper = new GameObject().AddComponent<CardGO>();
-                    wrapper.SetCard(c);
+                    GameObject wrapper;
+                    if (c.Special)
+                    {
+                        //instantiate special prefab
+                        wrapper = Instantiate(SpecialPrefab, player1Half.Deck.transform);
+                    }
+                    else if (((UnitCard)c).Hero)
+                    {
+                        //instantiate hero prefab
+                        wrapper = Instantiate(HeroPrefab, player1Half.Deck.transform);
+                    }
+                    else //regular unit
+                    {
+                        //instantiate unit prefab
+                        wrapper = Instantiate(UnitPrefab, player1Half.Deck.transform);
+                    }
+                    //CardGO wrapper = new GameObject().AddComponent<CardGO>();
+                    CardGO cardGO = wrapper.GetComponent<CardGO>();
+                    cardGO.SetCard(c);
+                    //RectTransform rect = wrapper.GetComponent<RectTransform>();
+                    //rect.pivot = new Vector2(0.5f, 0.5f);
+                    //rect.anchoredPosition = new Vector2(0.5f, 0.5f);
+                    //rect.offsetMax = new Vector2(0.5f, 0.5f);
+                    //rect.offsetMin = new Vector2(0.5f, 0.5f);
+                    //rect.position = Vector2.zero;
+                    player1Half.Deck.AddCard(cardGO);
+                    wrapper.SetActive(false);
                 }
                 Faction.CloneTo(f, gameObject);
             }
+            foreach (GameObject go in g)
+                Destroy(go);
         }
+
+        int[] deck = new int[] { 1, 3, 6, 9, 10, 14, 18, 11, 11, 12, 12, 13,
+            100, 101, 101, 102, 102, 102, 103, 103, 106, 107, 108, 109, 119, 121, 122, 122 };
 
         PlayerOnesTurn = (Random.Range(0, 2) == 1) ? true : false;
 
 
-
+        //set up board
         InitialiseZone(player1Half, true);
         InitialiseZone(player2Half, false);
         weather.Type = Zone.Types.Weather;
@@ -95,7 +129,7 @@ public class Manager : MonoBehaviour {
     }
 	
 	void Update () {
-		
+        Cheats();
 	}
 
     public void ChangeTurn()
@@ -109,6 +143,8 @@ public class Manager : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.F1))
         {
             //draw card;
+            CardGO cardGO = player1Half.Deck.Cards[0];
+            player1Half.Deck.MoveCardTo(cardGO ,player1Half.Hand);
         }
     }
 }

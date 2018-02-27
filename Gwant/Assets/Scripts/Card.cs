@@ -62,5 +62,4 @@ public abstract class Card// : MonoBehaviour
     protected abstract bool AbilityIsValid(Abilities ab);
     public abstract void ApplyEffects(Zone zone);
     
-
 }

@@ -12,7 +12,7 @@ public class Zone : MonoBehaviour {
     #region Fields
     //GameObject zoneGO;
     Types type;
-    //List<Card> cards;
+    List<CardGO> cards;
     IsVisibleTo visibleTo;
     bool collapsed;
     #endregion
@@ -26,15 +26,18 @@ public class Zone : MonoBehaviour {
         set
         {
             type = value;
-            if (type == Types.Deck || type == Types.Discard)
+            if (type == Types.Deck)
+            {
+            }
+            else if (type == Types.Discard)
                 IsCollapsed = true;
             else
                 IsCollapsed = false;
         }
     }
-    //public List<Card> Cards { get { return cards; } private set { cards = value; } }
+    public List<CardGO> Cards { get { return cards; } protected set { cards = value; } }
     public IsVisibleTo VisibleTo { get { return visibleTo; } set { visibleTo = value; } }
-    public bool IsCollapsed { get { return collapsed; } private set { collapsed = value; } }
+    public bool IsCollapsed { get { return collapsed; } protected set { collapsed = value; } }
     #endregion
 
     private void Start()
@@ -89,9 +92,15 @@ public class Zone : MonoBehaviour {
         }
     }
 
-    public void MoveCardTo(Card card, Zone zone)
+    public void MoveCardTo(CardGO cardGO, Zone zone)
     {
         //Zone targetZone;
+        cardGO.transform.parent.GetComponent<Zone>().Cards.Remove(cardGO);
+        cardGO.transform.SetParent(zone.transform);
+        if (!cardGO.gameObject.activeSelf && zone.Type != Types.Deck)
+            cardGO.gameObject.SetActive(true);
+
+        Card card = cardGO.Card;
         if (card.Special)
         {
             SpecialCard c = (SpecialCard)card;
@@ -184,6 +193,5 @@ public class Zone : MonoBehaviour {
         }
 
     }
-    
     #endregion
 }

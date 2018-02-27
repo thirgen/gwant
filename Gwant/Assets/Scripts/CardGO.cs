@@ -15,18 +15,6 @@ public class CardGO : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        if (child == null)
-            child = Resources.Load<GameObject>("Prefabs/CardBorder");
-        GameObject border = Instantiate(child);
-        border.transform.SetParent(transform);
-        border.name = "Border";
-        RectTransform rr = border.GetComponent<RectTransform>();
-        
-        rr.offsetMax  = Vector2.zero;
-        rr.offsetMin = Vector2.zero;
-
-        GetComponent<CardEventTrigger>().Border = transform.GetChild(0).GetComponent<Image>();
-        //border.SetActive(false);
     }
 
     public Zone.Types InZone { get { return transform.parent.gameObject.GetComponent<Zone>().Type; } }
@@ -35,7 +23,25 @@ public class CardGO : MonoBehaviour {
     {
         this.Card = Card;
         name = Card.Name;
+
+        //Initialise Gameobject
+
+        GetComponent<CardEventTrigger>().SetUpComponents();
+
+        /*
+        if (child == null)
+            child = Resources.Load<GameObject>("Prefabs/CardBorder");
+        GameObject border = Instantiate(child);
+        border.transform.SetParent(transform);
+        border.name = "Border";
+        RectTransform rr = border.GetComponent<RectTransform>();
+
+        rr.offsetMax = Vector2.zero;
+        rr.offsetMin = Vector2.zero;
+        */
+        //GetComponent<CardEventTrigger>().Border = transform.GetChild(0).GetComponent<Image>();
+        //border.SetActive(false);
     }
 
-    
+
 }
