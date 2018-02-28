@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(Battlefield))]
+//[CustomEditor(typeof(Battlefield))]
 public class BattlefieldEditor : Editor
 {
     bool cards = false;
@@ -32,7 +32,7 @@ public class BattlefieldEditor : Editor
             {
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Space(20);
-                active[i] = EditorGUILayout.Foldout(active[i], zone.Cards[i].Name);
+                active[i] = EditorGUILayout.Foldout(active[i], zone.Cards[i].Card.Name);
                 EditorGUILayout.EndHorizontal();
 
                 if (active[i])
@@ -42,7 +42,7 @@ public class BattlefieldEditor : Editor
                     GUILayout.Space(40); //Tab in 20 pixels //https://forum.unity.com/threads/indenting-guilayout-objects.113494/
 
                     EditorGUILayout.BeginVertical(); //Vertical contains ints
-                    UnitCardEditor.DrawInspector(zone.Cards[i]);
+                    UnitCardEditor.DrawInspector((UnitCard)zone.Cards[i].Card);
                     EditorGUILayout.EndVertical();
 
                     EditorGUILayout.EndHorizontal();

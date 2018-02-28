@@ -36,6 +36,7 @@ public class CardEventTrigger : EventTrigger {
     public Image Strength { get { return strength; } private set { strength = value; } }
     public Image Zone { get { return zone; } private set { zone = value; } }
     public Image Ability { get { return ability; } private set { ability = value; } }
+    public TextMeshProUGUI StrengthText { get { return strengthText; } private set { strengthText = value; } }
 
 
     public bool IsSelectedCard { get { if (selectedCard == this) return true; else return false; } }
@@ -45,12 +46,15 @@ public class CardEventTrigger : EventTrigger {
         image = GetComponent<Image>();
     }
 
-    private static Sprite[] strengthImages;// = new Sprite[2];
-    public Sprite[] StrengthImages { get { return strengthImages; } private set { strengthImages = value; } }
+    private static Sprite[] StrengthImages;// = new Sprite[2];
+    //public Sprite[] StrengthImages { get { return strengthImages; } private set { strengthImages = value; } }
     private static Sprite[] AbilityImages;
+    private static Sprite[] ZoneImages;
+
+
     public void SetUpComponents()
     {
-        if (strengthImages == null)
+        if (StrengthImages == null)
             StrengthImages = Resources.LoadAll<Sprite>("Images/strength");
 
         Card card = GetComponent<CardGO>().Card;
@@ -58,12 +62,15 @@ public class CardEventTrigger : EventTrigger {
         if (!card.Special)
         {
             Strength = transform.GetChild(2).GetComponent<Image>();
+            StrengthText = Strength.GetComponentInChildren<TextMeshProUGUI>();
+            StrengthText.text = ((UnitCard)card).Strength.ToString();
             Zone = transform.GetChild(3).GetComponent<Image>();
+            Zone.sprite = GetZoneSprite(((UnitCard)card).Section);
 
             if (((UnitCard)card).Hero)
-                Strength.sprite = strengthImages[1];
+                Strength.sprite = StrengthImages[1];
             else
-                Strength.sprite = strengthImages[0];
+                Strength.sprite = StrengthImages[0];
         }
         Ability.sprite = GetAbilitySprite(card.Ability);
         Border = transform.GetChild(0).GetComponent<Image>();
@@ -84,6 +91,22 @@ public class CardEventTrigger : EventTrigger {
             return AbilityImages[(int)ability - 3];
         else
             return null;
+    }
+
+    private Sprite GetZoneSprite(UnitCard.Sections section)
+    {
+        if (ZoneImages == null)
+            ZoneImages = Resources.LoadAll<Sprite>("Images/zone");
+
+        if (section == UnitCard.Sections.Melee)
+            return ZoneImages[0];
+        else if (section == UnitCard.Sections.Ranged)
+            return ZoneImages[1];
+        else if (section == UnitCard.Sections.Siege)
+            return ZoneImages[2];
+        else if (section == UnitCard.Sections.Agile)
+            return ZoneImages[3];
+        else return null;
     }
 
     public override void OnPointerEnter(PointerEventData eventData)
@@ -115,6 +138,7 @@ public class CardEventTrigger : EventTrigger {
             else //If another card (in the player's hand) is already selected,
             {    //deselt that one and select this one
                 UnHighlight(selectedCard);
+                //Manager.manager.HighlightZone(GetComponent<CardGO>().Card);
                 selectedCard = this;
             }
 
@@ -124,11 +148,12 @@ public class CardEventTrigger : EventTrigger {
                 Highlight(this);
 
             //Card c = GetComponent<CardGO>().Card;
-            print(GetComponent<CardGO>().InZone);
+            //print(GetComponent<CardGO>().InZone);
             //Highlight relevant Zone(s) for Card c
             if (Manager.manager.PlayerOnesTurn) //ALSO REMEMBER TO REVERSE FOR SPY CARDS
             {
                 //highlight zones in player one's half
+                Manager.manager.HighlightZone(GetComponent<CardGO>().Card);
             }
             else
             {

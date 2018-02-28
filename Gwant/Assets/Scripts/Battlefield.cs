@@ -8,7 +8,6 @@ public class Battlefield : Zone
     //public enum Combats { Melee, Ranged, Siege }
     //Combats combat;
     List<UnitCard> horns;
-    List<UnitCard> cards;
     HornZone hornZone;
     bool weather;
 
@@ -16,19 +15,18 @@ public class Battlefield : Zone
     public HornZone ZoneHorn { get { return hornZone; } set { hornZone = value; } }
     public bool Weather { get { return weather; } set { weather = value; } }
     public List<UnitCard> Horns { get { return horns; } }
-    public List<UnitCard> Cards { get { return cards; } }
 
     private void Start()
     {
-        cards = new List<UnitCard>();
+        //Cards = new List<CardGO>();
         horns = new List<UnitCard>();
     }
 
     public void CalcStats()
     {
-        foreach (UnitCard card in Cards)
+        foreach (CardGO card in Cards)
         {
-            card.CalcStats(this);
+            card.GetComponent<UnitCard>().CalcStats(this);
         }
     }
 

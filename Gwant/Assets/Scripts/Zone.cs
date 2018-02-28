@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class Zone : MonoBehaviour {
@@ -15,6 +16,7 @@ public class Zone : MonoBehaviour {
     List<CardGO> cards;
     IsVisibleTo visibleTo;
     bool collapsed;
+    bool highlighted = false;
     #endregion
 
     #region Properties
@@ -38,6 +40,7 @@ public class Zone : MonoBehaviour {
     public List<CardGO> Cards { get { return cards; } protected set { cards = value; } }
     public IsVisibleTo VisibleTo { get { return visibleTo; } set { visibleTo = value; } }
     public bool IsCollapsed { get { return collapsed; } protected set { collapsed = value; } }
+    public bool Highlighted { get { return highlighted; } protected set { highlighted = value; } }
     #endregion
 
     private void Start()
@@ -49,6 +52,18 @@ public class Zone : MonoBehaviour {
     public void SetDeckCards(List<Card> c)
     {
         //Cards = c;
+    }
+
+    public void Highlight()
+    {
+        GetComponent<Button>().interactable = true;
+        Highlighted = true;
+    }
+
+    public void UnHighlight()
+    {
+        GetComponent<Button>().interactable = false;
+        Highlighted = false;
     }
 
     public void HighlightZone(Card c)

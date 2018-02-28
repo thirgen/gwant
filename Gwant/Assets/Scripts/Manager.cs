@@ -94,7 +94,8 @@ public class Manager : MonoBehaviour {
         int[] deck = new int[] { 1, 3, 6, 9, 10, 14, 18, 11, 11, 12, 12, 13,
             100, 101, 101, 102, 102, 102, 103, 103, 106, 107, 108, 109, 119, 121, 122, 122 };
 
-        PlayerOnesTurn = (Random.Range(0, 2) == 1) ? true : false;
+        //PlayerOnesTurn = (Random.Range(0, 2) == 1) ? true : false;
+        PlayerOnesTurn = true;
 
 
         //set up board
@@ -128,6 +129,49 @@ public class Manager : MonoBehaviour {
         b.Siege.VisibleTo = Zone.IsVisibleTo.Both;
     }
 	
+    public void HighlightZone(Card card)
+    {
+        BoardHalf half = (PlayerOnesTurn) ? player1Half : player2Half;
+        if (card.Special)
+        {
+
+        }
+        else
+        {
+            UnitCard unitCard = (UnitCard)card;
+            if (unitCard.Section == UnitCard.Sections.Melee)
+            {
+                //highlight melee
+                Highlight(half.Melee);
+            }
+            else if (unitCard.Section == UnitCard.Sections.Ranged)
+            {
+                //ranged
+                Highlight(half.Ranged);
+            }
+            else if (unitCard.Section == UnitCard.Sections.Siege)
+            {
+                //siege
+                Highlight(half.Siege);
+            }
+            else //if (unitCard.Section == UnitCard.Sections.Agile)
+            {
+                //melee & ranged
+                Highlight(half.Melee);
+                Highlight(half.Ranged);
+            }
+
+        }
+    }
+
+    private void Highlight(Zone z)
+    {
+        if (z.Highlighted)
+            z.UnHighlight();
+        else
+            z.Highlight();
+    }
+
 	void Update () {
         Cheats();
 	}
