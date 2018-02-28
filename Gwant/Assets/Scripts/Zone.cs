@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(ZoneTrigger))]
 [System.Serializable]
 public class Zone : MonoBehaviour {
 

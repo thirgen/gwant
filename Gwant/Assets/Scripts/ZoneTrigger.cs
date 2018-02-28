@@ -11,11 +11,21 @@ public class ZoneTrigger : Button {
     public Color32 DefaultColour { get { return defaultColour; } set { defaultColour = value; } }
     public Color32 HighlightColour { get { return highlightColour; } set { highlightColour = value; } }
 
-    public Image myImage { get { return image; } }
+    public Image Image { get { return image; } }
+    public bool Highlighted { get { return interactable; } set { interactable = value; } }
 
     // Use this for initialization
     new void Start () {
-        image = GetComponent<Image>();
+        if (image == null)
+            image = GetComponent<Image>();
+        ColorBlock colours = colors;
+        colours.disabledColor = DefaultColour;
+        colours.normalColor = HighlightColour;
+        colours.highlightedColor = HighlightColour;
+        colours.pressedColor = HighlightColour;
+
+        colors = colours;
+        Highlighted = false;
 	}
 	
 
