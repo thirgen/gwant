@@ -16,8 +16,9 @@ public class Battlefield : Zone
     public bool Weather { get { return weather; } set { weather = value; } }
     public List<UnitCard> Horns { get { return horns; } }
 
-    private void Start()
+    new private void Start()
     {
+        base.Start();
         //Cards = new List<CardGO>();
         horns = new List<UnitCard>();
     }

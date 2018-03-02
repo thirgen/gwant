@@ -4,8 +4,8 @@ using System.Collections.ObjectModel;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(ZoneTrigger))]
-[System.Serializable]
+//[System.Serializable]
+[RequireComponent(typeof(ZoneEventTrigger))]
 public class Zone : MonoBehaviour {
 
     public enum Types { NOT_SET_YET, Hand, Melee, Ranged, Siege, Weather, Deck, Discard, Horn }
@@ -18,6 +18,7 @@ public class Zone : MonoBehaviour {
     IsVisibleTo visibleTo;
     bool collapsed;
     bool highlighted = false;
+    ZoneEventTrigger trigger;
     #endregion
 
     #region Properties
@@ -41,15 +42,19 @@ public class Zone : MonoBehaviour {
     public List<CardGO> Cards { get { return cards; } protected set { cards = value; } }
     public IsVisibleTo VisibleTo { get { return visibleTo; } set { visibleTo = value; } }
     public bool IsCollapsed { get { return collapsed; } protected set { collapsed = value; } }
-    public bool Highlighted { get { return highlighted; } protected set { highlighted = value; } }
+    //public bool Highlighted { get { return highlighted; } protected set { highlighted = value; } }
+    public bool Highlighted { get { return trigger.Highlighted; } protected set { trigger.Highlighted = value; } }
     #endregion
 
-    private void Start()
+    protected void Start()
     {
         //Type = Types.Deck;
+        trigger = GetComponent<ZoneEventTrigger>();
     }
 
     #region Methods
+
+
     public void SetDeckCards(List<Card> c)
     {
         //Cards = c;
@@ -57,13 +62,13 @@ public class Zone : MonoBehaviour {
 
     public void Highlight()
     {
-        GetComponent<Button>().interactable = true;
+        //GetComponent<Button>().interactable = true;
         Highlighted = true;
     }
 
     public void UnHighlight()
     {
-        GetComponent<Button>().interactable = false;
+        //GetComponent<Button>().interactable = false;
         Highlighted = false;
     }
 

@@ -9,6 +9,7 @@ public class Manager : MonoBehaviour {
     private List<GameObject> FactionGameObjects;
     public bool DebugCheats = true;
     private bool turn;
+    private List<Zone> highlightedZones;
 
     /// <summary>
     /// Returns true if it's Player One's turn.
@@ -103,6 +104,7 @@ public class Manager : MonoBehaviour {
         InitialiseZone(player2Half, false);
         weather.Type = Zone.Types.Weather;
         weather.VisibleTo = Zone.IsVisibleTo.Both;
+        highlightedZones = new List<Zone>();
     }
 
     private void InitialiseZone(BoardHalf b, bool player1)
@@ -129,9 +131,12 @@ public class Manager : MonoBehaviour {
         b.Siege.VisibleTo = Zone.IsVisibleTo.Both;
     }
 	
-    public void HighlightZone(Card card)
+    public void HighlightNewZone(Card card, bool highlightPlayerOne)
     {
-        BoardHalf half = (PlayerOnesTurn) ? player1Half : player2Half;
+        //Unhighlight any previously highlighted zones
+        UnHighlightZones();
+
+        BoardHalf half = (highlightPlayerOne) ? player1Half : player2Half;
         if (card.Special)
         {
 
@@ -164,12 +169,16 @@ public class Manager : MonoBehaviour {
         }
     }
 
+    public void UnHighlightZones()
+    {
+        foreach (Zone z in highlightedZones)
+            z.UnHighlight();
+        highlightedZones.Clear();
+    }
     private void Highlight(Zone z)
     {
-        if (z.Highlighted)
-            z.UnHighlight();
-        else
-            z.Highlight();
+        z.Highlight();
+        highlightedZones.Add(z);
     }
 
 	void Update () {
