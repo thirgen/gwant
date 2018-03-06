@@ -124,7 +124,7 @@ faction = {
 		strength = 2
 		ability = muster
 		section = siege
-		muster = "Gaunter O'Dimm*"
+		muster = "Gaunter O'Dimm: Darkness"
 	}
 	unit = {
 		id = 17

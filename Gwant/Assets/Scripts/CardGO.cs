@@ -57,45 +57,62 @@ public class CardGO : MonoBehaviour {
             gameObject.SetActive(true);
 
 
-        Card card = Card;
-        if (card.Special)
+        if (NewZone.Type != Zone.Types.Hand && NewZone.Type != Zone.Types.Deck && NewZone.Type != Zone.Types.Discard)
         {
-            SpecialCard c = (SpecialCard)card;
-            if (c.WeatherType != SpecialCard.WeatherTypes.None)
+            Card card = Card;
+            if (card.Special)
             {
-                if (c.WeatherType == SpecialCard.WeatherTypes.Frost)
-                    c.WeatherEffect(NewZone); //Melee row
-                else if (c.WeatherType == SpecialCard.WeatherTypes.Fog)
-                    c.WeatherEffect(NewZone); //Ranged row
-                else if (c.WeatherType == SpecialCard.WeatherTypes.Rain)
-                    c.WeatherEffect(NewZone); //Siege row
-                else if (c.WeatherType == SpecialCard.WeatherTypes.Storm)
+                SpecialCard c = (SpecialCard)card;
+                if (c.WeatherType != SpecialCard.WeatherTypes.None)
                 {
-                    c.WeatherEffect(NewZone); //Ranged row
-                    c.WeatherEffect(NewZone); //Siege row
+                    if (c.WeatherType == SpecialCard.WeatherTypes.Frost)
+                        c.WeatherEffect(NewZone); //Melee row
+                    else if (c.WeatherType == SpecialCard.WeatherTypes.Fog)
+                        c.WeatherEffect(NewZone); //Ranged row
+                    else if (c.WeatherType == SpecialCard.WeatherTypes.Rain)
+                        c.WeatherEffect(NewZone); //Siege row
+                    else if (c.WeatherType == SpecialCard.WeatherTypes.Storm)
+                    {
+                        c.WeatherEffect(NewZone); //Ranged row
+                        c.WeatherEffect(NewZone); //Siege row
+                    }
+                    else //if (c.WeatherType == SpecialCard.WeatherTypes.Clear)
+                        c.WeatherEffect(NewZone); //Clear Weather row
                 }
-                else //if (c.WeatherType == SpecialCard.WeatherTypes.Clear)
-                    c.WeatherEffect(NewZone); //Clear Weather row
+                else
+                {
+                    //Horn, Scorch, Mushrom, Decoy stuff
+                }
             }
             else
             {
-                //Horn, Scorch, Mushrom, Decoy stuff
-            }
-        }
-        else
-        {
-            //None, Medic, Morale, Muster, Spy, Bond, Berserker, Horn, Scorch, Mushroom
-            if (Card.Ability == Card.Abilities.Muster)
-            {
-
-                //play all must cards from hand/deck
-                foreach (CardGO cardGO in Manager.manager.GetZone(Zone.Types.Hand).Cards)
+                //None, Medic, Morale, Muster, Spy, Bond, Berserker, Horn, Scorch, Mushroom
+                if (Card.Ability == Card.Abilities.Muster)
                 {
-                    //if (IsMusterCard(cardGO.Card, ((UnitCard)cardGO.Card).Muster))
-                }
-                foreach (CardGO cardGO in Manager.manager.GetZone(Zone.Types.Deck).Cards)
-                {
-
+                    List<CardGO> cardsToMove = new List<CardGO>();
+                    //play all must cards from hand/deck
+                    foreach (CardGO cardGO in Manager.manager.GetZone(Zone.Types.Hand).Cards)
+                    {
+                        if (!cardGO.Card.Special && ((UnitCard)cardGO.Card).Muster != null)
+                        {
+                            if (IsMusterCard(cardGO.Card, ((UnitCard)cardGO.Card).Muster))
+                                cardsToMove.Add(cardGO);
+                        }
+                    }
+                    foreach (CardGO cardGO in Manager.manager.GetZone(Zone.Types.Deck).Cards)
+                    {
+                        if (!cardGO.Card.Special && ((UnitCard)cardGO.Card).Muster != null)
+                        {
+                            if (IsMusterCard(cardGO.Card, ((UnitCard)cardGO.Card).Muster))
+                                cardsToMove.Add(cardGO);
+                        }
+                    }
+                    while (cardsToMove.Count > 0)
+                    {
+                        //cardsToMove[0].MoveTo(Zone);
+                        cardsToMove[0].MoveTo(Manager.manager.GetZone(((UnitCard)cardsToMove[0].Card).GetZone));
+                        cardsToMove.Remove(cardsToMove[0]);
+                    }
                 }
             }
         }

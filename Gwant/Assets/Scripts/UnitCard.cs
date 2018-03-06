@@ -138,5 +138,19 @@ public class UnitCard : Card {
         return false;
     }
 
+    public Zone.Types GetZone
+    {
+        get
+        {
+            if (Section == Sections.Melee)
+                return Zone.Types.Melee;
+            else if (Section == Sections.Ranged)
+                return Zone.Types.Ranged;
+            else if (Section == Sections.Siege)
+                return Zone.Types.Siege;
+            else
+                return Zone.Types.NOT_SET_YET;
+        }
+    }
     
 }
