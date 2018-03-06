@@ -44,10 +44,13 @@ public class CardGO : MonoBehaviour {
         //border.SetActive(false);
     }
 
-    public void MoveTo(Zone NewZone)
+    public void MoveTo(Zone NewZone, int PositionInZone = -1)
     {
         Zone.Cards.Remove(this);
-        NewZone.Cards.Add(this);
+        if (PositionInZone < 0 || PositionInZone > NewZone.Cards.Count)
+            NewZone.Cards.Add(this);
+        else
+            NewZone.Cards.Insert(PositionInZone, this);
 
         transform.SetParent(NewZone.transform);
         if (!gameObject.activeSelf && Zone.Type != Zone.Types.Deck)
@@ -82,9 +85,28 @@ public class CardGO : MonoBehaviour {
         else
         {
             //None, Medic, Morale, Muster, Spy, Bond, Berserker, Horn, Scorch, Mushroom
+            if (Card.Ability == Card.Abilities.Muster)
+            {
 
+                //play all must cards from hand/deck
+                foreach (CardGO cardGO in Manager.manager.GetZone(Zone.Types.Hand).Cards)
+                {
+                    //if (IsMusterCard(cardGO.Card, ((UnitCard)cardGO.Card).Muster))
+                }
+                foreach (CardGO cardGO in Manager.manager.GetZone(Zone.Types.Deck).Cards)
+                {
+
+                }
+            }
         }
         //card.ApplyEffects(targetZone);
     }
 
+
+    private bool IsMusterCard(Card Card, string MusterName)
+    {
+        if (Card.Name.Contains(MusterName))
+            return true;
+        return false;
+    }
 }

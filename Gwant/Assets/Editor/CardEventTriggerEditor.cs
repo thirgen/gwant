@@ -20,6 +20,9 @@ public class CardEventTriggerEditor : Editor {
 
         EditorGUILayout.Toggle("Highlighted", trigger.Highlighted);
         EditorGUILayout.Toggle("Special Highlighted", trigger.SpecialHighlighted);
+
+        SerializedProperty cardGO = serializedObject.FindProperty("cardGO");
+        EditorGUILayout.PropertyField(cardGO);
     }
 
 }

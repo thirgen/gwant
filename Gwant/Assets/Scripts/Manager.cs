@@ -180,7 +180,31 @@ public class Manager : MonoBehaviour {
         foreach(CardGO go in z.Cards)
         {
             CardEventTrigger.SpecialHighlight(go.GetComponent<CardEventTrigger>());
-            print(go.GetComponent<CardEventTrigger>().Highlighted + ", " + go.GetComponent<CardEventTrigger>().SpecialHighlighted);
+            //print(go.GetComponent<CardEventTrigger>().Highlighted + ", " + go.GetComponent<CardEventTrigger>().SpecialHighlighted);
+        }
+    }
+
+    public Zone GetZone(Zone.Types Type)
+    {
+        BoardHalf half = (PlayerOnesTurn) ? player1Half : player2Half;
+        switch(Type)
+        {
+            case Zone.Types.Hand:
+                return half.Hand;
+            case Zone.Types.Melee:
+                return half.Melee;
+            case Zone.Types.Ranged:
+                return half.Ranged;
+            case Zone.Types.Siege:
+                return half.Siege;
+            case Zone.Types.Deck:
+                return half.Deck;
+            case Zone.Types.Discard:
+                return half.Discard;
+            case Zone.Types.Weather:
+                return weather;
+            default:
+                return null;
         }
     }
 

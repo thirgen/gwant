@@ -13,6 +13,9 @@ public class CardEventTrigger : EventTrigger {
     TextMeshProUGUI strengthText;
     bool highlighted;
     bool specialHighlighted;
+    [SerializeField]
+    CardGO cardGO;
+    static List<CardEventTrigger> specialHighlight;
 
     static Color defaultColour = new Color32(255, 255, 255, 0);
     static Color highlightColour = new Color32(0, 255, 255, 255);
@@ -48,7 +51,9 @@ public class CardEventTrigger : EventTrigger {
 
     private void Start()
     {
-
+        if (cardGO == null)
+            cardGO = GetComponent<CardGO>();
+        specialHighlight = new List<CardEventTrigger>();
     }
 
     [SerializeField]
@@ -65,7 +70,7 @@ public class CardEventTrigger : EventTrigger {
         if (StrengthImages == null)
             StrengthImages = Resources.LoadAll<Sprite>("Images/strength");
 
-        Card card = GetComponent<CardGO>().Card;
+        Card card = cardGO.Card;
         
         //set card art
         //GetComponent<Image>().sprite = null;
@@ -132,7 +137,7 @@ public class CardEventTrigger : EventTrigger {
     {
         base.OnPointerEnter(eventData);
 
-        if (!IsSelectedCard && GetComponent<CardGO>().InZone == Zone.Types.Hand && !Highlighted && !SpecialHighlighted)
+        if (!IsSelectedCard && cardGO.InZone == Zone.Types.Hand && !Highlighted && !SpecialHighlighted)
             Highlight(this);
     }
 
@@ -142,7 +147,7 @@ public class CardEventTrigger : EventTrigger {
         if (!IsSelectedCard && Highlighted)
         {
             UnHighlight(this);
-            print("UNHIGHTLIGHTED: " + gameObject.name);
+            //print("UNHIGHTLIGHTED: " + gameObject.name);
         }
     }
 
@@ -150,58 +155,67 @@ public class CardEventTrigger : EventTrigger {
     {
         base.OnPointerClick(eventData);
 
-        if (Highlighted && eventData.button == PointerEventData.InputButton.Left)
+        if (eventData.button == PointerEventData.InputButton.Left)
         {
-
-            //If no card is selected, select this one
-            if (selectedCard == null)
-                Select(this);
-            //If this card is already selected, deselect it then unhighlight all selected zones
-            else if (IsSelectedCard) 
-                Select(null);
-            //If another card (in the player's hand) is already selected,
-            //deselect that one and select this one
-            else
-            {   
-                Deselect(SelectedCard);
-                Select(this);
-            }
-
-            if (IsSelectedCard) //card is being selected
+            if (Highlighted)
             {
-                Card c = GetComponent<CardGO>().Card;
-                //print(GetComponent<CardGO>().InZone);
-                
-
-                //highlight zones depending on who's turn it is
-                //if it's a spy, reverse
-                //TODO 
-                //add enum for P1, P2, and Both (for scorch special cards)
-                bool highlightPlayerOne;
-                if (!c.Special)
+                //If no card is selected, select this one
+                if (selectedCard == null)
+                    Select(this);
+                //If this card is already selected, deselect it then unhighlight all selected zones
+                else if (IsSelectedCard)
+                    Select(null);
+                //If another card (in the player's hand) is already selected,
+                //deselect that one and select this one
+                else
                 {
-                    if (((UnitCard)c).Ability == Card.Abilities.Spy)
-                        highlightPlayerOne = (Manager.manager.PlayerOnesTurn) ? false : true;
+                    Deselect(SelectedCard);
+                    Select(this);
+                }
+
+                if (IsSelectedCard) //card is being selected
+                {
+                    Card c = cardGO.Card;
+                    //print(GetComponent<CardGO>().InZone);
+
+
+                    //highlight zones depending on who's turn it is
+                    //if it's a spy, reverse
+                    //TODO 
+                    //add enum for P1, P2, and Both (for scorch special cards)
+                    bool highlightPlayerOne;
+                    if (!c.Special)
+                    {
+                        if (((UnitCard)c).Ability == Card.Abilities.Spy)
+                            highlightPlayerOne = (Manager.manager.PlayerOnesTurn) ? false : true;
+                        else
+                            highlightPlayerOne = (Manager.manager.PlayerOnesTurn) ? true : false;
+                    }
                     else
                         highlightPlayerOne = (Manager.manager.PlayerOnesTurn) ? true : false;
-                }
-                else
-                    highlightPlayerOne = (Manager.manager.PlayerOnesTurn) ? true : false;
 
-                //Highlight relevant Zone(s) for Card c
-                Manager.manager.HighlightNewZone(GetComponent<CardGO>().Card, highlightPlayerOne);
-                UnHighlight(this);
+                    //Highlight relevant Zone(s) for Card c
+                    Manager.manager.HighlightNewZone(cardGO.Card, highlightPlayerOne);
+                    UnHighlight(this);
+                }
+                else //card is being deselected
+                    Highlight(this);
             }
             else if (SpecialHighlighted)
             {
-                if (SelectedCard.GetComponent<CardGO>().Card.Ability == Card.Abilities.Decoy)
+                if (SelectedCard.cardGO.Card.Ability == Card.Abilities.Decoy)
                 {
-                    //play the selected card in this cards zone
+                    print("DECOY: " + gameObject.name);
+                    //play the decoy card in this card's slot, and return this card to hand
+
+                    print(cardGO.Zone.Cards.IndexOf(cardGO) + ", " + cardGO.Zone.Cards.Count);
+                    int index = cardGO.Zone.Cards.IndexOf(cardGO);
+                    SelectedCard.cardGO.MoveTo(cardGO.Zone, index);
+                    SelectedCard.transform.SetSiblingIndex(index);
+                    cardGO.MoveTo(Manager.manager.GetZone(Zone.Types.Hand));
+                    UnHighlightAllSpecial();
                 }
             }
-            else //card is being deselected
-                Highlight(this);
-
         }
         else if (eventData.button == PointerEventData.InputButton.Right)
         {
@@ -211,6 +225,10 @@ public class CardEventTrigger : EventTrigger {
         }
     }
 
+    private void Reset()
+    {
+        cardGO = GetComponent<CardGO>();
+    }
 
     #region Card Util
     private static void Highlight(CardEventTrigger Trigger)
@@ -223,6 +241,17 @@ public class CardEventTrigger : EventTrigger {
     {
         Trigger.Border.color = HighlightColour;
         Trigger.SpecialHighlighted = true;
+        specialHighlight.Add(Trigger);
+    }
+
+    public static void UnHighlightAllSpecial()
+    {
+        foreach(CardEventTrigger t in specialHighlight)
+        {
+            t.Border.color = DefaultColour;
+            t.SpecialHighlighted = false;
+        }
+        specialHighlight.Clear();
     }
 
     private static void UnHighlight(CardEventTrigger Trigger)

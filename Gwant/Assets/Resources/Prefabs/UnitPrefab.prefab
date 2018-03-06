@@ -247,6 +247,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Delegates: []
   delegates: []
+  cardGO: {fileID: 114906578018231564}
 --- !u!114 &114925602510239558
 MonoBehaviour:
   m_ObjectHideFlags: 1
