@@ -32,9 +32,20 @@ public class ZoneEventTrigger : MonoBehaviour, IPointerClickHandler {
         {
             print("CLICK: " + gameObject + " CARD: " + CardEventTrigger.SelectedCard);
             //play selected card
-            CardEventTrigger.SelectedCard.GetComponent<CardGO>().MoveTo(GetComponent<Zone>());
-            CardEventTrigger.Deselect(CardEventTrigger.SelectedCard);
+            CardGO cardGO = CardEventTrigger.SelectedCard.GetComponent<CardGO>();
+            cardGO.MoveTo(GetComponent<Zone>());
             Manager.manager.UnHighlightZones();
+            Zone z = GetComponent<Zone>();
+            if (z.Type == Zone.Types.Melee || z.Type == Zone.Types.Ranged ||
+                z.Type == Zone.Types.Siege)
+                ((Battlefield)z).CalcStats();
+            if (z.Type == Zone.Types.Horn)
+            {
+                ((HornZone)z).SpecialHorn = cardGO;
+                //recalc stats for associated battlefield
+                //z.Battlefield.CalcStats();
+            }
+            CardEventTrigger.Deselect(CardEventTrigger.SelectedCard);
         }
     }
 

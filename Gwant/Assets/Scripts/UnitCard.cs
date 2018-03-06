@@ -32,10 +32,10 @@ public class UnitCard : Card {
         this.Ability = Ability;
         strength = new Vector2Int();
         SetBaseStrength(Strength);
-        if (Ability == Abilities.Morale)
-            SetBaseMorale(1);
-        else
-            SetBaseMorale(0);
+        //if (Ability == Abilities.Morale)
+            //SetBaseMorale(1);
+        //else
+            //SetBaseMorale(0);
         if (Ability == Abilities.Muster)
             this.Muster = Muster;
         if (Ability == Abilities.Avenger)
@@ -53,41 +53,54 @@ public class UnitCard : Card {
         //CalcStats(zone);
     }
 
-    public void CalcStats(Battlefield bf)
+    public void CalcStats(Battlefield bf, CardGO cardGO)
     {
-        //1. apply Weather effects
-        if (bf.Weather)
+        if (!Hero)
         {
-            Strength = 1;
-        }
-        else
-            Strength = GetBaseStrength();
-        //2. apply Bond effects
-        if (Bond)
-        {
-            Strength += GetBaseStrength();
-        }
-        //3. apply Morale effects
-        Strength += Morale;
-        //4.1 apply Horn effect from Horn unit cards
-        if (bf.ZoneHorn.HasHorn && !Horn)
-        {
-            Strength += Strength;
-            Horn = true;
-        }
-        //4.2 apply Horn effect from Horn special cards
-        if (bf.Horns.Count != 0 && !Horn)
-        {
-            //I'm not sure what this is supposed to do.
-            //I forgot why I wrote it
-            foreach (UnitCard c in bf.Horns)
+            //1. apply Weather effects
+            if (bf.Weather)
             {
-                if (c != this)
+                Strength = 1;
+            }
+            else
+                Strength = GetBaseStrength();
+            //2. apply Bond effects
+            if (Bond)
+            {
+                Strength += GetBaseStrength();
+            }
+            //3. apply Morale effects
+            if (bf.Morale > 0 && Ability != Abilities.Morale)
+            {
+                Morale = bf.Morale;
+                Strength += Morale;
+            }
+            else if (bf.Morale > 1 && Ability == Abilities.Morale)
+            {
+                Morale = bf.Morale;
+                Strength += Morale - 1;
+            }
+            //4.1 apply Horn effect from Horn unit cards
+            Horn = false;
+            if (bf.ZoneHorn.HasHorn)
+            {
+                HornZone hz = bf.ZoneHorn;
+                if (hz.SpecialHorn != null)
                 {
                     Strength += Strength;
                     Horn = true;
                 }
+                //check to see this card is not doubling itself
+                else if ((Ability == Abilities.Horn && hz.UnitHorns.Count > 1) ||
+                    (Ability != Abilities.Horn && hz.UnitHorns.Count > 0))
+                {
+                    Strength += Strength;
+                    Horn = true;
+                }
+
             }
+            //update Strength text
+            cardGO.GetComponent<CardEventTrigger>().UpdateStrengthText();
         }
     }
 
@@ -102,7 +115,7 @@ public class UnitCard : Card {
         this.Strength = Strength;
         strength.y = Strength;
     }
-    private void SetBaseMorale(int Morale) { this.Morale = Morale; }
+    //private void SetBaseMorale(int Morale) { this.Morale = Morale; }
 
     public bool Hero { get { return hero; } private set { hero = value; } }
     public bool Bond { get { return bond; } private set { bond = value; } }

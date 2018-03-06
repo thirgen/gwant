@@ -59,10 +59,9 @@ public class CardGO : MonoBehaviour {
 
         if (NewZone.Type != Zone.Types.Hand && NewZone.Type != Zone.Types.Deck && NewZone.Type != Zone.Types.Discard)
         {
-            Card card = Card;
-            if (card.Special)
+            if (Card.Special)
             {
-                SpecialCard c = (SpecialCard)card;
+                SpecialCard c = (SpecialCard)Card;
                 if (c.WeatherType != SpecialCard.WeatherTypes.None)
                 {
                     if (c.WeatherType == SpecialCard.WeatherTypes.Frost)
@@ -86,6 +85,8 @@ public class CardGO : MonoBehaviour {
             }
             else
             {
+                Battlefield bf = (Battlefield)Zone;
+
                 //None, Medic, Morale, Muster, Spy, Bond, Berserker, Horn, Scorch, Mushroom
                 if (Card.Ability == Card.Abilities.Medic)
                 {
@@ -93,8 +94,10 @@ public class CardGO : MonoBehaviour {
                 }
                 else if (Card.Ability == Card.Abilities.Morale)
                 {
+                    //+1 morale to zone
+                    bf.Morale++;
                     //Recalc strength for zone
-                    ((Battlefield)Zone).CalcStats();
+                    bf.CalcStats();
                 }
                 else if (Card.Ability == Card.Abilities.Muster)
                 {
@@ -133,7 +136,7 @@ public class CardGO : MonoBehaviour {
                 else if (Card.Ability == Card.Abilities.Bond)
                 {
                     //Recalc strength for zone
-                    ((Battlefield)Zone).CalcStats();
+                    bf.CalcStats();
                 }
                 else if (Card.Ability == Card.Abilities.Berserker)
                 {
@@ -141,8 +144,10 @@ public class CardGO : MonoBehaviour {
                 }
                 else if (Card.Ability == Card.Abilities.Horn)
                 {
+                    //add card to HornZorn horn units
+                    bf.ZoneHorn.UnitHorns.Add(this);
                     //Recalc strength for zone
-                    ((Battlefield)Zone).CalcStats();
+                    bf.CalcStats();
                 }
                 else if (Card.Ability == Card.Abilities.Scorch)
                 {

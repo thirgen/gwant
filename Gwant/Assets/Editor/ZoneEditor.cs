@@ -21,24 +21,33 @@ public class ZoneEditor : Editor {
         EditorGUILayout.EnumPopup("Visible to", zone.VisibleTo);
         EditorGUILayout.Toggle("Collapsed", zone.IsCollapsed);
 
+
+
         //EditorGUILayout.Toggle("Highlighted", zone.Highlighted);
+        
         cards = EditorGUILayout.Foldout(cards, "Cards");
-        if (zone.Cards != null && cards)
+        if (cards)
+            DrawCardFoldout(zone, ref active);
+    }
+
+    public static void DrawCardFoldout(Zone zone, ref bool[] ActiveCards)
+    {
+        if (zone.Cards != null)
         {
-            if (active == null || active.Length != zone.Cards.Count)
+            if (ActiveCards == null || ActiveCards.Length != zone.Cards.Count)
             {
-                active = new bool[zone.Cards.Count];
-                for (int i = 0; i < active.Length; i++)
-                    active[i] = false;
+                ActiveCards = new bool[zone.Cards.Count];
+                for (int i = 0; i < ActiveCards.Length; i++)
+                    ActiveCards[i] = false;
             }
             for (int i = 0; i < zone.Cards.Count; i++)
             {
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Space(20);
-                active[i] = EditorGUILayout.Foldout(active[i], zone.Cards[i].Card.Name);
+                ActiveCards[i] = EditorGUILayout.Foldout(ActiveCards[i], zone.Cards[i].Card.Name);
                 EditorGUILayout.EndHorizontal();
 
-                if (active[i])
+                if (ActiveCards[i])
                 {
                     EditorGUILayout.BeginHorizontal(); //Horizontal contains tab + ints
 
@@ -55,11 +64,6 @@ public class ZoneEditor : Editor {
                 }
             }
         }
-    }
-
-    public static void DrawCardFoldout(List<Card> Cards, bool[] ActiveCards, bool ViewCards)
-    {
-
     }
 
 }

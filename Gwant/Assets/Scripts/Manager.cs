@@ -146,6 +146,16 @@ public class Manager : MonoBehaviour {
                 HighlightCardsInZone(half.Ranged);
                 HighlightCardsInZone(half.Siege);
             }
+            else if (card.Ability == Card.Abilities.Horn)
+            {
+                //highlight the three horn zones
+                if (half.Melee.ZoneHorn.SpecialHorn == null)
+                    Highlight(half.Melee.ZoneHorn);
+                if (half.Ranged.ZoneHorn.SpecialHorn == null)
+                    Highlight(half.Ranged.ZoneHorn);
+                if (half.Siege.ZoneHorn.SpecialHorn == null)
+                    Highlight(half.Siege.ZoneHorn);
+            }
         }
         else
         {
