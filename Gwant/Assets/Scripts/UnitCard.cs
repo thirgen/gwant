@@ -65,12 +65,12 @@ public class UnitCard : Card {
         //2. apply Bond effects
         if (Bond)
         {
-            Strength += Strength;
+            Strength += GetBaseStrength();
         }
         //3. apply Morale effects
         Strength += Morale;
         //4.1 apply Horn effect from Horn unit cards
-        if (bf.ZoneHorn.Horn && !Horn)
+        if (bf.ZoneHorn.HasHorn && !Horn)
         {
             Strength += Strength;
             Horn = true;

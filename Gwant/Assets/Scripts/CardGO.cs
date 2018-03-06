@@ -87,10 +87,20 @@ public class CardGO : MonoBehaviour {
             else
             {
                 //None, Medic, Morale, Muster, Spy, Bond, Berserker, Horn, Scorch, Mushroom
-                if (Card.Ability == Card.Abilities.Muster)
+                if (Card.Ability == Card.Abilities.Medic)
                 {
+                    //display all graveyard cards
+                }
+                else if (Card.Ability == Card.Abilities.Morale)
+                {
+                    //Recalc strength for zone
+                    ((Battlefield)Zone).CalcStats();
+                }
+                else if (Card.Ability == Card.Abilities.Muster)
+                {
+                    //select all muster cards from hand/deck
+
                     List<CardGO> cardsToMove = new List<CardGO>();
-                    //play all must cards from hand/deck
                     foreach (CardGO cardGO in Manager.manager.GetZone(Zone.Types.Hand).Cards)
                     {
                         if (!cardGO.Card.Special && ((UnitCard)cardGO.Card).Muster != null)
@@ -107,12 +117,40 @@ public class CardGO : MonoBehaviour {
                                 cardsToMove.Add(cardGO);
                         }
                     }
+
+                    //play selected cards
                     while (cardsToMove.Count > 0)
                     {
-                        //cardsToMove[0].MoveTo(Zone);
                         cardsToMove[0].MoveTo(Manager.manager.GetZone(((UnitCard)cardsToMove[0].Card).GetZone));
                         cardsToMove.Remove(cardsToMove[0]);
                     }
+                }
+                else if (Card.Ability == Card.Abilities.Spy)
+                {
+                    //draw card from deck
+                    ((Deck)Manager.manager.GetZone(Zone.Types.Deck)).DrawCard(Manager.manager.GetZone(Zone.Types.Hand));
+                }
+                else if (Card.Ability == Card.Abilities.Bond)
+                {
+                    //Recalc strength for zone
+                    ((Battlefield)Zone).CalcStats();
+                }
+                else if (Card.Ability == Card.Abilities.Berserker)
+                {
+                    //if mushroom in zone, do berseker thing
+                }
+                else if (Card.Ability == Card.Abilities.Horn)
+                {
+                    //Recalc strength for zone
+                    ((Battlefield)Zone).CalcStats();
+                }
+                else if (Card.Ability == Card.Abilities.Scorch)
+                {
+                    //destroy strongest card(s) in zone
+                }
+                else if (Card.Ability == Card.Abilities.Mushroom)
+                {
+                    //trigger berserker stuff
                 }
             }
         }
