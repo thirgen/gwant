@@ -21,17 +21,15 @@ public class ZoneEditor : Editor {
         EditorGUILayout.EnumPopup("Visible to", zone.VisibleTo);
         EditorGUILayout.Toggle("Collapsed", zone.IsCollapsed);
 
-        EditorGUILayout.Toggle("Highlighted", zone.Highlighted);
+        //EditorGUILayout.Toggle("Highlighted", zone.Highlighted);
         cards = EditorGUILayout.Foldout(cards, "Cards");
         if (zone.Cards != null && cards)
         {
-            if (active == null)
+            if (active == null || active.Length != zone.Cards.Count)
             {
                 active = new bool[zone.Cards.Count];
                 for (int i = 0; i < active.Length; i++)
-                {
                     active[i] = false;
-                }
             }
             for (int i = 0; i < zone.Cards.Count; i++)
             {

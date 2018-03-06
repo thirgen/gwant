@@ -20,8 +20,8 @@ public class SpecialCardEditor : Editor {
         EditorGUILayout.LabelField("ID", card.ID.ToString());
         EditorGUILayout.LabelField("Name", card.Name);
         EditorGUILayout.LabelField("Art", card.Art);
-        EditorGUILayout.EnumPopup("Ability", card.Ability);
+        EditorGUILayout.LabelField("Ability", card.Ability.ToString());
         if (card.Ability == Card.Abilities.Weather)
-            EditorGUILayout.EnumPopup("Weather", card.WeatherType);
+            EditorGUILayout.LabelField("Weather", card.WeatherType.ToString());
     }
 }

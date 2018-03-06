@@ -17,28 +17,28 @@ public class UnitCardEditor : Editor {
     public static void DrawInspector(UnitCard card)
     {
         EditorGUILayout.LabelField("ID", card.ID.ToString());
-        EditorGUILayout.TextField("Name", card.Name);
+        EditorGUILayout.LabelField("Name", card.Name);
         EditorGUILayout.LabelField("Art", card.Art);
-        EditorGUILayout.EnumPopup("Section", card.Section);
-        EditorGUILayout.Toggle("Hero", card.Hero);
+        EditorGUILayout.LabelField("Section", card.Section.ToString());
+        EditorGUILayout.LabelField("Hero", card.Hero.ToString());
 
 
-        EditorGUILayout.EnumPopup("Ability", card.Ability);
+        EditorGUILayout.LabelField("Ability", card.Ability.ToString());
         if (card.Ability == Card.Abilities.Avenger)
-            EditorGUILayout.IntField("Avenger", card.Avenger);
+            EditorGUILayout.LabelField("Avenger", card.Avenger.ToString());
         else if (card.Ability == Card.Abilities.Muster)
             EditorGUILayout.LabelField("Muster", card.Muster);
         else if (card.Ability == Card.Abilities.Scorch)
         {
-            EditorGUILayout.IntField("Scorch Value", card.ScorchThreshold);
+            EditorGUILayout.LabelField("Scorch Value", card.ScorchThreshold.ToString());
             //EditorGUILayout.HelpBox("The value that a row must be greater than for the Scorch ability to activate", MessageType.Info);
         }
         else if (card.Ability == Card.Abilities.Bond)
-            EditorGUILayout.Toggle("Bond", card.Bond);
+            EditorGUILayout.LabelField("Bond", card.Bond.ToString());
 
 
         if (card.Hero)
-            EditorGUILayout.IntField("Strength", card.Strength);
+            EditorGUILayout.LabelField("Strength", card.Strength.ToString());
         else
         {
             GUILayout.Label("Strength");
@@ -51,17 +51,15 @@ public class UnitCardEditor : Editor {
             GUILayout.Space(20); //Tab in 20 pixels //https://forum.unity.com/threads/indenting-guilayout-objects.113494/
 
             EditorGUILayout.BeginVertical(); //Vertical contains ints
-            EditorGUILayout.IntField("Total", card.Strength);
-            EditorGUILayout.IntField("Base", card.GetBaseStrength());
+            EditorGUILayout.LabelField("Total", card.Strength.ToString());
+            EditorGUILayout.LabelField("Base", card.GetBaseStrength().ToString());
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.EndHorizontal();
-            EditorGUILayout.IntField("Morale", card.Morale);
+            EditorGUILayout.LabelField("Morale", card.Morale.ToString());
             EditorGUILayout.Toggle("Horn", card.Horn);
         }
 
 
     }
-
-    enum AttributeType { Int, String, Bool, Enum}
 }

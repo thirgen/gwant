@@ -32,6 +32,9 @@ public class ZoneEventTrigger : MonoBehaviour, IPointerClickHandler {
         {
             print("CLICK: " + gameObject + " CARD: " + CardEventTrigger.SelectedCard);
             //play selected card
+            CardEventTrigger.SelectedCard.GetComponent<CardGO>().MoveTo(GetComponent<Zone>());
+            CardEventTrigger.Deselect(CardEventTrigger.SelectedCard);
+            Manager.manager.UnHighlightZones();
         }
     }
 

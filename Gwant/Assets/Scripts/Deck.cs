@@ -23,4 +23,9 @@ public class Deck : Zone
         Cards.Add(cardGO);
         //cardGO.transform.SetParent(transform);
     }
+
+    public void DrawCard(Zone hand)
+    {
+        Cards[0].MoveTo(hand);
+    }
 }

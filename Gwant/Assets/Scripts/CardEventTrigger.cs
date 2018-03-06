@@ -12,6 +12,7 @@ public class CardEventTrigger : EventTrigger {
     Image border;
     TextMeshProUGUI strengthText;
     bool highlighted;
+    bool specialHighlighted;
 
     static Color defaultColour = new Color32(255, 255, 255, 0);
     static Color highlightColour = new Color32(0, 255, 255, 255);
@@ -33,6 +34,14 @@ public class CardEventTrigger : EventTrigger {
 
 
     public TextMeshProUGUI StrengthText { get { return strengthText; } private set { strengthText = value; } }
+    /// <summary>
+    /// The Highlight used when a card is moused over in the hand
+    /// </summary>
+    public bool Highlighted { get { return highlighted; } private set { highlighted = value; } }
+    /// <summary>
+    /// The Highlight used when a card is highlighted by special card abilities, i.e. Decoy, 
+    /// </summary>
+    public bool SpecialHighlighted { get { return specialHighlighted; } private set { specialHighlighted = value; } }
 
 
     public bool IsSelectedCard { get { if (selectedCard == this) return true; else return false; } }
@@ -42,9 +51,12 @@ public class CardEventTrigger : EventTrigger {
 
     }
 
+    [SerializeField]
     private static Sprite[] StrengthImages;// = new Sprite[2];
     //public Sprite[] StrengthImages { get { return strengthImages; } private set { strengthImages = value; } }
+    [SerializeField]
     private static Sprite[] AbilityImages;
+    [SerializeField]
     private static Sprite[] ZoneImages;
 
 
@@ -79,6 +91,8 @@ public class CardEventTrigger : EventTrigger {
 
         }
         Border = transform.GetChild(0).GetComponent<Image>();
+        Highlighted = false;
+        SpecialHighlighted = false;
     }
 
     private Sprite GetAbilitySprite(Card.Abilities ability)
@@ -118,22 +132,25 @@ public class CardEventTrigger : EventTrigger {
     {
         base.OnPointerEnter(eventData);
 
-        if (!IsSelectedCard && GetComponent<CardGO>().InZone == Zone.Types.Hand)
+        if (!IsSelectedCard && GetComponent<CardGO>().InZone == Zone.Types.Hand && !Highlighted && !SpecialHighlighted)
             Highlight(this);
     }
 
     public override void OnPointerExit(PointerEventData eventData)
     {
         base.OnPointerExit(eventData);
-        if (!IsSelectedCard)
+        if (!IsSelectedCard && Highlighted)
+        {
             UnHighlight(this);
+            print("UNHIGHTLIGHTED: " + gameObject.name);
+        }
     }
 
     public override void OnPointerClick(PointerEventData eventData)
     {
         base.OnPointerClick(eventData);
 
-        if (highlighted && eventData.button == PointerEventData.InputButton.Left)
+        if (Highlighted && eventData.button == PointerEventData.InputButton.Left)
         {
 
             //If no card is selected, select this one
@@ -173,6 +190,14 @@ public class CardEventTrigger : EventTrigger {
 
                 //Highlight relevant Zone(s) for Card c
                 Manager.manager.HighlightNewZone(GetComponent<CardGO>().Card, highlightPlayerOne);
+                UnHighlight(this);
+            }
+            else if (SpecialHighlighted)
+            {
+                if (SelectedCard.GetComponent<CardGO>().Card.Ability == Card.Abilities.Decoy)
+                {
+                    //play the selected card in this cards zone
+                }
             }
             else //card is being deselected
                 Highlight(this);
@@ -191,13 +216,19 @@ public class CardEventTrigger : EventTrigger {
     private static void Highlight(CardEventTrigger Trigger)
     {
         Trigger.Border.color = HighlightColour;
-        Trigger.highlighted = true;
+        Trigger.Highlighted = true;
+    }
+
+    public static void SpecialHighlight(CardEventTrigger Trigger)
+    {
+        Trigger.Border.color = HighlightColour;
+        Trigger.SpecialHighlighted = true;
     }
 
     private static void UnHighlight(CardEventTrigger Trigger)
     {
         Trigger.Border.color = DefaultColour;
-        Trigger.highlighted = false;
+        Trigger.Highlighted = false;
     }
 
     private static void Select(CardEventTrigger Trigger)
@@ -208,7 +239,7 @@ public class CardEventTrigger : EventTrigger {
         selectedCard = Trigger;
     }
 
-    private static void Deselect(CardEventTrigger Trigger)
+    public static void Deselect(CardEventTrigger Trigger)
     {
         Trigger.border.color = DefaultColour;
         Select(null);

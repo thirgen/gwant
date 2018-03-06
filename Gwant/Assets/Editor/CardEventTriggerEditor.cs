@@ -15,9 +15,11 @@ public class CardEventTriggerEditor : Editor {
 
         CardEventTrigger trigger = (CardEventTrigger)target;
 
-        //SerializedProperty strengthSprites = serializedObject.FindProperty("strengthImages");
+        //SerializedProperty strengthSprites = serializedObject.FindProperty("StrengthImages");
         //EditorGUILayout.PropertyField(strengthSprites);
 
+        EditorGUILayout.Toggle("Highlighted", trigger.Highlighted);
+        EditorGUILayout.Toggle("Special Highlighted", trigger.SpecialHighlighted);
     }
 
 }

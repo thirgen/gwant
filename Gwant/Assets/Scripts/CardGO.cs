@@ -17,7 +17,8 @@ public class CardGO : MonoBehaviour {
 	void Start () {
     }
 
-    public Zone.Types InZone { get { return transform.parent.gameObject.GetComponent<Zone>().Type; } }
+    public Zone Zone { get { return transform.parent.gameObject.GetComponent<Zone>(); } }
+    public Zone.Types InZone { get { return Zone.Type; } }
 
     public void SetCard(Card Card)
     {
@@ -25,7 +26,7 @@ public class CardGO : MonoBehaviour {
         name = Card.Name;
 
         //Initialise Gameobject
-
+        
         GetComponent<CardEventTrigger>().SetUpComponents();
 
         /*
@@ -43,5 +44,47 @@ public class CardGO : MonoBehaviour {
         //border.SetActive(false);
     }
 
+    public void MoveTo(Zone NewZone)
+    {
+        Zone.Cards.Remove(this);
+        NewZone.Cards.Add(this);
+
+        transform.SetParent(NewZone.transform);
+        if (!gameObject.activeSelf && Zone.Type != Zone.Types.Deck)
+            gameObject.SetActive(true);
+
+
+        Card card = Card;
+        if (card.Special)
+        {
+            SpecialCard c = (SpecialCard)card;
+            if (c.WeatherType != SpecialCard.WeatherTypes.None)
+            {
+                if (c.WeatherType == SpecialCard.WeatherTypes.Frost)
+                    c.WeatherEffect(NewZone); //Melee row
+                else if (c.WeatherType == SpecialCard.WeatherTypes.Fog)
+                    c.WeatherEffect(NewZone); //Ranged row
+                else if (c.WeatherType == SpecialCard.WeatherTypes.Rain)
+                    c.WeatherEffect(NewZone); //Siege row
+                else if (c.WeatherType == SpecialCard.WeatherTypes.Storm)
+                {
+                    c.WeatherEffect(NewZone); //Ranged row
+                    c.WeatherEffect(NewZone); //Siege row
+                }
+                else //if (c.WeatherType == SpecialCard.WeatherTypes.Clear)
+                    c.WeatherEffect(NewZone); //Clear Weather row
+            }
+            else
+            {
+                //Horn, Scorch, Mushrom, Decoy stuff
+            }
+        }
+        else
+        {
+            //None, Medic, Morale, Muster, Spy, Bond, Berserker, Horn, Scorch, Mushroom
+
+        }
+        //card.ApplyEffects(targetZone);
+    }
 
 }

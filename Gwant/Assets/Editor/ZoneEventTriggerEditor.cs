@@ -25,7 +25,10 @@ public class ZoneEventTriggerEditor : Editor {
         SerializedProperty image = serializedObject.FindProperty("image");
         if (image != null)
             EditorGUILayout.PropertyField(image);
-
+        EditorGUILayout.Toggle("Highlighted", trigger.Highlighted);
     }
-
+    void OnValidate()
+    {
+        Repaint();
+    }
 }

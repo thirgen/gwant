@@ -139,7 +139,13 @@ public class Manager : MonoBehaviour {
         BoardHalf half = (highlightPlayerOne) ? player1Half : player2Half;
         if (card.Special)
         {
-
+            if (card.Ability == Card.Abilities.Decoy)
+            {
+                //highlight cards in battlefield zones
+                HighlightCardsInZone(half.Melee);
+                HighlightCardsInZone(half.Ranged);
+                HighlightCardsInZone(half.Siege);
+            }
         }
         else
         {
@@ -166,6 +172,15 @@ public class Manager : MonoBehaviour {
                 Highlight(half.Ranged);
             }
 
+        }
+    }
+
+    private void HighlightCardsInZone(Zone z)
+    {
+        foreach(CardGO go in z.Cards)
+        {
+            CardEventTrigger.SpecialHighlight(go.GetComponent<CardEventTrigger>());
+            print(go.GetComponent<CardEventTrigger>().Highlighted + ", " + go.GetComponent<CardEventTrigger>().SpecialHighlighted);
         }
     }
 
@@ -196,8 +211,7 @@ public class Manager : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.F1))
         {
             //draw card;
-            CardGO cardGO = player1Half.Deck.Cards[0];
-            player1Half.Deck.MoveCardTo(cardGO ,player1Half.Hand);
+            player1Half.Deck.DrawCard(player1Half.Hand);
         }
     }
 }

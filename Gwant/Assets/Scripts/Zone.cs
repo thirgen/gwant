@@ -50,6 +50,7 @@ public class Zone : MonoBehaviour {
     {
         //Type = Types.Deck;
         trigger = GetComponent<ZoneEventTrigger>();
+        Cards = new List<CardGO>();
     }
 
     #region Methods
@@ -111,47 +112,6 @@ public class Zone : MonoBehaviour {
                 //Highlight Siege;
             }
         }
-    }
-
-    public void MoveCardTo(CardGO cardGO, Zone zone)
-    {
-        //Zone targetZone;
-        cardGO.transform.parent.GetComponent<Zone>().Cards.Remove(cardGO);
-        cardGO.transform.SetParent(zone.transform);
-        if (!cardGO.gameObject.activeSelf && zone.Type != Types.Deck)
-            cardGO.gameObject.SetActive(true);
-
-        Card card = cardGO.Card;
-        if (card.Special)
-        {
-            SpecialCard c = (SpecialCard)card;
-            if (c.WeatherType != SpecialCard.WeatherTypes.None)
-            {
-                if (c.WeatherType == SpecialCard.WeatherTypes.Frost)
-                    c.WeatherEffect(zone); //Melee row
-                else if (c.WeatherType == SpecialCard.WeatherTypes.Fog)
-                    c.WeatherEffect(zone); //Ranged row
-                else if (c.WeatherType == SpecialCard.WeatherTypes.Rain)
-                    c.WeatherEffect(zone); //Siege row
-                else if (c.WeatherType == SpecialCard.WeatherTypes.Storm)
-                {
-                    c.WeatherEffect(zone); //Ranged row
-                    c.WeatherEffect(zone); //Siege row
-                }
-                else //if (c.WeatherType == SpecialCard.WeatherTypes.Clear)
-                    c.WeatherEffect(zone); //Clear Weather row
-            }
-            else
-            {
-                //Horn, Scorch, Mushrom, Decoy stuff
-            }
-        }
-        else
-        {
-            //None, Medic, Morale, Muster, Spy, Bond, Berserker, Horn, Scorch, Mushroom
-
-        }
-        //card.ApplyEffects(targetZone);
     }
 
     #endregion
