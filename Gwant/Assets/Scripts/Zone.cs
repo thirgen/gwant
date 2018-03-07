@@ -19,6 +19,10 @@ public class Zone : MonoBehaviour {
     bool collapsed;
     bool highlighted = false;
     ZoneEventTrigger trigger;
+    private const int MAX_CARDS_HAND = 10;
+    private const int MAX_CARDS_BATTLEFIELD = 9;
+    [SerializeField]
+    private const int CARD_OVERLAP_AMOUNT = -4;
     #endregion
 
     #region Properties
@@ -54,7 +58,29 @@ public class Zone : MonoBehaviour {
     }
 
     #region Methods
+    public int RecalcSpacing()
+    {
+        //-4, -7, -9.5, -11.75
+        /*
+         
+        14x = -9
+        20x = -17
+        59x = -30
 
+        */
+        if (Type == Types.Hand && Cards.Count > MAX_CARDS_HAND)
+        {
+            int overflow = (Cards.Count - MAX_CARDS_HAND);
+            return CARD_OVERLAP_AMOUNT * (Cards.Count / MAX_CARDS_HAND);
+        }
+        else if ((Type == Types.Melee || Type == Types.Ranged ||
+            Type == Types.Siege) && Cards.Count > MAX_CARDS_BATTLEFIELD)
+        {
+            int overflow = (Cards.Count - MAX_CARDS_BATTLEFIELD);
+            return CARD_OVERLAP_AMOUNT * (Cards.Count / MAX_CARDS_HAND);
+        }
+        return 0;
+    }
 
     public void SetDeckCards(List<Card> c)
     {

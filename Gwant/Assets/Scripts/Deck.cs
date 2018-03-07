@@ -27,5 +27,6 @@ public class Deck : Zone
     public void DrawCard(Zone hand)
     {
         Cards[0].MoveTo(hand);
+        hand.GetComponent<UnityEngine.UI.HorizontalLayoutGroup>().spacing = hand.RecalcSpacing();
     }
 }

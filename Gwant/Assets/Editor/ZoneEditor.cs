@@ -8,6 +8,7 @@ public class ZoneEditor : Editor {
 
     bool cards = false;
     bool[] active;
+    static AnimationCurve curve;
 
     public override void OnInspectorGUI()
     {
@@ -20,8 +21,6 @@ public class ZoneEditor : Editor {
         //zone.VisibleTo = (Zone.IsVisibleTo)EditorGUILayout.EnumPopup("Visible to", zone.VisibleTo);
         EditorGUILayout.EnumPopup("Visible to", zone.VisibleTo);
         EditorGUILayout.Toggle("Collapsed", zone.IsCollapsed);
-
-
 
         //EditorGUILayout.Toggle("Highlighted", zone.Highlighted);
         

@@ -12,8 +12,7 @@ public class Battlefield : Zone
     HornZone hornZone;
     bool weather;
     public int Morale;
-
-    const int MAX_CARDS_WITHOUT_SPACING = 9;
+    
 
     //public Combats Combat { get { return combat; } set { combat = value; } }
     public HornZone ZoneHorn { get { return hornZone; } set { hornZone = value; } }
