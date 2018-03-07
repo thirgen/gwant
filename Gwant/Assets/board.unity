@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657868, g: 0.4964127, b: 0.57481724, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -936,6 +936,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5baddc0ce68317c438e9e6f3c3fd5e83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  battlefield: {fileID: 1681271429}
   SpecialHorn: {fileID: 0}
   UnitHorns: []
 --- !u!114 &289648804
@@ -1593,6 +1594,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5baddc0ce68317c438e9e6f3c3fd5e83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  battlefield: {fileID: 1382537371}
   SpecialHorn: {fileID: 0}
   UnitHorns: []
 --- !u!114 &466392440
@@ -1924,6 +1926,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5baddc0ce68317c438e9e6f3c3fd5e83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  battlefield: {fileID: 1700745368}
   SpecialHorn: {fileID: 0}
   UnitHorns: []
 --- !u!114 &533382418
@@ -4263,6 +4266,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5baddc0ce68317c438e9e6f3c3fd5e83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  battlefield: {fileID: 781651257}
   SpecialHorn: {fileID: 0}
   UnitHorns: []
 --- !u!114 &1368357526
@@ -4569,6 +4573,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5baddc0ce68317c438e9e6f3c3fd5e83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  battlefield: {fileID: 565900090}
   SpecialHorn: {fileID: 0}
   UnitHorns: []
 --- !u!114 &1458859669
@@ -4789,6 +4794,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5baddc0ce68317c438e9e6f3c3fd5e83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  battlefield: {fileID: 558574919}
   SpecialHorn: {fileID: 0}
   UnitHorns: []
 --- !u!114 &1650669323
@@ -4937,6 +4943,7 @@ GameObject:
   - component: {fileID: 1686559969}
   - component: {fileID: 1686559968}
   - component: {fileID: 1686559970}
+  - component: {fileID: 1686559971}
   m_Layer: 5
   m_Name: Discard
   m_TagString: Untagged
@@ -5009,6 +5016,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a29e359e296cfa4c9a5471b15637c63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1686559971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1686559966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -405508275, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_Spacing: -35
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
 --- !u!1 &1699969707
 GameObject:
   m_ObjectHideFlags: 0

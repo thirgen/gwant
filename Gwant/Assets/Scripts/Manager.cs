@@ -139,22 +139,35 @@ public class Manager : MonoBehaviour {
         BoardHalf half = (highlightPlayerOne) ? player1Half : player2Half;
         if (card.Special)
         {
+            switch (card.Ability)
+            {
+                case Card.Abilities.Decoy:
+                    //highlight cards in battlefield zones
+                    HighlightCardsInZone(half.Melee);
+                    HighlightCardsInZone(half.Ranged);
+                    HighlightCardsInZone(half.Siege);
+                    break;
+                case Card.Abilities.Scorch:
+                    //highlight all 3 zones
+                    Highlight(half.Melee);
+                    Highlight(half.Ranged);
+                    Highlight(half.Siege);
+                    break;
+                case Card.Abilities.Horn:
+                    //highlight the three horn zones
+                    if (half.Melee.ZoneHorn.SpecialHorn == null)
+                        Highlight(half.Melee.ZoneHorn);
+                    if (half.Ranged.ZoneHorn.SpecialHorn == null)
+                        Highlight(half.Ranged.ZoneHorn);
+                    if (half.Siege.ZoneHorn.SpecialHorn == null)
+                        Highlight(half.Siege.ZoneHorn);
+                    break;
+            }
             if (card.Ability == Card.Abilities.Decoy)
             {
-                //highlight cards in battlefield zones
-                HighlightCardsInZone(half.Melee);
-                HighlightCardsInZone(half.Ranged);
-                HighlightCardsInZone(half.Siege);
             }
             else if (card.Ability == Card.Abilities.Horn)
             {
-                //highlight the three horn zones
-                if (half.Melee.ZoneHorn.SpecialHorn == null)
-                    Highlight(half.Melee.ZoneHorn);
-                if (half.Ranged.ZoneHorn.SpecialHorn == null)
-                    Highlight(half.Ranged.ZoneHorn);
-                if (half.Siege.ZoneHorn.SpecialHorn == null)
-                    Highlight(half.Siege.ZoneHorn);
             }
         }
         else
@@ -194,9 +207,14 @@ public class Manager : MonoBehaviour {
         }
     }
 
-    public Zone GetZone(Zone.Types Type)
+    public Zone GetZone(Zone.Types Type, bool CurrentPlayer = true)
     {
-        BoardHalf half = (PlayerOnesTurn) ? player1Half : player2Half;
+
+        //11 0 - p1
+        //10 1 - p2
+        //01 1 - p2
+        //00 0 - p1
+        BoardHalf half = (PlayerOnesTurn == CurrentPlayer) ? player1Half : player2Half;
         switch(Type)
         {
             case Zone.Types.Hand:

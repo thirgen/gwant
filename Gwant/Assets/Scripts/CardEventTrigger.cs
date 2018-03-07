@@ -71,12 +71,16 @@ public class CardEventTrigger : EventTrigger {
             StrengthImages = Resources.LoadAll<Sprite>("Images/strength");
 
         Card card = cardGO.Card;
-        
+
         //set card art
         //GetComponent<Image>().sprite = null;
 
         //set ability image
-        transform.GetChild(1).GetComponent<Image>().sprite = GetAbilitySprite(card.Ability);
+        Sprite ability = GetAbilitySprite(card.Ability);
+        if (ability == null)
+            transform.GetChild(1).GetComponent<Image>().enabled = false;
+        else
+            transform.GetChild(1).GetComponent<Image>().sprite = GetAbilitySprite(card.Ability);
 
         if (!card.Special)
         {
@@ -163,7 +167,7 @@ public class CardEventTrigger : EventTrigger {
 
                     //Highlight relevant Zone(s) for Card c
                     Manager.manager.HighlightNewZone(cardGO.Card, highlightPlayerOne);
-                    UnHighlight(this);
+                    //UnHighlight(this);
                 }
                 else //card is being deselected
                     Highlight(this);
@@ -175,11 +179,13 @@ public class CardEventTrigger : EventTrigger {
                     print("DECOY: " + gameObject.name);
                     //play the decoy card in this card's slot, and return this card to hand
 
-                    print(cardGO.Zone.Cards.IndexOf(cardGO) + ", " + cardGO.Zone.Cards.Count);
+                    //print(cardGO.Zone.Cards.IndexOf(cardGO) + ", " + cardGO.Zone.Cards.Count);
+                    cardGO.ApplyEffects(cardGO.Zone, false);
                     int index = cardGO.Zone.Cards.IndexOf(cardGO);
                     SelectedCard.cardGO.MoveTo(cardGO.Zone, index);
                     SelectedCard.transform.SetSiblingIndex(index);
                     cardGO.MoveTo(Manager.manager.GetZone(Zone.Types.Hand));
+                    //reset card effects
                     UnHighlightAllSpecial();
                 }
             }
@@ -221,7 +227,7 @@ public class CardEventTrigger : EventTrigger {
         specialHighlight.Clear();
     }
 
-    private static void UnHighlight(CardEventTrigger Trigger)
+    public static void UnHighlight(CardEventTrigger Trigger)
     {
         Trigger.Border.color = DefaultColour;
         Trigger.Highlighted = false;

@@ -56,8 +56,19 @@ public class CardGO : MonoBehaviour {
         if (!gameObject.activeSelf && Zone.Type != Zone.Types.Deck)
             gameObject.SetActive(true);
 
+        if (NewZone.Type != Zone.Types.Deck && NewZone.Type != Zone.Types.Discard &&
+            NewZone.Type != Zone.Types.Hand)
+            ApplyEffects(NewZone);
+        else
+            ApplyEffects(NewZone, false);
 
-        if (NewZone.Type != Zone.Types.Hand && NewZone.Type != Zone.Types.Deck && NewZone.Type != Zone.Types.Discard)
+        
+        //card.ApplyEffects(targetZone);
+    }
+
+    public void ApplyEffects(Zone zone, bool apply = true)
+    {
+        if (zone.Type != Zone.Types.Hand && zone.Type != Zone.Types.Deck && zone.Type != Zone.Types.Discard)
         {
             if (Card.Special)
             {
@@ -65,18 +76,18 @@ public class CardGO : MonoBehaviour {
                 if (c.WeatherType != SpecialCard.WeatherTypes.None)
                 {
                     if (c.WeatherType == SpecialCard.WeatherTypes.Frost)
-                        c.WeatherEffect(NewZone); //Melee row
+                        c.WeatherEffect(zone); //Melee row
                     else if (c.WeatherType == SpecialCard.WeatherTypes.Fog)
-                        c.WeatherEffect(NewZone); //Ranged row
+                        c.WeatherEffect(zone); //Ranged row
                     else if (c.WeatherType == SpecialCard.WeatherTypes.Rain)
-                        c.WeatherEffect(NewZone); //Siege row
+                        c.WeatherEffect(zone); //Siege row
                     else if (c.WeatherType == SpecialCard.WeatherTypes.Storm)
                     {
-                        c.WeatherEffect(NewZone); //Ranged row
-                        c.WeatherEffect(NewZone); //Siege row
+                        c.WeatherEffect(zone); //Ranged row
+                        c.WeatherEffect(zone); //Siege row
                     }
                     else //if (c.WeatherType == SpecialCard.WeatherTypes.Clear)
-                        c.WeatherEffect(NewZone); //Clear Weather row
+                        c.WeatherEffect(zone); //Clear Weather row
                 }
                 else
                 {
@@ -88,18 +99,20 @@ public class CardGO : MonoBehaviour {
                 Battlefield bf = (Battlefield)Zone;
 
                 //None, Medic, Morale, Muster, Spy, Bond, Berserker, Horn, Scorch, Mushroom
-                if (Card.Ability == Card.Abilities.Medic)
+                if (apply && Card.Ability == Card.Abilities.Medic)
                 {
                     //display all graveyard cards
                 }
                 else if (Card.Ability == Card.Abilities.Morale)
                 {
-                    //+1 morale to zone
-                    bf.Morale++;
+                    if (apply)
+                        bf.Morale++; //+1 morale to zone
+                    else
+                        bf.Morale--;
                     //Recalc strength for zone
                     bf.CalcStats();
                 }
-                else if (Card.Ability == Card.Abilities.Muster)
+                else if (apply && Card.Ability == Card.Abilities.Muster)
                 {
                     //select all muster cards from hand/deck
 
@@ -128,7 +141,7 @@ public class CardGO : MonoBehaviour {
                         cardsToMove.Remove(cardsToMove[0]);
                     }
                 }
-                else if (Card.Ability == Card.Abilities.Spy)
+                else if (apply && Card.Ability == Card.Abilities.Spy)
                 {
                     //draw card from deck
                     ((Deck)Manager.manager.GetZone(Zone.Types.Deck)).DrawCard(Manager.manager.GetZone(Zone.Types.Hand));
@@ -138,30 +151,36 @@ public class CardGO : MonoBehaviour {
                     //Recalc strength for zone
                     bf.CalcStats();
                 }
-                else if (Card.Ability == Card.Abilities.Berserker)
+                else if (apply && Card.Ability == Card.Abilities.Berserker)
                 {
                     //if mushroom in zone, do berseker thing
                 }
                 else if (Card.Ability == Card.Abilities.Horn)
                 {
                     //add card to HornZorn horn units
-                    bf.ZoneHorn.UnitHorns.Add(this);
+                    if (apply)
+                        bf.ZoneHorn.UnitHorns.Add(this);
+                    else
+                        bf.ZoneHorn.UnitHorns.Remove(this);
                     //Recalc strength for zone
                     bf.CalcStats();
                 }
-                else if (Card.Ability == Card.Abilities.Scorch)
+                else if (apply && Card.Ability == Card.Abilities.Scorch)
                 {
                     //destroy strongest card(s) in zone
                 }
-                else if (Card.Ability == Card.Abilities.Mushroom)
+                else if (apply && Card.Ability == Card.Abilities.Mushroom)
                 {
                     //trigger berserker stuff
                 }
             }
         }
-        //card.ApplyEffects(targetZone);
     }
 
+    public void Discard()
+    {
+        MoveTo(Manager.manager.GetZone(Zone.Types.Discard));
+    }
 
     private bool IsMusterCard(Card Card, string MusterName)
     {

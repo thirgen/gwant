@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class HornZone : Zone {
 
+    [SerializeField]
+    private Battlefield battlefield;
     public CardGO SpecialHorn;
     public List<CardGO> UnitHorns = new List<CardGO>();
-    private Battlefield battlefield;
     
     public Battlefield Battlefield { get { return battlefield; } }
 
@@ -29,4 +30,8 @@ public class HornZone : Zone {
         
     }
 
+    private void Reset()
+    {
+        battlefield = transform.parent.GetComponentInChildren<Battlefield>();
+    }
 }

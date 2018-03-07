@@ -13,6 +13,8 @@ public class Battlefield : Zone
     bool weather;
     public int Morale;
 
+    const int MAX_CARDS_WITHOUT_SPACING = 9;
+
     //public Combats Combat { get { return combat; } set { combat = value; } }
     public HornZone ZoneHorn { get { return hornZone; } set { hornZone = value; } }
     public bool Weather { get { return weather; } set { weather = value; } }
@@ -41,6 +43,6 @@ public class Battlefield : Zone
 
     private void Reset()
     {
-        hornZone = transform.parent.GetChild(0).GetComponent<HornZone>();
+        hornZone = transform.parent.GetComponentInChildren<HornZone>();
     }
 }
