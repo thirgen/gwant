@@ -10,11 +10,12 @@ public class Manager : MonoBehaviour {
     public bool DebugCheats = true;
     private bool turn;
     private List<Zone> highlightedZones;
-
+    private bool cardRotation;
     /// <summary>
     /// Returns true if it's Player One's turn.
     /// </summary>
     public bool PlayerOnesTurn { get { return turn; } private set { turn = value; } }
+    public bool CardRotation { get { return cardRotation; } set { cardRotation = value; } }
 
 
     #region BoardZones
@@ -52,41 +53,44 @@ public class Manager : MonoBehaviour {
         foreach (TextAsset t in TextAssets)
         {
             List<GameObject> g = TextParsing.ParseText(t.text);
-            foreach (GameObject go in g)
+            for (int i = 0; i < 2; i++)
             {
-                FactionGameObjects.Add(go);
-                Faction f = go.GetComponent<Faction>();
-                foreach (Card c in f.Cards)
+                foreach (GameObject go in g)
                 {
-                    GameObject wrapper;
-                    if (c.Special)
+                    FactionGameObjects.Add(go);
+                    Faction f = go.GetComponent<Faction>();
+                    foreach (Card c in f.Cards)
                     {
-                        //instantiate special prefab
-                        wrapper = Instantiate(SpecialPrefab, player1Half.Deck.transform);
+                        GameObject wrapper;
+                        if (c.Special)
+                        {
+                            //instantiate special prefab
+                            wrapper = Instantiate(SpecialPrefab, player1Half.Deck.transform);
+                        }
+                        else if (((UnitCard)c).Hero)
+                        {
+                            //instantiate hero prefab
+                            wrapper = Instantiate(HeroPrefab, player1Half.Deck.transform);
+                        }
+                        else //regular unit
+                        {
+                            //instantiate unit prefab
+                            wrapper = Instantiate(UnitPrefab, player1Half.Deck.transform);
+                        }
+                        //CardGO wrapper = new GameObject().AddComponent<CardGO>();
+                        CardGO cardGO = wrapper.GetComponent<CardGO>();
+                        cardGO.SetCard(c);
+                        //RectTransform rect = wrapper.GetComponent<RectTransform>();
+                        //rect.pivot = new Vector2(0.5f, 0.5f);
+                        //rect.anchoredPosition = new Vector2(0.5f, 0.5f);
+                        //rect.offsetMax = new Vector2(0.5f, 0.5f);
+                        //rect.offsetMin = new Vector2(0.5f, 0.5f);
+                        //rect.position = Vector2.zero;
+                        player1Half.Deck.AddCard(cardGO);
+                        wrapper.SetActive(false);
                     }
-                    else if (((UnitCard)c).Hero)
-                    {
-                        //instantiate hero prefab
-                        wrapper = Instantiate(HeroPrefab, player1Half.Deck.transform);
-                    }
-                    else //regular unit
-                    {
-                        //instantiate unit prefab
-                        wrapper = Instantiate(UnitPrefab, player1Half.Deck.transform);
-                    }
-                    //CardGO wrapper = new GameObject().AddComponent<CardGO>();
-                    CardGO cardGO = wrapper.GetComponent<CardGO>();
-                    cardGO.SetCard(c);
-                    //RectTransform rect = wrapper.GetComponent<RectTransform>();
-                    //rect.pivot = new Vector2(0.5f, 0.5f);
-                    //rect.anchoredPosition = new Vector2(0.5f, 0.5f);
-                    //rect.offsetMax = new Vector2(0.5f, 0.5f);
-                    //rect.offsetMin = new Vector2(0.5f, 0.5f);
-                    //rect.position = Vector2.zero;
-                    player1Half.Deck.AddCard(cardGO);
-                    wrapper.SetActive(false);
+                    Faction.CloneTo(f, gameObject);
                 }
-                Faction.CloneTo(f, gameObject);
             }
             foreach (GameObject go in g)
                 Destroy(go);
@@ -260,7 +264,7 @@ public class Manager : MonoBehaviour {
 
     void Cheats()
     {
-        if (Input.GetKeyDown(KeyCode.F1))
+        if (Input.GetKey(KeyCode.F1) && Time.frameCount % 5 == 0)
         {
             //draw card;
             player1Half.Deck.DrawCard(player1Half.Hand);

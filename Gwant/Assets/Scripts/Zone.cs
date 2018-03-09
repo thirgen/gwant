@@ -58,7 +58,7 @@ public class Zone : MonoBehaviour {
     }
 
     #region Methods
-    public int RecalcSpacing()
+    public float RecalcSpacing()
     {
         //-4, -7, -9.5, -11.75
         /*
@@ -66,18 +66,21 @@ public class Zone : MonoBehaviour {
         14x = -9
         20x = -17
         59x = -30
-
+        //added overlap gets smaller the more cards there are
+        //ranges from -4 to 0
         */
         if (Type == Types.Hand && Cards.Count > MAX_CARDS_HAND)
         {
-            int overflow = (Cards.Count - MAX_CARDS_HAND);
-            return CARD_OVERLAP_AMOUNT * (Cards.Count / MAX_CARDS_HAND);
+            float width = 40 * MAX_CARDS_HAND;//GetComponent<RectTransform>().rect.width;
+            float cardAlloc = width / (Cards.Count);
+            return cardAlloc - 35.66666f;// + ((Cards.Count - MAX_CARDS_HAND) * 0.25f);
         }
         else if ((Type == Types.Melee || Type == Types.Ranged ||
             Type == Types.Siege) && Cards.Count > MAX_CARDS_BATTLEFIELD)
         {
-            int overflow = (Cards.Count - MAX_CARDS_BATTLEFIELD);
-            return CARD_OVERLAP_AMOUNT * (Cards.Count / MAX_CARDS_HAND);
+            float width = 40 * MAX_CARDS_BATTLEFIELD;//GetComponent<RectTransform>().rect.width;
+            float cardAlloc = width / (Cards.Count);
+            return cardAlloc - 40f;// + ((Cards.Count - MAX_CARDS_HAND) * 0.25f);
         }
         return 0;
     }

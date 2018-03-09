@@ -17,7 +17,7 @@ public class ManagerEditor : Editor {
         {
             manager.ChangeTurn();
         }
-
+        manager.CardRotation = EditorGUILayout.Toggle("Card Rotation", manager.CardRotation);
     }
 
 }

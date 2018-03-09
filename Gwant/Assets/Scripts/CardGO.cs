@@ -61,7 +61,8 @@ public class CardGO : MonoBehaviour {
             ApplyEffects(NewZone);
         else
             ApplyEffects(NewZone, false);
-
+        if (Manager.manager.CardRotation)
+            transform.Rotate(0, 0, Random.Range(-3, 4));
         
         //card.ApplyEffects(targetZone);
     }
