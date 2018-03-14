@@ -4,13 +4,14 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+
+[AddComponentMenu("Gwant/Card GameObject")]
 [RequireComponent(typeof(CardEventTrigger))]
 public class CardGO : MonoBehaviour {
 
     private static GameObject child;
     private Card card;
     private Button button;
-
     public Card Card { get { return card; } private set { card = value; } }
 
 	// Use this for initialization

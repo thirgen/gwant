@@ -185,7 +185,9 @@ public class CardEventTrigger : EventTrigger {
                     SelectedCard.cardGO.MoveTo(cardGO.Zone, index);
                     SelectedCard.transform.SetSiblingIndex(index);
                     cardGO.MoveTo(Manager.manager.GetZone(Zone.Types.Hand));
+                    ((Battlefield)cardGO.Zone).CalcStats();
                     //reset card effects
+                    Deselect(this);
                     UnHighlightAllSpecial();
                 }
             }
@@ -195,6 +197,7 @@ public class CardEventTrigger : EventTrigger {
             //display big version of card.
             //set examiningCard = true;
             //lock out highlighting/selecting cards
+
         }
     }
 

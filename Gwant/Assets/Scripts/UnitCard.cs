@@ -21,7 +21,7 @@ public class UnitCard : Card {
     int scorchThreshold;
     int avenger;
 
-    bool bond;
+    int bondCount;
     bool horn;
 
     public UnitCard(int ID, string Name, string Art, Sections Section, int Strength,
@@ -65,9 +65,41 @@ public class UnitCard : Card {
             else
                 Strength = GetBaseStrength();
             //2. apply Bond effects
-            if (Bond)
+            if (Ability == Abilities.Bond)
             {
-                Strength += GetBaseStrength();
+                ClearBonds();
+                int index = bf.Cards.IndexOf(cardGO);
+                int tempindex = -1;
+                while (index + tempindex >= 0 &&
+                    bf.Cards[index + tempindex].GetComponent<CardGO>().Card.Name == cardGO.Card.Name)
+                {
+                    AddBond();
+                    tempindex--;
+                }
+                /*
+                if (index > 0 && bf.Cards[index - 1].GetComponent<CardGO>().Card.Name == cardGO.Card.Name)
+                {
+                    AddBond();
+                }
+                */
+                tempindex = 1;
+                while (index + tempindex <= bf.Cards.Count - 1 &&
+                    bf.Cards[index + tempindex].GetComponent<CardGO>().Card.Name == cardGO.Card.Name)
+                {
+                    AddBond();
+                    tempindex++;
+                }
+                /*
+                if (index < bf.Cards.Count - 1 &&
+                    bf.Cards[index + 1].GetComponent<CardGO>().Card.Name == cardGO.Card.Name)
+                {
+                    AddBond();
+                }
+                */
+                for (int i = 0; i < Bond; i++)
+                {
+                    Strength += GetBaseStrength();
+                }
             }
             //3. apply Morale effects
             if (bf.Morale > 0 && Ability != Abilities.Morale)
@@ -118,7 +150,9 @@ public class UnitCard : Card {
     //private void SetBaseMorale(int Morale) { this.Morale = Morale; }
 
     public bool Hero { get { return hero; } private set { hero = value; } }
-    public bool Bond { get { return bond; } private set { bond = value; } }
+    public int Bond { get { return bondCount; }  }
+    public void AddBond() { bondCount++; }
+    public void ClearBonds() { bondCount = 0; }
     public bool Horn { get { return horn; } set { horn = value; } }
     public Sections Section { get { return section; } private set { section = value; } }
     public string Muster

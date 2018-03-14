@@ -53,7 +53,7 @@ public class Manager : MonoBehaviour {
         foreach (TextAsset t in TextAssets)
         {
             List<GameObject> g = TextParsing.ParseText(t.text);
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 1; i++)
             {
                 foreach (GameObject go in g)
                 {
