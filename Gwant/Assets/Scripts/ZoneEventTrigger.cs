@@ -95,7 +95,7 @@ public class ZoneEventTrigger : MonoBehaviour, IPointerClickHandler {
 
             //if Cards.count > MAX_CARDS_WITHOUT_OVERLAP
             //change layout group spacing by -10 * (Cards.Count - MAX_CARDS_WITHOUT_OVERLAP)
-            GetComponent<HorizontalLayoutGroup>().spacing = z.RecalcSpacing();
+            //GetComponent<HorizontalLayoutGroup>().spacing = z.RecalcSpacing();
             CardEventTrigger.Deselect(CardEventTrigger.SelectedCard);
         }
     }

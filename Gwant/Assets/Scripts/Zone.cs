@@ -19,8 +19,8 @@ public class Zone : MonoBehaviour {
     bool collapsed;
     bool highlighted = false;
     ZoneEventTrigger trigger;
-    private const int MAX_CARDS_HAND = 10;
-    private const int MAX_CARDS_BATTLEFIELD = 9;
+    public const int MAX_CARDS_HAND = 10;
+    public const int MAX_CARDS_BATTLEFIELD = 9;
     [SerializeField]
     private const int CARD_OVERLAP_AMOUNT = -4;
     #endregion

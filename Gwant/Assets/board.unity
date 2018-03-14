@@ -979,7 +979,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 289648798}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -405508275, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 30a7982328aa57c4382aed766d1f33dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
@@ -1637,7 +1637,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 466392434}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -405508275, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 30a7982328aa57c4382aed766d1f33dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
@@ -2040,7 +2040,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 533382412}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -405508275, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 30a7982328aa57c4382aed766d1f33dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
@@ -2317,9 +2317,9 @@ GameObject:
   - component: {fileID: 558574915}
   - component: {fileID: 558574918}
   - component: {fileID: 558574917}
+  - component: {fileID: 558574920}
   - component: {fileID: 558574916}
   - component: {fileID: 558574919}
-  - component: {fileID: 558574920}
   m_Layer: 5
   m_Name: Melee
   m_TagString: Untagged
@@ -2414,7 +2414,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 558574914}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -405508275, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 30a7982328aa57c4382aed766d1f33dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
@@ -2439,9 +2439,9 @@ GameObject:
   - component: {fileID: 565900087}
   - component: {fileID: 565900089}
   - component: {fileID: 565900088}
+  - component: {fileID: 565900092}
   - component: {fileID: 565900091}
   - component: {fileID: 565900090}
-  - component: {fileID: 565900092}
   m_Layer: 5
   m_Name: Siege
   m_TagString: Untagged
@@ -2536,7 +2536,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 565900086}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -405508275, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 30a7982328aa57c4382aed766d1f33dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
@@ -2951,9 +2951,9 @@ GameObject:
   - component: {fileID: 781651254}
   - component: {fileID: 781651256}
   - component: {fileID: 781651255}
+  - component: {fileID: 781651259}
   - component: {fileID: 781651258}
   - component: {fileID: 781651257}
-  - component: {fileID: 781651259}
   m_Layer: 5
   m_Name: Siege
   m_TagString: Untagged
@@ -3048,7 +3048,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 781651253}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -405508275, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 30a7982328aa57c4382aed766d1f33dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
@@ -3073,9 +3073,9 @@ GameObject:
   - component: {fileID: 806964950}
   - component: {fileID: 806964952}
   - component: {fileID: 806964951}
+  - component: {fileID: 806964955}
   - component: {fileID: 806964953}
   - component: {fileID: 806964954}
-  - component: {fileID: 806964955}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -3168,7 +3168,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 806964949}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -405508275, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 30a7982328aa57c4382aed766d1f33dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
@@ -3193,8 +3193,8 @@ GameObject:
   - component: {fileID: 834195503}
   - component: {fileID: 834195506}
   - component: {fileID: 834195505}
-  - component: {fileID: 834195504}
   - component: {fileID: 834195507}
+  - component: {fileID: 834195504}
   m_Layer: 5
   m_Name: Hand
   m_TagString: Untagged
@@ -3228,13 +3228,12 @@ RectTransform:
 --- !u!114 &834195504
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114493815838250554, guid: 73cb6488afd89894f94b4b33f65b2aba,
-    type: 2}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 834195502}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -405508275, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Script: {fileID: 11500000, guid: 30a7982328aa57c4382aed766d1f33dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
@@ -3242,12 +3241,12 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 4
+  m_ChildAlignment: 0
   m_Spacing: 0
-  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
 --- !u!114 &834195505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4859,7 +4858,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1368357520}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -405508275, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 30a7982328aa57c4382aed766d1f33dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
@@ -4867,9 +4866,9 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 0
+  m_ChildAlignment: 4
   m_Spacing: 0
-  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
@@ -4910,9 +4909,9 @@ GameObject:
   - component: {fileID: 1382537368}
   - component: {fileID: 1382537370}
   - component: {fileID: 1382537369}
+  - component: {fileID: 1382537373}
   - component: {fileID: 1382537372}
   - component: {fileID: 1382537371}
-  - component: {fileID: 1382537373}
   m_Layer: 5
   m_Name: Ranged
   m_TagString: Untagged
@@ -5007,7 +5006,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1382537367}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -405508275, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 30a7982328aa57c4382aed766d1f33dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
@@ -5166,7 +5165,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1458859663}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -405508275, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 30a7982328aa57c4382aed766d1f33dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
@@ -5459,7 +5458,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1650669317}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -405508275, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 30a7982328aa57c4382aed766d1f33dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
@@ -5740,9 +5739,9 @@ GameObject:
   - component: {fileID: 1681271426}
   - component: {fileID: 1681271428}
   - component: {fileID: 1681271427}
+  - component: {fileID: 1681271431}
   - component: {fileID: 1681271430}
   - component: {fileID: 1681271429}
-  - component: {fileID: 1681271431}
   m_Layer: 5
   m_Name: Ranged
   m_TagString: Untagged
@@ -5837,7 +5836,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1681271425}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -405508275, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 30a7982328aa57c4382aed766d1f33dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
@@ -6068,9 +6067,9 @@ GameObject:
   - component: {fileID: 1700745365}
   - component: {fileID: 1700745367}
   - component: {fileID: 1700745366}
+  - component: {fileID: 1700745370}
   - component: {fileID: 1700745369}
   - component: {fileID: 1700745368}
-  - component: {fileID: 1700745370}
   m_Layer: 5
   m_Name: Melee
   m_TagString: Untagged
@@ -6165,7 +6164,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1700745364}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -405508275, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 30a7982328aa57c4382aed766d1f33dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
