@@ -76,12 +76,7 @@ public class UnitCard : Card {
                     AddBond();
                     tempindex--;
                 }
-                /*
-                if (index > 0 && bf.Cards[index - 1].GetComponent<CardGO>().Card.Name == cardGO.Card.Name)
-                {
-                    AddBond();
-                }
-                */
+
                 tempindex = 1;
                 while (index + tempindex <= bf.Cards.Count - 1 &&
                     bf.Cards[index + tempindex].GetComponent<CardGO>().Card.Name == cardGO.Card.Name)
@@ -89,13 +84,7 @@ public class UnitCard : Card {
                     AddBond();
                     tempindex++;
                 }
-                /*
-                if (index < bf.Cards.Count - 1 &&
-                    bf.Cards[index + 1].GetComponent<CardGO>().Card.Name == cardGO.Card.Name)
-                {
-                    AddBond();
-                }
-                */
+
                 for (int i = 0; i < Bond; i++)
                 {
                     Strength += GetBaseStrength();
@@ -134,6 +123,11 @@ public class UnitCard : Card {
             //update Strength text
             cardGO.GetComponent<CardEventTrigger>().UpdateStrengthText();
         }
+    }
+
+    public void TriggerAvengerAbility()
+    {
+
     }
 
     public int Strength { get { return strength.x; } set { strength.x = value; } }

@@ -180,15 +180,15 @@ public class CardEventTrigger : EventTrigger {
                     //play the decoy card in this card's slot, and return this card to hand
 
                     //print(cardGO.Zone.Cards.IndexOf(cardGO) + ", " + cardGO.Zone.Cards.Count);
-                    cardGO.ApplyEffects(cardGO.Zone, false);
+                    //cardGO.ApplyEffects(cardGO.Zone, false);
                     int index = cardGO.Zone.Cards.IndexOf(cardGO);
                     SelectedCard.cardGO.MoveTo(cardGO.Zone, index);
                     SelectedCard.transform.SetSiblingIndex(index);
                     cardGO.MoveTo(Manager.manager.GetZone(Zone.Types.Hand));
                     ((Battlefield)cardGO.Zone).CalcStats();
                     //reset card effects
-                    Deselect(this);
                     UnHighlightAllSpecial();
+                    Deselect(this);
                 }
             }
         }
@@ -239,7 +239,10 @@ public class CardEventTrigger : EventTrigger {
     private static void Select(CardEventTrigger Trigger)
     {
         if (Trigger != null)
+        {
+            //UnHighlight(Trigger);
             Trigger.border.color = SelectedColour;
+        }
         Manager.manager.UnHighlightZones();
         selectedCard = Trigger;
     }

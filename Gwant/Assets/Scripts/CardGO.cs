@@ -51,22 +51,36 @@ public class CardGO : MonoBehaviour {
         if (PositionInZone < 0 || PositionInZone > NewZone.Cards.Count)
             NewZone.Cards.Add(this);
         else
+        {
             NewZone.Cards.Insert(PositionInZone, this);
-
+        }
+        //PositionInZone = NewZone.Cards.IndexOf(this);
+        NewZone.GetComponent<ZoneLayoutGroup>().CardAdded(PositionInZone);
         transform.SetParent(NewZone.transform);
+        
+        /*          */
+        //FIX THIS    
+        /*          */
+
+        if (PositionInZone > 0 && PositionInZone < NewZone.Cards.Count && (NewZone.Cards.IndexOf(this) != PositionInZone ||
+            Card.Ability == Card.Abilities.Bond))
+            transform.SetSiblingIndex(PositionInZone);
         if (!gameObject.activeSelf && Zone.Type != Zone.Types.Deck)
             gameObject.SetActive(true);
 
-        if (NewZone.Type != Zone.Types.Deck && NewZone.Type != Zone.Types.Discard &&
-            NewZone.Type != Zone.Types.Hand)
-            ApplyEffects(NewZone);
-        else
-            ApplyEffects(NewZone, false);
+        
+
+        //if (NewZone.Type != Zone.Types.Deck && NewZone.Type != Zone.Types.Discard &&
+            //NewZone.Type != Zone.Types.Hand)
+            //ApplyEffects(NewZone);
+        //else
+            //ApplyEffects(NewZone, false);
         if (Manager.manager.CardRotation)
             transform.Rotate(0, 0, Random.Range(-3, 4));
         
         //card.ApplyEffects(targetZone);
     }
+    
 
     public void ApplyEffects(Zone zone, bool apply = true)
     {

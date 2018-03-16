@@ -78,11 +78,26 @@ public class ZoneEventTrigger : MonoBehaviour, IPointerClickHandler {
                     //scorch highest str card(s) in opponents zone
                 }
             }
+            else if (cardGO.Card.Ability == Card.Abilities.Bond)
 
             CardEventTrigger.UnHighlight(CardEventTrigger.SelectedCard.GetComponent<CardEventTrigger>());
-            cardGO.MoveTo(GetComponent<Zone>());
-            Manager.manager.UnHighlightZones();
             Zone z = GetComponent<Zone>();
+            if (cardGO.Card.Ability == Card.Abilities.Bond && z.Cards.Count > 0)
+            {
+                for(int i = 0; i < z.Cards.Count; i++)
+                {
+                    if (z.Cards[i].Card.Name == cardGO.Card.Name)
+                    {
+                        cardGO.MoveTo(z, z.Cards.IndexOf(z.Cards[i]));
+                        break;
+                    }
+                    else if (i == z.Cards.Count - 1)
+                        cardGO.MoveTo(z);
+                }
+            }
+            else
+                cardGO.MoveTo(z);
+            Manager.manager.UnHighlightZones();
             if (z.Type == Zone.Types.Melee || z.Type == Zone.Types.Ranged ||
                 z.Type == Zone.Types.Siege)
                 ((Battlefield)z).CalcStats();

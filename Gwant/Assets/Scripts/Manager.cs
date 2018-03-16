@@ -206,7 +206,8 @@ public class Manager : MonoBehaviour {
     {
         foreach(CardGO go in z.Cards)
         {
-            CardEventTrigger.SpecialHighlight(go.GetComponent<CardEventTrigger>());
+            if (go.Card.Ability != Card.Abilities.Decoy)
+                CardEventTrigger.SpecialHighlight(go.GetComponent<CardEventTrigger>());
             //print(go.GetComponent<CardEventTrigger>().Highlighted + ", " + go.GetComponent<CardEventTrigger>().SpecialHighlighted);
         }
     }
