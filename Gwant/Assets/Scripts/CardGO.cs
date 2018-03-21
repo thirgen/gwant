@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
 [AddComponentMenu("Gwant/Card GameObject")]
-[RequireComponent(typeof(CardEventTrigger))]
+//[RequireComponent(typeof(CardEventTrigger))]
 public class CardGO : MonoBehaviour {
 
     private static GameObject child;
@@ -29,20 +30,7 @@ public class CardGO : MonoBehaviour {
         //Initialise Gameobject
         
         GetComponent<CardEventTrigger>().SetUpComponents();
-
-        /*
-        if (child == null)
-            child = Resources.Load<GameObject>("Prefabs/CardBorder");
-        GameObject border = Instantiate(child);
-        border.transform.SetParent(transform);
-        border.name = "Border";
-        RectTransform rr = border.GetComponent<RectTransform>();
-
-        rr.offsetMax = Vector2.zero;
-        rr.offsetMin = Vector2.zero;
-        */
-        //GetComponent<CardEventTrigger>().Border = transform.GetChild(0).GetComponent<Image>();
-        //border.SetActive(false);
+        SetUpSprites();
     }
 
     public void MoveTo(Zone NewZone, int PositionInZone = -1)
@@ -55,9 +43,14 @@ public class CardGO : MonoBehaviour {
             NewZone.Cards.Insert(PositionInZone, this);
         }
         //PositionInZone = NewZone.Cards.IndexOf(this);
-        NewZone.GetComponent<ZoneLayoutGroup>().CardAdded(PositionInZone);
-        transform.SetParent(NewZone.transform);
-        
+        if (gameObject.activeSelf)
+            StartCoroutine(MoveCardTo(NewZone, PositionInZone));
+        else
+        {
+            NewZone.GetComponent<ZoneLayoutGroup>().CardAdded(PositionInZone);
+            transform.SetParent(NewZone.transform);
+        }
+
         /*          */
         //FIX THIS    
         /*          */
@@ -203,5 +196,112 @@ public class CardGO : MonoBehaviour {
         if (Card.Name.Contains(MusterName))
             return true;
         return false;
+    }
+
+    #region Sprite Fields
+    [SerializeField]
+    private static Sprite[] StrengthImages;
+    [SerializeField]
+    private static Sprite[] AbilityImages;
+    [SerializeField]
+    private static Sprite[] ZoneImages;
+
+    private TextMeshProUGUI strengthText;
+    public TextMeshProUGUI StrengthText { get { return strengthText; } private set { strengthText = value; } }
+    #endregion
+
+    #region Sprite methods
+    private void SetUpSprites()
+    {
+        //set card art
+        //GetComponent<Image>().sprite = null;
+
+        //set ability image
+        Sprite ability = GetAbilitySprite(card.Ability);
+        if (ability == null)
+            transform.GetChild(1).GetComponent<Image>().enabled = false;
+        else
+            transform.GetChild(1).GetComponent<Image>().sprite = GetAbilitySprite(card.Ability);
+
+
+        if (StrengthImages == null)
+            StrengthImages = Resources.LoadAll<Sprite>("Images/strength");
+
+        if (!card.Special)
+        {
+            //set strength image type
+            Image strength = transform.GetChild(2).GetComponent<Image>();
+            if (((UnitCard)card).Hero)
+                strength.sprite = StrengthImages[1];
+            else
+                strength.sprite = StrengthImages[0];
+
+            //set strength number
+            StrengthText = strength.GetComponentInChildren<TextMeshProUGUI>();
+            UpdateStrengthText();
+
+            //set zone sprite
+            transform.GetChild(3).GetComponent<Image>().sprite = GetZoneSprite(((UnitCard)card).Section);
+
+        }
+    }
+
+    public void UpdateStrengthText()
+    {
+        UnitCard card = (UnitCard)Card;
+        StrengthText.text = card.Strength.ToString();
+        if (!card.Hero)
+        {
+            if (card.Strength > card.GetBaseStrength())
+                StrengthText.color = new Color32(6, 100, 42, 255);
+            else if (card.Strength < card.GetBaseStrength())
+                StrengthText.color = Color.red;
+            else
+                StrengthText.color = Color.black;
+        }
+        else
+            StrengthText.color = Color.white;
+    }
+
+    private Sprite GetAbilitySprite(Card.Abilities ability)
+    {
+        if (AbilityImages == null)
+            AbilityImages = Resources.LoadAll<Sprite>("Images/abilities/");
+
+        if (ability == Card.Abilities.None)
+            return null;
+        else if ((int)ability < (int)Card.Abilities.SPECIAL_START)
+            return AbilityImages[(int)ability - 1];
+        else if ((int)ability < (int)Card.Abilities.UNIT_END)
+            return AbilityImages[(int)ability - 2];
+        else if ((int)ability < (int)Card.Abilities.Weather)
+            return AbilityImages[(int)ability - 3];
+        else
+            return null;
+    }
+
+    private Sprite GetZoneSprite(UnitCard.Sections section)
+    {
+        if (ZoneImages == null)
+            ZoneImages = Resources.LoadAll<Sprite>("Images/zone");
+
+        if (section == UnitCard.Sections.Melee)
+            return ZoneImages[0];
+        else if (section == UnitCard.Sections.Ranged)
+            return ZoneImages[1];
+        else if (section == UnitCard.Sections.Siege)
+            return ZoneImages[2];
+        else if (section == UnitCard.Sections.Agile)
+            return ZoneImages[3];
+        else return null;
+    }
+    #endregion
+
+    private IEnumerator MoveCardTo(Zone z, int PositionInZone)
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        z.GetComponent<ZoneLayoutGroup>().CardAdded(PositionInZone);
+        transform.SetParent(z.transform);
     }
 }

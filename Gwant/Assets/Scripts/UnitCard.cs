@@ -121,7 +121,7 @@ public class UnitCard : Card {
 
             }
             //update Strength text
-            cardGO.GetComponent<CardEventTrigger>().UpdateStrengthText();
+            cardGO.GetComponent<CardGO>().UpdateStrengthText();
         }
     }
 

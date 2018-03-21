@@ -10,20 +10,44 @@ public class ZoneLayoutGroup : HorizontalLayoutGroup {
     Zone zone;
     [SerializeField]
     int newCardPosition;
+    [SerializeField]
+    int childCount;
 
     protected override void Start()
     {
         //if (zone.Type == Zone.Types.Deck || zone.Type == Zone.Types.Discard)
         //spacing = -40;
         newCardPosition = -1;
+        childCount = transform.childCount;
     }
 
     protected override void OnTransformChildrenChanged()
     {
         base.OnTransformChildrenChanged();
+        
         //print("New Card Position: " + newCardPosition);
-        CardGO cardGO = (newCardPosition == -1)? zone.Cards[zone.Cards.Count - 1] : zone.Cards[newCardPosition];
-        print("New Card: " + cardGO + " in Zone: " + zone);
+
+        //Check if a card was added to the Zone
+        bool hasNewChild = false;
+        if (transform.childCount > childCount)
+            hasNewChild = true;
+        childCount = transform.childCount;
+
+        //CardGO cardGO = (newCardPosition == -1) ? zone.Cards[zone.Cards.Count - 1] : zone.Cards[newCardPosition];
+        CardGO cardGO = null;
+        if (hasNewChild) //If a card was added, get that card
+        {
+            if (newCardPosition == -1)
+            {
+                if (zone.Cards.Count >= 1)
+                    cardGO = zone.Cards[zone.Cards.Count - 1];
+                else
+                    cardGO = zone.Cards[0];
+            }
+            else
+                cardGO = zone.Cards[newCardPosition];
+            print("New Card: " + cardGO + " in Zone: " + zone);
+        }
         if (zone.Type == Zone.Types.Hand)
         {
             if (zone.Cards.Count > Zone.MAX_CARDS_HAND)
@@ -33,7 +57,8 @@ public class ZoneLayoutGroup : HorizontalLayoutGroup {
                 spacing = cardAlloc - 35.66666f;// + ((Cards.Count - MAX_CARDS_HAND) * 0.25f);
             }
             //
-            cardGO.ApplyEffects(zone, false);
+            if (hasNewChild)
+                cardGO.ApplyEffects(zone, false);
         }
         else if (zone.Type == Zone.Types.Melee || zone.Type == Zone.Types.Ranged ||
             zone.Type == Zone.Types.Siege)
@@ -44,7 +69,8 @@ public class ZoneLayoutGroup : HorizontalLayoutGroup {
                 float cardAlloc = width / (zone.Cards.Count);
                 spacing = cardAlloc - 40f;// + ((Cards.Count - MAX_CARDS_HAND) * 0.25f);
             }
-            ApplyAllCardEffects();
+            if (hasNewChild)
+                ApplyAllCardEffects();
             //if (ability != Card.Abilities.Avenger)
             //Trigger card ability
         }
@@ -55,8 +81,10 @@ public class ZoneLayoutGroup : HorizontalLayoutGroup {
             if (go.Card.Ability == Card.Abilities.Avenger)
             {
                 print("Avenger on " + go.Card.Name);
+                
             }
         }
+        
         newCardPosition = -1;
     }
 

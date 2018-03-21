@@ -28,6 +28,8 @@ public class Deck : Zone
     {
         if (Cards.Count > 0)
             Cards[0].MoveTo(hand);
+        else
+            print("No cards left in deck");
 
         //hand.GetComponent<UnityEngine.UI.HorizontalLayoutGroup>().spacing = hand.RecalcSpacing();
     }

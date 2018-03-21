@@ -10,7 +10,6 @@ using UnityEngine.UI;
 public class CardEventTrigger : EventTrigger {
 
     Image border;
-    TextMeshProUGUI strengthText;
     bool highlighted;
     bool specialHighlighted;
     [SerializeField]
@@ -36,7 +35,6 @@ public class CardEventTrigger : EventTrigger {
     public static CardEventTrigger SelectedCard { get { return selectedCard; } }
 
 
-    public TextMeshProUGUI StrengthText { get { return strengthText; } private set { strengthText = value; } }
     /// <summary>
     /// The Highlight used when a card is moused over in the hand
     /// </summary>
@@ -67,38 +65,9 @@ public class CardEventTrigger : EventTrigger {
 
     public void SetUpComponents()
     {
-        if (StrengthImages == null)
-            StrengthImages = Resources.LoadAll<Sprite>("Images/strength");
 
         Card card = cardGO.Card;
 
-        //set card art
-        //GetComponent<Image>().sprite = null;
-
-        //set ability image
-        Sprite ability = GetAbilitySprite(card.Ability);
-        if (ability == null)
-            transform.GetChild(1).GetComponent<Image>().enabled = false;
-        else
-            transform.GetChild(1).GetComponent<Image>().sprite = GetAbilitySprite(card.Ability);
-
-        if (!card.Special)
-        {
-            //set strength image type
-            Image strength = transform.GetChild(2).GetComponent<Image>();
-            if (((UnitCard)card).Hero)
-                strength.sprite = StrengthImages[1];
-            else
-                strength.sprite = StrengthImages[0];
-
-            //set strength number
-            StrengthText = strength.GetComponentInChildren<TextMeshProUGUI>();
-            UpdateStrengthText();
-
-            //set zone sprite
-            transform.GetChild(3).GetComponent<Image>().sprite = GetZoneSprite(((UnitCard)card).Section);
-
-        }
         Border = transform.GetChild(0).GetComponent<Image>();
         Highlighted = false;
         SpecialHighlighted = false;
@@ -251,56 +220,6 @@ public class CardEventTrigger : EventTrigger {
     {
         Trigger.border.color = DefaultColour;
         Select(null);
-    }
-
-    public void UpdateStrengthText()
-    {
-        UnitCard card = (UnitCard)cardGO.Card;
-        StrengthText.text = card.Strength.ToString();
-        if (!card.Hero)
-        {
-            if (card.Strength > card.GetBaseStrength())
-                StrengthText.color = new Color32(6, 100, 42, 255);
-            else if (card.Strength < card.GetBaseStrength())
-                StrengthText.color = Color.red;
-            else
-                StrengthText.color = Color.black;
-        }
-        else
-            StrengthText.color = Color.white;
-    }
-
-    private Sprite GetAbilitySprite(Card.Abilities ability)
-    {
-        if (AbilityImages == null)
-            AbilityImages = Resources.LoadAll<Sprite>("Images/abilities/");
-
-        if (ability == Card.Abilities.None)
-            return null;
-        else if ((int)ability < (int)Card.Abilities.SPECIAL_START)
-            return AbilityImages[(int)ability - 1];
-        else if ((int)ability < (int)Card.Abilities.UNIT_END)
-            return AbilityImages[(int)ability - 2];
-        else if ((int)ability < (int)Card.Abilities.Weather)
-            return AbilityImages[(int)ability - 3];
-        else
-            return null;
-    }
-
-    private Sprite GetZoneSprite(UnitCard.Sections section)
-    {
-        if (ZoneImages == null)
-            ZoneImages = Resources.LoadAll<Sprite>("Images/zone");
-
-        if (section == UnitCard.Sections.Melee)
-            return ZoneImages[0];
-        else if (section == UnitCard.Sections.Ranged)
-            return ZoneImages[1];
-        else if (section == UnitCard.Sections.Siege)
-            return ZoneImages[2];
-        else if (section == UnitCard.Sections.Agile)
-            return ZoneImages[3];
-        else return null;
     }
 
     #endregion
