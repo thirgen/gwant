@@ -78,7 +78,7 @@ public class ZoneEventTrigger : MonoBehaviour, IPointerClickHandler {
                     //scorch highest str card(s) in opponents zone
                 }
             }
-            else if (cardGO.Card.Ability == Card.Abilities.Bond)
+            //else if (cardGO.Card.Ability == Card.Abilities.Bond)
 
             CardEventTrigger.UnHighlight(CardEventTrigger.SelectedCard.GetComponent<CardEventTrigger>());
             Zone z = GetComponent<Zone>();
@@ -98,14 +98,13 @@ public class ZoneEventTrigger : MonoBehaviour, IPointerClickHandler {
             else
                 cardGO.MoveTo(z);
             Manager.manager.UnHighlightZones();
-            if (z.Type == Zone.Types.Melee || z.Type == Zone.Types.Ranged ||
-                z.Type == Zone.Types.Siege)
-                ((Battlefield)z).CalcStats();
+            if (z.Type == Zone.Types.Melee || z.Type == Zone.Types.Ranged || z.Type == Zone.Types.Siege)
+                ((Battlefield)z).RecalcStatsAtEndOfFrame();
             else if (z.Type == Zone.Types.Horn)
             {
                 ((HornZone)z).SpecialHorn = cardGO;
                 //recalc stats for associated battlefield
-                ((HornZone)z).Battlefield.CalcStats();
+                StartCoroutine(((HornZone)z).Battlefield.RecalcStatsAtEndOfFrame());
             }
 
             //if Cards.count > MAX_CARDS_WITHOUT_OVERLAP

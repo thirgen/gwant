@@ -26,7 +26,7 @@ public class Battlefield : Zone
         //horns = new List<UnitCard>();
     }
 
-    public void CalcStats()
+    private void CalcStats()
     {
         foreach (CardGO cardGO in Cards)
         {
@@ -43,5 +43,17 @@ public class Battlefield : Zone
     private void Reset()
     {
         hornZone = transform.parent.GetComponentInChildren<HornZone>();
+    }
+
+    bool alreadyCalled = false;
+    public IEnumerator RecalcStatsAtEndOfFrame()
+    {
+        if (!alreadyCalled)
+        {
+            alreadyCalled = true;
+            yield return new WaitForEndOfFrame();
+            CalcStats();
+            alreadyCalled = false;
+        }
     }
 }

@@ -154,7 +154,7 @@ public class CardEventTrigger : EventTrigger {
                     SelectedCard.cardGO.MoveTo(cardGO.Zone, index);
                     SelectedCard.transform.SetSiblingIndex(index);
                     cardGO.MoveTo(Manager.manager.GetZone(Zone.Types.Hand));
-                    ((Battlefield)cardGO.Zone).CalcStats();
+                    ((Battlefield)cardGO.Zone).RecalcStatsAtEndOfFrame();
                     //reset card effects
                     UnHighlightAllSpecial();
                     Deselect(this);
