@@ -35,7 +35,7 @@ public class UnitCardEditor : Editor {
         }
         else if (card.Ability == Card.Abilities.Bond)
             EditorGUILayout.LabelField("Bond", card.Bond.ToString());
-
+        EditorGUILayout.Toggle("Ability Used", card.AbilityUsed);
 
         if (card.Hero)
             EditorGUILayout.LabelField("Strength", card.Strength.ToString());

@@ -16,6 +16,7 @@ public class UnitCard : Card {
     //y = base strength
     Vector2Int strength;
     int morale;
+    public bool AbilityUsed = false;
 
     string muster;
     int scorchThreshold;
@@ -164,12 +165,21 @@ public class UnitCard : Card {
     {
         get
         {
+            return ability;
+            /*
             if (AbilityIsValid(ability))
                 return ability;
             else
                 return Abilities.None;
+            */
         }
-        protected set { ability = value; } //Must be protected because it's an override
+        protected set //Must be protected because it's an override
+        {
+            if (AbilityIsValid(value))
+                ability = value;
+            else
+                ability = Abilities.None;
+        }
     }
 
     protected override bool AbilityIsValid(Abilities ab)

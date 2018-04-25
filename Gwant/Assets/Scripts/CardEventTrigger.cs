@@ -104,11 +104,17 @@ public class CardEventTrigger : EventTrigger {
                     Select(this);
                 //If this card is already selected, deselect it then unhighlight all selected zones
                 else if (IsSelectedCard)
+                {
+                    if (specialHighlight.Count != 0)
+                        UnHighlightAllSpecial();
                     Select(null);
+                }
                 //If another card (in the player's hand) is already selected,
                 //deselect that one and select this one
                 else
                 {
+                    if (specialHighlight.Count != 0)
+                        UnHighlightAllSpecial();
                     Deselect(SelectedCard);
                     Select(this);
                 }
@@ -149,12 +155,13 @@ public class CardEventTrigger : EventTrigger {
                     //play the decoy card in this card's slot, and return this card to hand
 
                     //print(cardGO.Zone.Cards.IndexOf(cardGO) + ", " + cardGO.Zone.Cards.Count);
-                    //cardGO.ApplyEffects(cardGO.Zone, false);
+                    cardGO.ApplyEffects(cardGO.Zone, false);
                     int index = cardGO.Zone.Cards.IndexOf(cardGO);
                     SelectedCard.cardGO.MoveTo(cardGO.Zone, index);
                     SelectedCard.transform.SetSiblingIndex(index);
+                    Battlefield old = (Battlefield)cardGO.Zone;
                     cardGO.MoveTo(Manager.manager.GetZone(Zone.Types.Hand));
-                    ((Battlefield)cardGO.Zone).RecalcStatsAtEndOfFrame();
+                    StartCoroutine(old.RecalcStatsAtEndOfFrame());
                     //reset card effects
                     UnHighlightAllSpecial();
                     Deselect(this);

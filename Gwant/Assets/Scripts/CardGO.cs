@@ -36,6 +36,10 @@ public class CardGO : MonoBehaviour {
     public void MoveTo(Zone NewZone, int PositionInZone = -1)
     {
         Zone.Cards.Remove(this);
+        /* //THIS SHOULD BE DONE IN CARD MOVEMENT/DECOY EFFECTS?
+        if (Card.Ability == Card.Abilities.Horn && !Card.Special && ((UnitCard)Card).AbilityUsed)
+            ((Battlefield)Zone).ZoneHorn.UnitHorns.Remove(this);
+        */
         if (PositionInZone < 0 || PositionInZone > NewZone.Cards.Count)
         {
             NewZone.Cards.Add(this);
@@ -113,21 +117,28 @@ public class CardGO : MonoBehaviour {
                 Battlefield bf = (Battlefield)Zone;
 
                 //None, Medic, Morale, Muster, Spy, Bond, Berserker, Horn, Scorch, Mushroom
-                if (apply && Card.Ability == Card.Abilities.Medic)
+                if (apply && Card.Ability == Card.Abilities.Medic && !((UnitCard)Card).AbilityUsed)
                 {
+                    ((UnitCard)Card).AbilityUsed = true;
                     //display all graveyard cards
                 }
                 else if (Card.Ability == Card.Abilities.Morale)
                 {
-                    if (apply)
+                    if (apply && !((UnitCard)Card).AbilityUsed)
+                    {
                         bf.Morale++; //+1 morale to zone
-                    else
+                        ((UnitCard)Card).AbilityUsed = true;
+                    }
+                    else if (!apply && ((UnitCard)Card).AbilityUsed)
+                    {
                         bf.Morale--;
+                        ((UnitCard)Card).AbilityUsed = false;
+                    }
                     //Recalc strength for zone
                     /*
                     bf.CalcStats();
                     */
-                    StartCoroutine(((Battlefield)zone).RecalcStatsAtEndOfFrame());
+                    //StartCoroutine(((Battlefield)zone).RecalcStatsAtEndOfFrame());
                 }
                 else if (apply && Card.Ability == Card.Abilities.Muster)
                 {
@@ -150,11 +161,13 @@ public class CardGO : MonoBehaviour {
                                 cardsToMove.Add(cardGO);
                         }
                     }
+                    ((UnitCard)Card).AbilityUsed = true;
 
                     //play selected cards
                     while (cardsToMove.Count > 0)
                     {
                         cardsToMove[0].MoveTo(Manager.manager.GetZone(((UnitCard)cardsToMove[0].Card).GetZone));
+                        ((UnitCard)cardsToMove[0].Card).AbilityUsed = true;
                         cardsToMove.Remove(cardsToMove[0]);
                     }
                 }
@@ -169,7 +182,7 @@ public class CardGO : MonoBehaviour {
                     /*
                     bf.CalcStats();
                     */
-                    StartCoroutine(((Battlefield)zone).RecalcStatsAtEndOfFrame());
+                    //StartCoroutine(((Battlefield)zone).RecalcStatsAtEndOfFrame());
                 }
                 else if (apply && Card.Ability == Card.Abilities.Berserker)
                 {
@@ -178,15 +191,23 @@ public class CardGO : MonoBehaviour {
                 else if (Card.Ability == Card.Abilities.Horn)
                 {
                     //add card to HornZorn horn units
-                    if (apply)
+                    if (apply && !((UnitCard)Card).AbilityUsed)
+                    {
+                        //if (apply && !bf.ZoneHorn.UnitHorns.Contains(this))
                         bf.ZoneHorn.UnitHorns.Add(this);
-                    else
+                        ((UnitCard)Card).AbilityUsed = true;
+                    }
+                    //else if (!apply && bf.ZoneHorn.UnitHorns.Contains(this))
+                    else if (!apply && ((UnitCard)Card).AbilityUsed)
+                    {
                         bf.ZoneHorn.UnitHorns.Remove(this);
+                        ((UnitCard)Card).AbilityUsed = false;
+                    }
                     //Recalc strength for zone
                     /*
                     bf.CalcStats();
                     */
-                    StartCoroutine(((Battlefield)zone).RecalcStatsAtEndOfFrame());
+                    //StartCoroutine(((Battlefield)zone).RecalcStatsAtEndOfFrame());
                 }
                 else if (apply && Card.Ability == Card.Abilities.Scorch)
                 {
@@ -196,7 +217,7 @@ public class CardGO : MonoBehaviour {
                 {
                     //trigger berserker stuff
                 }
-
+                StartCoroutine(((Battlefield)zone).RecalcStatsAtEndOfFrame());
             }
         }
     }
@@ -314,12 +335,15 @@ public class CardGO : MonoBehaviour {
 
     private IEnumerator MoveCardTo(Zone z, int PositionInZone)
     {
-        yield return new WaitForSeconds(0.1f);
+        //Might abandon this. Can cause problems.
+        //yield return new WaitForSeconds(0.1f);
 
         z.GetComponent<ZoneLayoutGroup>().CardAdded(PositionInZone);
         transform.SetParent(z.transform);
         if (PositionInZone != -1)
             transform.SetSiblingIndex(PositionInZone);
+        yield return new WaitForSeconds(0.1f);
+        print("waited");
     }
     
 }
