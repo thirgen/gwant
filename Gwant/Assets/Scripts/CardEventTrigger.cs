@@ -155,11 +155,12 @@ public class CardEventTrigger : EventTrigger {
                     //play the decoy card in this card's slot, and return this card to hand
 
                     //print(cardGO.Zone.Cards.IndexOf(cardGO) + ", " + cardGO.Zone.Cards.Count);
-                    cardGO.ApplyEffects(cardGO.Zone, false);
                     int index = cardGO.Zone.Cards.IndexOf(cardGO);
                     SelectedCard.cardGO.MoveTo(cardGO.Zone, index);
                     SelectedCard.transform.SetSiblingIndex(index);
                     Battlefield old = (Battlefield)cardGO.Zone;
+                    cardGO.ApplyEffects(old, false);
+                    ((UnitCard)cardGO.Card).CalcStats(old, cardGO, false);
                     cardGO.MoveTo(Manager.manager.GetZone(Zone.Types.Hand));
                     StartCoroutine(old.RecalcStatsAtEndOfFrame());
                     //reset card effects

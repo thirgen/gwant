@@ -54,9 +54,16 @@ public class UnitCard : Card {
         //CalcStats(zone);
     }
 
-    public void CalcStats(Battlefield bf, CardGO cardGO)
+    public void CalcStats(Battlefield bf, CardGO cardGO, bool apply = true)
     {
-        if (!Hero)
+        if (!apply) {
+            Strength = GetBaseStrength();
+            ClearBonds();
+            Morale = 0;
+            Horn = false;
+            cardGO.GetComponent<CardGO>().UpdateStrengthText();
+        }
+        else if (!Hero)
         {
             //1. apply Weather effects
             if (bf.Weather)

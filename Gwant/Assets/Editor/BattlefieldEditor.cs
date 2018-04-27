@@ -20,6 +20,7 @@ public class BattlefieldEditor : Editor
         EditorGUILayout.PropertyField(hornZone);
 
         EditorGUILayout.IntField("Morale", zone.Morale);
+        EditorGUILayout.IntField("Strength", zone.Strength);
 
         cards = EditorGUILayout.Foldout(cards, "Cards");
         if (cards)

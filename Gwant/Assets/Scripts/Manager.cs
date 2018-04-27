@@ -62,24 +62,30 @@ public class Manager : MonoBehaviour {
                     foreach (Card c in f.Cards)
                     {
                         GameObject wrapper;
+                        GameObject wrapper2;
                         if (c.Special)
                         {
                             //instantiate special prefab
                             wrapper = Instantiate(SpecialPrefab, player1Half.Deck.transform);
+                            wrapper2 = Instantiate(SpecialPrefab, player2Half.Deck.transform);
                         }
                         else if (((UnitCard)c).Hero)
                         {
                             //instantiate hero prefab
                             wrapper = Instantiate(HeroPrefab, player1Half.Deck.transform);
+                            wrapper2 = Instantiate(HeroPrefab, player2Half.Deck.transform);
                         }
                         else //regular unit
                         {
                             //instantiate unit prefab
                             wrapper = Instantiate(UnitPrefab, player1Half.Deck.transform);
+                            wrapper2 = Instantiate(UnitPrefab, player2Half.Deck.transform);
                         }
                         //CardGO wrapper = new GameObject().AddComponent<CardGO>();
                         CardGO cardGO = wrapper.GetComponent<CardGO>();
+                        CardGO cardGO2 = wrapper2.GetComponent<CardGO>();
                         cardGO.SetCard(c);
+                        cardGO2.SetCard(c);
                         //RectTransform rect = wrapper.GetComponent<RectTransform>();
                         //rect.pivot = new Vector2(0.5f, 0.5f);
                         //rect.anchoredPosition = new Vector2(0.5f, 0.5f);
@@ -87,7 +93,9 @@ public class Manager : MonoBehaviour {
                         //rect.offsetMin = new Vector2(0.5f, 0.5f);
                         //rect.position = Vector2.zero;
                         player1Half.Deck.AddCard(cardGO);
+                        player2Half.Deck.AddCard(cardGO2);
                         wrapper.SetActive(false);
+                        wrapper2.SetActive(false);
                     }
                     Faction.CloneTo(f, gameObject);
                 }
@@ -109,6 +117,8 @@ public class Manager : MonoBehaviour {
         weather.Type = Zone.Types.Weather;
         weather.VisibleTo = Zone.IsVisibleTo.Both;
         highlightedZones = new List<Zone>();
+
+        StartCoroutine(DrawCards());
     }
 
     private void InitialiseZone(BoardHalf b, bool player1)
@@ -262,13 +272,22 @@ public class Manager : MonoBehaviour {
         PlayerOnesTurn = !PlayerOnesTurn;
     }
 
-
     void Cheats()
     {
         if (Input.GetKey(KeyCode.F1) && Time.frameCount % 5 == 0)
         {
             //draw card;
             player1Half.Deck.DrawCard(player1Half.Hand);
+        }
+    }
+
+    IEnumerator DrawCards()
+    {
+        yield return new WaitForEndOfFrame();
+        for (int i = 0; i < 10; i++)
+        {
+            player1Half.Deck.DrawCard(player1Half.Hand);
+            player2Half.Deck.DrawCard(player2Half.Hand);
         }
     }
 }
