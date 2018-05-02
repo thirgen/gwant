@@ -47,6 +47,7 @@ public class ZoneEventTrigger : MonoBehaviour, IPointerClickHandler {
                         Manager.manager.GetZone(Zone.Types.Ranged, false),
                         Manager.manager.GetZone(Zone.Types.Siege, false)
                     };
+                    /*
                     List<CardGO> strongest = new List<CardGO>();
                     foreach (Zone zone in zones)
                     {
@@ -72,6 +73,8 @@ public class ZoneEventTrigger : MonoBehaviour, IPointerClickHandler {
                         go.Discard();
                         print(go.name);
                     }
+                    */
+                    ScorchZone(zones);
                 }
                 else
                 {
@@ -111,6 +114,35 @@ public class ZoneEventTrigger : MonoBehaviour, IPointerClickHandler {
             //change layout group spacing by -10 * (Cards.Count - MAX_CARDS_WITHOUT_OVERLAP)
             //GetComponent<HorizontalLayoutGroup>().spacing = z.RecalcSpacing();
             CardEventTrigger.Deselect(CardEventTrigger.SelectedCard);
+        }
+    }
+
+    private void ScorchZone(Zone[] zones)
+    {
+        List<CardGO> strongest = new List<CardGO>();
+        foreach (Zone zone in zones)
+        {
+            foreach (CardGO c in zone.Cards)
+            {
+                if (!c.Card.Special && !((UnitCard)c.Card).Hero)
+                {
+                    if (strongest.Count == 0)
+                        strongest.Add(c);
+                    else if (((UnitCard)c.Card).Strength > ((UnitCard)strongest[0].Card).Strength)
+                    {
+                        strongest.Clear();
+                        strongest.Add(c);
+                    }
+                    else if (((UnitCard)c.Card).Strength == ((UnitCard)strongest[0].Card).Strength)
+                        strongest.Add(c);
+                }
+            }
+        }
+        //move strongest to discard
+        foreach (CardGO go in strongest)
+        {
+            go.Discard();
+            print(go.name + " ded.");
         }
     }
 

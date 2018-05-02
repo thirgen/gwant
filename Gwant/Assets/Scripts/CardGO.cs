@@ -342,8 +342,8 @@ public class CardGO : MonoBehaviour {
         transform.SetParent(z.transform);
         if (PositionInZone != -1)
             transform.SetSiblingIndex(PositionInZone);
-        yield return new WaitForSeconds(0.1f);
-        print("waited");
+        yield return new WaitForSeconds(0);
+        //print("waited");
     }
     
 }

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using TMPro;
 using UnityEngine;
 
+[AddComponentMenu("Gwant/Battlefield Zone")]
 public class Battlefield : Zone
 {
     //public enum Combats { Melee, Ranged, Siege }
@@ -29,7 +30,7 @@ public class Battlefield : Zone
         //Cards = new List<CardGO>();
         //horns = new List<UnitCard>();
         strengthText = transform.parent.GetChild(2).GetComponent<TextMeshProUGUI>();
-        print("");
+        //print("");
     }
 
     private void CalcStats()
