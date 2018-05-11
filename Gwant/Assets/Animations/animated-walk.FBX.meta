@@ -1,0 +1,168 @@
+fileFormatVersion: 2
+guid: 0e2c877a9999d14488353937a3720842
+timeCreated: 1526056625
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Body
+    100004: FrontView
+    100006: SideView
+    100008: Skeleton_
+    100010: Skeleton_Head
+    100012: Skeleton_LCalf
+    100014: Skeleton_LCollarbone
+    100016: Skeleton_LDigit11
+    100018: Skeleton_LDigit21
+    100020: Skeleton_LFoot
+    100022: Skeleton_LForearm
+    100024: Skeleton_LPalm
+    100026: Skeleton_LPlatform
+    100028: Skeleton_LThigh
+    100030: Skeleton_LUpperarm
+    100032: Skeleton_Neck1
+    100034: Skeleton_Neck2
+    100036: Skeleton_Pelvis
+    100038: Skeleton_RCalf
+    100040: Skeleton_RCollarbone
+    100042: Skeleton_RDigit11
+    100044: Skeleton_RDigit21
+    100046: Skeleton_RFoot
+    100048: Skeleton_RForearm
+    100050: Skeleton_Ribcage
+    100052: Skeleton_RPalm
+    100054: Skeleton_RPlatform
+    100056: Skeleton_RThigh
+    100058: Skeleton_RUpperarm
+    100060: Skeleton_Spine1
+    100062: Skeleton_Spine2
+    100064: Skeleton_Spine3
+    100066: Skeleton_Spine4
+    400000: //RootNode
+    400002: Body
+    400004: FrontView
+    400006: SideView
+    400008: Skeleton_
+    400010: Skeleton_Head
+    400012: Skeleton_LCalf
+    400014: Skeleton_LCollarbone
+    400016: Skeleton_LDigit11
+    400018: Skeleton_LDigit21
+    400020: Skeleton_LFoot
+    400022: Skeleton_LForearm
+    400024: Skeleton_LPalm
+    400026: Skeleton_LPlatform
+    400028: Skeleton_LThigh
+    400030: Skeleton_LUpperarm
+    400032: Skeleton_Neck1
+    400034: Skeleton_Neck2
+    400036: Skeleton_Pelvis
+    400038: Skeleton_RCalf
+    400040: Skeleton_RCollarbone
+    400042: Skeleton_RDigit11
+    400044: Skeleton_RDigit21
+    400046: Skeleton_RFoot
+    400048: Skeleton_RForearm
+    400050: Skeleton_Ribcage
+    400052: Skeleton_RPalm
+    400054: Skeleton_RPlatform
+    400056: Skeleton_RThigh
+    400058: Skeleton_RUpperarm
+    400060: Skeleton_Spine1
+    400062: Skeleton_Spine2
+    400064: Skeleton_Spine3
+    400066: Skeleton_Spine4
+    2100000: 'Material #47'
+    2100002: 'Material #48'
+    2100004: 'Material #72'
+    2300000: FrontView
+    2300002: SideView
+    3300000: FrontView
+    3300002: SideView
+    4300000: FrontView
+    4300002: SideView
+    4300004: Body
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: Body
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
